@@ -94,35 +94,6 @@ async function f1() {
             }
         });
 
-
-        //Adiciona as formulas e colhe o material para colocar nas peças
-        const itemColUpdate = targetSheet.getColumn(3);
-        let localizePontos = [];
-        itemColUpdate.eachCell(function(cell, rowNumber){
-            if((cell.value != null) && (!cell.value.includes(".")) && (cell.value != "ITEM")){
-                localizePontos.push({adress: rowNumber, value: cell.value, material: []})
-                let result = targetSheet.getCell(`D${rowNumber}`) * targetSheet.getCell(`I${rowNumber}`);
-                targetSheet.getCell(`K${rowNumber}`).value = {formula: `D${rowNumber}*I${rowNumber}`, result};
-            } else if((cell.value != null) && (cell.value.includes(".")) && (cell.value != "ITEM")){
-                let conjuntoFind = localizePontos.find(({value}) => value === cell.value.split('.')[0]);
-                let result = targetSheet.getCell(`D${rowNumber}`) * targetSheet.getCell(`I${rowNumber}`) * targetSheet.getCell(`D${conjuntoFind.adress}`);
-                targetSheet.getCell(`K${rowNumber}`).value = {formula: `D${rowNumber}*I${rowNumber}*$D$${conjuntoFind.adress}`, result};
-
-                let conjuntoIndex = localizePontos.findIndex(({value}) => value === cell.value.split('.')[0]);
-                let material = targetSheet.getCell(`H${rowNumber}`);
-                localizePontos[conjuntoIndex].material.push(material.value);
-            }
-
-        });
-
-        //Adiciona os matériais as Peças
-        for(i = 0; i < localizePontos.length; i++){
-            if(localizePontos[i].material != false){
-                let newMaterial = adjustMaterial(localizePontos[i].material);
-                targetSheet.getCell(`H${localizePontos[i].adress}`).value = newMaterial;
-            }   
-        };
-
         //Verifica tem Descrição dentro de uma peça
         const estoqueCol21 = targetSheet.getColumn(7);
         estoqueCol21.eachCell(function(cell, rowNumber) {
@@ -136,6 +107,48 @@ async function f1() {
             };
 
         });
+
+        //Adiciona as formulas e colhe o material para colocar nas peças
+        const itemColUpdate = targetSheet.getColumn(3);
+        let localizePontos = [];
+        itemColUpdate.eachCell(function(cell, rowNumber){
+            if((cell.value != null) && (!cell.value.includes(".")) && (cell.value != "ITEM")){
+                let result = targetSheet.getCell(`D${rowNumber}`) * targetSheet.getCell(`I${rowNumber}`);
+                targetSheet.getCell(`K${rowNumber}`).value = {formula: `D${rowNumber}*I${rowNumber}`, result};
+
+                localizePontos.push({adress: rowNumber, index: cell.value, pesoMaterial: 0, material: []})
+            } else if((cell.value != null) && (cell.value.includes(".")) && (cell.value != "ITEM")){
+                let conjuntoFind = localizePontos.find(({index}) => index === cell.value.split('.')[0]);
+                let conjuntoIndex = localizePontos.findIndex(({index}) => index === cell.value.split('.')[0]);
+
+                let result = targetSheet.getCell(`D${rowNumber}`) * targetSheet.getCell(`I${rowNumber}`) * targetSheet.getCell(`D${conjuntoFind.adress}`);
+                targetSheet.getCell(`K${rowNumber}`).value = {formula: `D${rowNumber}*I${rowNumber}*$D$${conjuntoFind.adress}`, result};
+
+                let material = targetSheet.getCell(`H${rowNumber}`);
+                localizePontos[conjuntoIndex].material.push(material.value);
+                localizePontos[conjuntoIndex].pesoMaterial += result;
+            }
+
+        });
+        
+        //Adiciona os matériais as Peças
+        for(i = 0; i < localizePontos.length; i++){
+            if(localizePontos[i].material != false){
+                let newMaterial = adjustMaterial(localizePontos[i].material);
+                targetSheet.getCell(`H${localizePontos[i].adress}`).value = newMaterial;
+                
+                let infoPeca = targetSheet.getCell(`K${localizePontos[i].adress}`)
+                let pesoPeca = infoPeca.value.result
+
+                if (localizePontos[i].pesoMaterial > (pesoPeca + 0.1) || localizePontos[i].pesoMaterial < (pesoPeca - 0.1) || isNaN(localizePontos[i].pesoMaterial)){
+                    console.log(`🦋 Error CHX: Peso da Peça não batendo com soma dos Componentes ${infoPeca.address}`);
+                    infoPeca.style = {
+                        fill: { type: 'pattern', pattern:'solid',fgColor:{argb:'7F7679'}},
+                    };
+
+                };
+            };
+        };
 
         //Verifica se a peça tem código
         const numberoPeca = targetSheet.getColumn(5);

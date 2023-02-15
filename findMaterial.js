@@ -21,7 +21,6 @@ const findMaterial = (material) => {
         {modelo: "L 3 x 3 x 1/4", descricao: "L 3\" x 1/4\"", material: "ASTM A-36"},
         //PERFIL U
         {modelo: "C 4x5.4", descricao: "PERFIL U 4\" - 1ªALMA", material: "ASTM A-36"},
-        {modelo: "C 4 x 5,4", descricao: "PERFIL U 4\" - 1ªALMA", material: "ASTM A-36"},
         {modelo: "C 6x8.2", descricao: "PERFIL U 6\" - 1ªALMA", material: ""},
         {modelo: "C 6 x 8,2", descricao: "PERFIL U 6\" - 1ªALMA", material: "ASTM A-36"},
         //TUBOS
