@@ -1,7 +1,7 @@
 const ExcelJS = require('exceljs');
 const {findMaterial} = require('./findMaterial.js');
 const {adjustMaterial} = require('./adjustMaterial.js')
-const filename = "./2023-01-24_LISTA DE MATERIAL_00.xlsx";
+const filename = "./2023-02-15_LISTA MATERIAL - C0011_00.xlsx";
 const codigoDeProjeto = "C122005";
 
 const workbook = new ExcelJS.Workbook();
@@ -55,14 +55,17 @@ async function f1() {
         const estoqueCol2 = targetSheet.getColumn(7);
         estoqueCol2.eachCell(function(cell, rowNumber) {
             if(cell.value == null){
-                console.log(`🦋 Error CHX: Matérial não encontrado ${cell.address}`);
-                cell.style = {
-                    fill: { type: 'pattern', pattern:'solid',fgColor:{argb:'6ddd35'}},
-                };
+                if(targetSheet.getCell(`H${rowNumber}`).value != "Generic"){
+                    console.log(`🦋 Error CHX: Matérial não encontrado ${cell.address}`);
+                    cell.style = {
+                        fill: { type: 'pattern', pattern:'solid',fgColor:{argb:'6ddd35'}},
+                    };
+                }
             } else if(!(cell.value.includes("NÚMERO DE ESTOQUE") || cell.value.includes("Descrição"))) {
+                cell.value = cell.value.replace(/^\s+|\s+$/g, "");
                 let material = findMaterial(cell.value);
                 if (material == undefined){
-                    console.log(`🦋 Error CHX: Matérial não encontrado ${cell.address}`);
+                    console.log(`🦋 Error CHX: Matérial não cadastrado ${cell.address}`);
                     cell.style = {
                         fill: { type: 'pattern', pattern:'solid',fgColor:{argb:'6ddd35'}},
                     };
@@ -174,7 +177,7 @@ async function f1() {
               row: targetSheet.lastRow.number,
               column: 9
             }
-          }
+        }
 
         //Ajeita o Tamanho das colunas
         targetSheet.columns.forEach(function (column, i) {

@@ -19,20 +19,25 @@ const findMaterial = (material) => {
         {modelo: "L 2 1/2 x 2 1/2 x 3/16", descricao: "L 2.1/2\" x 3/16\"", material: "ASTM A-36"},
         {modelo: "L 3 x 3 x 3/16", descricao: "L 3\" x 3/16\"", material: "ASTM A-36"},
         {modelo: "L 3 x 3 x 1/4", descricao: "L 3\" x 1/4\"", material: "ASTM A-36"},
+        {modelo: "L 4 x 4 x 5/16", descricao: "L 4\" x 5/16\"", material: "ASTM A-36"},
         //PERFIL U
         {modelo: "C 4x5.4", descricao: "PERFIL U 4\" - 1ªALMA", material: "ASTM A-36"},
         {modelo: "C 6x8.2", descricao: "PERFIL U 6\" - 1ªALMA", material: ""},
         {modelo: "C 6 x 8,2", descricao: "PERFIL U 6\" - 1ªALMA", material: "ASTM A-36"},
+        {modelo: "C 8 x 11,5", descricao: "PERFIL U 8\" - 1ªALMA", material: "ASTM A-36"},
+        {modelo: "C 8x11.5", descricao: "PERFIL U 8\" - 1ªALMA", material: "ASTM A-36"},
         //TUBOS
         {modelo: "PIPE ØEXT. 33,400 mmx3,380 mm", descricao: "TUBO DN 1\" SCH40", material: "ASTM A53 Gr.B"},
         {modelo: "PIPE ØEXT. 42,200 mmx3,560 mm", descricao: "TUBO DN 1.1/4\" SCH40", material: "ASTM A53 Gr.B"},
         //PERFIL W
+        {modelo: "VIGA W 203,000 mmx102,000 mm", descricao: "W 200X19.3", material: "ASTM A572 Gr. 50"},
         {modelo: "W150 x 22.5", descricao: "W 150x22.5", material: "ASTM A572 Gr. 50"},
         {modelo: "W200 x 26.6", descricao: "W 200x26.6", material: "ASTM A572 Gr. 50"},
         {modelo: "W200 x 46.1", descricao: "W 200x46,1", material: "ASTM A572 Gr. 50"},
         {modelo: "W200 x 52", descricao: "W 200x52", material: "ASTM A572 Gr. 50"},
         {modelo: "W250 x 32.7", descricao: "W 200x32.7", material: "ASTM A572 Gr. 50"},
         //CURVAS
+        {modelo: "CURVA 90º DN 1\" SCH40 CFME ANSI B16.9 RC", descricao: "CURVA 90º DN 1\" SCH40 CFME ANSI B16.9 RC", material: "ASTM A-36"},
         {modelo: "CURVA 90º DN 1.1/4\" SCH40 CFME ANSI B16.9 RC", descricao: "CURVA 90º DN 1.1/4\" SCH40 CFME ANSI B16.9 RC", material: "ASTM A-36"},
         //{modelo: "", descricao: "", material: ""},
     ] 

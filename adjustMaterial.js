@@ -4,7 +4,7 @@ const adjustMaterial = (material) => {
 
     for(c = 0; c < materialList.length; c++){
         if(material.includes(materialList[c])){
-            if(c > 0){
+            if(nameMaterial != ''){
                 nameMaterial = `${nameMaterial} / ${materialList[c]}`;
             } else {
                 nameMaterial = materialList[c];
