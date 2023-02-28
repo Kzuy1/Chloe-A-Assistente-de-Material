@@ -42,7 +42,18 @@ const findMaterial = (material) => {
         //{modelo: "", descricao: "", material: ""},
     ] 
 
-    return listMaterial.find(({modelo}) => modelo === material)
+    let info = listMaterial.filter(obj => obj.modelo == material);
+    return info[0];
 }
 
-module.exports = {findMaterial}
+const findMaterialEsp = (descricao, material) => {
+    let listMaterial = [
+        //CHAPAS MM
+        {modelo: "SHEET TH. 6,350 mm", materialMod: "USI SAC 350", descricao: "CHAPA 1/4\"", material: "SAC 350"},
+        //{modelo: "",  materialMod: "", descricao: "", material: ""},
+    ] 
+    let info = listMaterial.filter(obj => obj.modelo == descricao && obj.materialMod == material);
+    return info[0];
+}
+
+module.exports = {findMaterial, findMaterialEsp}

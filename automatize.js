@@ -1,5 +1,5 @@
 const ExcelJS = require('exceljs');
-const {findMaterial} = require('./findMaterial.js');
+const {findMaterial, findMaterialEsp} = require('./findMaterial.js');
 const {adjustMaterial} = require('./adjustMaterial.js')
 const filename = "./2023-02-15_LISTA MATERIAL - C0011_00.xlsx";
 const codigoDeProjeto = "C122005";
@@ -63,7 +63,15 @@ async function f1() {
                 }
             } else if(!(cell.value.includes("NÚMERO DE ESTOQUE") || cell.value.includes("Descrição"))) {
                 cell.value = cell.value.replace(/^\s+|\s+$/g, "");
-                let material = findMaterial(cell.value);
+                let material;
+                let tipoMaterial = targetSheet.getCell(`H${rowNumber}`);
+                if(tipoMaterial.value != "ASTM A36" && tipoMaterial.value != "ASTM A572 Gr. 50") {
+                    console.log(`🚨 Alerta: Material diferente de Aço Carbono ${cell.address}`);
+                    material = findMaterialEsp(cell.value, tipoMaterial);
+                } else {
+                    material = findMaterial(cell.value);
+                };
+
                 if (material == undefined){
                     console.log(`🦋 Error CHX: Matérial não cadastrado ${cell.address}`);
                     cell.style = {
