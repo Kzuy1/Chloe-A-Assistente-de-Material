@@ -9,6 +9,8 @@ async function f1() {
   await workbook.xlsx.readFile(filename).then(async function() {
     let sourceWorksheet = workbook.getWorksheet(1);
 
+    workbook.removeWorksheet(7);
+    workbook.removeWorksheet(6);
     workbook.removeWorksheet(5);
     workbook.removeWorksheet(4);
     workbook.removeWorksheet(3);
@@ -49,6 +51,14 @@ async function f1() {
           let targetSheet = workbook.getWorksheet(`${copyPecaRow.values[1]} - PEÇAS`);
           let copyPecaRowProcess = copyPecaRow.values.slice(0, 10);
           targetSheet.insertRow(targetSheet.lastRow.number + 1, copyPecaRowProcess);
+          if(copyPecaRow.values[7] != "Descrição"){
+            let targetSheetMat = workbook.getWorksheet(`${copyPecaRow.values[1]} - MATERIAL`);
+            let copyPecaRowProcess = [];
+            copyPecaRowProcess.push(copyPecaRow.values[7]);
+            copyPecaRowProcess.push(copyPecaRow.values[8]);
+            copyPecaRowProcess.push(copyPecaRow.values[11].result);
+            targetSheetMat.insertRow(targetSheetMat.lastRow.number + 1, copyPecaRowProcess);
+          };
         };
       } else if (cell.value.includes(".")) {
         let copyPecaRow = sourceWorksheet.getRow(rowNumber);
@@ -141,6 +151,15 @@ async function f1() {
         valuesPeso.push(+materialList[c6][5].toFixed(1));
       }
       peso.values = valuesPeso;
+
+      let qtde = targetSheet.getColumn(15);
+      let valuesQtde = ["QUANTIDADE"];
+      for(c4 = 0; c4 < materialList.length; c4++){
+        let pesoMaterial = targetSheet.getCell(`Q${c4+2}`).value;
+        let result  = pesoMaterial/materialList[c4][3];
+        valuesQtde.push(+result.toFixed(1));
+      }
+      qtde.values = valuesQtde;
     };
 
     workbook.xlsx.writeFile(`${filename}`);
