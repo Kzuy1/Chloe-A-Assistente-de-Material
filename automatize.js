@@ -1,7 +1,7 @@
 const ExcelJS = require('exceljs');
 const { findMaterial, findMaterialEsp } = require('./findMaterial.js');
 const { adjustMaterial } = require('./adjustMaterial.js')
-const filename = "./2023-02-15_LISTA MATERIAL - C0011_00 - Copia.xlsx";
+const filename = "./2023-03-09_LISTA_MATERIAL_SUPORTE_TRANSPORTADOR_00.xlsx";
 const codigoDeProjeto = "C122005";
 
 const workbook = new ExcelJS.Workbook();
@@ -45,10 +45,13 @@ async function f1() {
     //Move do Estoque Perfil para outra coluna de material
     const estoqueCol = targetSheet.getColumn(6);
     estoqueCol.eachCell(function(cell, rowNumber) {
-      if (cell.value != null) {
-        targetSheet.getCell(`G${rowNumber}`).value = cell.value;
-      };
-
+      let valor = targetSheet.getCell(`G${rowNumber}`).value;
+      valor = valor != null ? valor : "";
+      if(!valor.includes("CURVA")){
+        if (cell.value != null) {
+          targetSheet.getCell(`G${rowNumber}`).value = cell.value;
+        };
+      }
     });
 
     //Procura o material e substitui
