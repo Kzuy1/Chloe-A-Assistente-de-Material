@@ -36,7 +36,7 @@ async function f1() {
     let copyRow = sourceWorksheet.getRow(1);
     for (i = 1; i < workbook.worksheets.length; i++) {
       if (i % 2 == 0) {
-        workbook.worksheets[i].insertRow(1, ["NÚMERO DE ESTOQUE", "MATERIAL", "PESO"]);
+        workbook.worksheets[i].insertRow(1, ["NÚMERO DE ESTOQUE", "MATERIAL", "QTDE", "PESO"]);
       } else {
         workbook.worksheets[i].insertRow(1, copyRow.values);
       }
@@ -51,11 +51,12 @@ async function f1() {
           let targetSheet = workbook.getWorksheet(`${copyPecaRow.values[1]} - PEÇAS`);
           let copyPecaRowProcess = copyPecaRow.values.slice(0, 10);
           targetSheet.insertRow(targetSheet.lastRow.number + 1, copyPecaRowProcess);
-          if(copyPecaRow.values[7] != "Descrição"){
+          if (copyPecaRow.values[7] != "Descrição") {
             let targetSheetMat = workbook.getWorksheet(`${copyPecaRow.values[1]} - MATERIAL`);
             let copyPecaRowProcess = [];
             copyPecaRowProcess.push(copyPecaRow.values[7]);
             copyPecaRowProcess.push(copyPecaRow.values[8]);
+            copyPecaRowProcess.push(copyPecaRow.values[12].result);
             copyPecaRowProcess.push(copyPecaRow.values[11].result);
             targetSheetMat.insertRow(targetSheetMat.lastRow.number + 1, copyPecaRowProcess);
           };
@@ -67,6 +68,7 @@ async function f1() {
           let copyPecaRowProcess = [];
           copyPecaRowProcess.push(copyPecaRow.values[7]);
           copyPecaRowProcess.push(copyPecaRow.values[8]);
+          copyPecaRowProcess.push(copyPecaRow.values[12].result);
           copyPecaRowProcess.push(copyPecaRow.values[11].result);
           targetSheet.insertRow(targetSheet.lastRow.number + 1, copyPecaRowProcess);
         };
@@ -97,16 +99,16 @@ async function f1() {
       let targetSheet = workbook.worksheets[i];
       targetSheet.spliceColumns(10, 1, [], [], ["POS."], ["DESCRIÇÃO"], ["UNIDADE"], ["QUANTIDADE"], ["MATERIAL/PADRÃO"], ["PESO [kg]"]);
       let materialList = [""];
-      
+
       for (c = 2; c <= targetSheet.lastRow.number; c++) {
         let materialTarget = targetSheet.getRow(c).values
-        for(cont = 0; cont < materialList.length; cont++){
-          if(materialTarget[1] == materialList[cont][1] && materialTarget[2] == materialList[cont][4]){
-            materialList[cont][5] += materialTarget[3];
+        for (cont = 0; cont < materialList.length; cont++) {
+          if (materialTarget[1] == materialList[cont][1] && materialTarget[2] == materialList[cont][4]) {
+            materialList[cont][5] += materialTarget[4];
             break;
-          } else if(cont == materialList.length-1){
+          } else if (cont == materialList.length - 1) {
             let materialCorri = findMaterialPos(materialTarget[1], materialTarget[2]);
-            materialCorri[5] += materialTarget[3];
+            materialCorri[5] += materialTarget[4];
             materialList.push(materialCorri);
             break;
           }
@@ -115,48 +117,48 @@ async function f1() {
       };
 
       materialList.shift();
-      materialList = materialList.sort((a, b) => a[0] - b[0]);
+      materialList = materialList.sort((a, b) => a[0] + b[0]);
 
       let pos = targetSheet.getColumn(12);
       let valuesPos = ["POS."];
-      for(c1 = 1; c1 <= materialList.length; c1++){
+      for (c1 = 1; c1 <= materialList.length; c1++) {
         valuesPos.push(c1);
       };
       pos.values = valuesPos;
 
       let descricao = targetSheet.getColumn(13);
       let valuesDescricao = ["DESCRIÇÃO"];
-      for(c2 = 0; c2 < materialList.length; c2++){
+      for (c2 = 0; c2 < materialList.length; c2++) {
         valuesDescricao.push(materialList[c2][1])
       };
       descricao.values = valuesDescricao;
 
       let unidade = targetSheet.getColumn(14);
       let valuesUnidade = ["UNIDADE"];
-      for(c3 = 0; c3 < materialList.length; c3++){
+      for (c3 = 0; c3 < materialList.length; c3++) {
         valuesUnidade.push(materialList[c3][2])
       };
       unidade.values = valuesUnidade;
 
       let materialPadrao = targetSheet.getColumn(16);
       let valuesMaterialPadrao = ["MATERIAL/PADRÃO"];
-      for(c5 = 0; c5 < materialList.length; c5++){
+      for (c5 = 0; c5 < materialList.length; c5++) {
         valuesMaterialPadrao.push(materialList[c5][4]);
       }
       materialPadrao.values = valuesMaterialPadrao;
 
       let peso = targetSheet.getColumn(17);
       let valuesPeso = ["PESO [kg]"];
-      for(c6 = 0; c6 < materialList.length; c6++){
+      for (c6 = 0; c6 < materialList.length; c6++) {
         valuesPeso.push(+materialList[c6][5].toFixed(1));
       }
       peso.values = valuesPeso;
 
       let qtde = targetSheet.getColumn(15);
       let valuesQtde = ["QUANTIDADE"];
-      for(c4 = 0; c4 < materialList.length; c4++){
-        let pesoMaterial = targetSheet.getCell(`Q${c4+2}`).value;
-        let result  = pesoMaterial/materialList[c4][3];
+      for (c4 = 0; c4 < materialList.length; c4++) {
+        let pesoMaterial = targetSheet.getCell(`Q${c4 + 2}`).value;
+        let result = pesoMaterial / materialList[c4][3];
         valuesQtde.push(+result.toFixed(1));
       }
       qtde.values = valuesQtde;

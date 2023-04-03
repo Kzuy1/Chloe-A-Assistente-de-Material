@@ -47,7 +47,7 @@ async function f1() {
     estoqueCol.eachCell(function(cell, rowNumber) {
       let valor = targetSheet.getCell(`G${rowNumber}`).value;
       valor = valor != null ? valor : "";
-      if(!valor.includes("CURVA")){
+      if (!valor.includes("CURVA")) {
         if (cell.value != null) {
           targetSheet.getCell(`G${rowNumber}`).value = cell.value;
         };
@@ -108,6 +108,29 @@ async function f1() {
       }
     });
 
+    //Verifica o QTDE
+    const qtdeBaseCol = targetSheet.getColumn(10);
+    qtdeBaseCol.eachCell(function(cell, rowNumber) {
+      if (cell.value == null) {
+        console.log(`🦋 Error CHX: QTDE não encontrado ${cell.address}`);
+        cell.style = {
+          fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: '79553D' } },
+        };
+      } else if (cell.value == 1) {
+
+      } else if (cell.value.includes("mm")) {
+        cell.value = cell.value.replace(" mm", "").replace(",", ".");
+        cell.value = Number(cell.value);
+      } else if (cell.value.includes("in")) {
+        cell.value = cell.value.replace(" in", "").replace(",", ".");
+        cell.value = Number(cell.value) * 25.4;
+      } else if (cell.value.includes("pol")) {
+        cell.value = cell.value.replace(" pol", "").replace(",", ".");
+        cell.value = Number(cell.value) * 25.4;
+      }
+
+    });
+
     //Verifica tem Descrição dentro de uma peça
     const estoqueCol21 = targetSheet.getColumn(7);
     estoqueCol21.eachCell(function(cell, rowNumber) {
@@ -128,7 +151,10 @@ async function f1() {
     itemColUpdate.eachCell(function(cell, rowNumber) {
       if ((cell.value != null) && (!cell.value.includes(".")) && (cell.value != "ITEM")) {
         let result = targetSheet.getCell(`D${rowNumber}`) * targetSheet.getCell(`I${rowNumber}`);
-        targetSheet.getCell(`K${rowNumber}`).value = { formula: `D${rowNumber}*I${rowNumber}`, result };
+        targetSheet.getCell(`K${rowNumber}`).value = { formula: `D${rowNumber}*I${rowNumber}`, result: result };
+
+        let result1 = targetSheet.getCell(`D${rowNumber}`) * targetSheet.getCell(`J${rowNumber}`);
+        targetSheet.getCell(`L${rowNumber}`).value = { formula: `D${rowNumber}*J${rowNumber}`, result: result1 };
 
         localizePontos.push({ adress: rowNumber, index: cell.value, pesoMaterial: 0, material: [] })
       } else if ((cell.value != null) && (cell.value.includes(".")) && (cell.value != "ITEM")) {
@@ -136,7 +162,10 @@ async function f1() {
         let conjuntoIndex = localizePontos.findIndex(({ index }) => index === cell.value.split('.')[0]);
 
         let result = targetSheet.getCell(`D${rowNumber}`) * targetSheet.getCell(`I${rowNumber}`) * targetSheet.getCell(`D${conjuntoFind.adress}`);
-        targetSheet.getCell(`K${rowNumber}`).value = { formula: `D${rowNumber}*I${rowNumber}*$D$${conjuntoFind.adress}`, result };
+        targetSheet.getCell(`K${rowNumber}`).value = { formula: `D${rowNumber}*I${rowNumber}*$D$${conjuntoFind.adress}`, result: result };
+
+        let result1 = targetSheet.getCell(`D${rowNumber}`) * targetSheet.getCell(`J${rowNumber}`) * targetSheet.getCell(`D${conjuntoFind.adress}`);
+        targetSheet.getCell(`L${rowNumber}`).value = { formula: `D${rowNumber}*J${rowNumber}*D$${conjuntoFind.adress}`, result: result1 };
 
         let material = targetSheet.getCell(`H${rowNumber}`);
         localizePontos[conjuntoIndex].material.push(material.value);
@@ -175,9 +204,6 @@ async function f1() {
       };
 
     });
-
-    const qtdeBaseCol = targetSheet.getColumn(10);
-    qtdeBaseCol.hidden = true;
 
     targetSheet.autoFilter = {
       from: {
