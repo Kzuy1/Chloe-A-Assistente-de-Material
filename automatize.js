@@ -1,7 +1,7 @@
 const ExcelJS = require('exceljs');
 const { findMaterial, findMaterialEsp } = require('./findMaterial.js');
 const { adjustMaterial } = require('./adjustMaterial.js')
-const filename = "./2023-03-09_LISTA_MATERIAL_SUPORTE_TRANSPORTADOR_00.xlsx";
+const filename = "./LISTA_C122005_FN-B5-C0001_01.xlsx";
 const codigoDeProjeto = "C122005";
 
 const workbook = new ExcelJS.Workbook();
@@ -112,7 +112,7 @@ async function f1() {
     const qtdeBaseCol = targetSheet.getColumn(10);
     qtdeBaseCol.eachCell(function(cell, rowNumber) {
       if (cell.value == null) {
-        console.log(`🦋 Error CHX: QTDE não encontrado ${cell.address}`);
+        //console.log(`🦋 Error CHX: QTDE não encontrado ${cell.address}`);
         cell.style = {
           fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: '79553D' } },
         };
@@ -173,7 +173,7 @@ async function f1() {
       }
 
     });
-
+    
     //Adiciona os matériais as Peças
     for (i = 0; i < localizePontos.length; i++) {
       if (localizePontos[i].material != false) {
@@ -183,12 +183,16 @@ async function f1() {
         let infoPeca = targetSheet.getCell(`K${localizePontos[i].adress}`)
         let pesoPeca = infoPeca.value.result
 
-        if (localizePontos[i].pesoMaterial > (pesoPeca + 0.1) || localizePontos[i].pesoMaterial < (pesoPeca - 0.1) || isNaN(localizePontos[i].pesoMaterial)) {
-          console.log(`🦋 Error CHX: Peso da Peça não batendo com soma dos Componentes ${infoPeca.address}`);
+        if(pesoPeca == undefined){
+          console.log(`🦋 Error CHX: Peso da Peça não encontrado ${infoPeca.address}`);
           infoPeca.style = {
-            fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: '7F7679' } },
+            fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: '39FF42' } },
           };
-
+        } else if (localizePontos[i].pesoMaterial > (pesoPeca + 0.1) || localizePontos[i].pesoMaterial < (pesoPeca - 0.1) || isNaN(localizePontos[i].pesoMaterial)) {
+            console.log(`🦋 Error CHX: Peso da Peça não batendo com soma dos Componentes ${infoPeca.address}`);
+            infoPeca.style = {
+              fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: '7F7679' } },
+            };
         };
       };
     };

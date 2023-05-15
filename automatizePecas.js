@@ -1,6 +1,6 @@
 const ExcelJS = require('exceljs');
 const { findMaterialPos } = require('./findMaterial.js');
-const filename = "./2023-03-09_LISTA_MATERIAL_SUPORTE_TRANSPORTADOR_00_CHLOE_LES.xlsx";
+const filename = "./LISTA_C122005_FN-B5-C0001_01_CHLOE_LES.xlsx";
 const codigoDeProjeto = "C122005";
 
 const workbook = new ExcelJS.Workbook();
@@ -9,6 +9,10 @@ async function f1() {
   await workbook.xlsx.readFile(filename).then(async function() {
     let sourceWorksheet = workbook.getWorksheet(1);
 
+    workbook.removeWorksheet(11);
+    workbook.removeWorksheet(10);
+    workbook.removeWorksheet(9);
+    workbook.removeWorksheet(8);
     workbook.removeWorksheet(7);
     workbook.removeWorksheet(6);
     workbook.removeWorksheet(5);
@@ -117,7 +121,7 @@ async function f1() {
       };
 
       materialList.shift();
-      materialList = materialList.sort((a, b) => a[0] + b[0]);
+      materialList = materialList.sort((a, b) => a[0] - b[0]);
 
       let pos = targetSheet.getColumn(12);
       let valuesPos = ["POS."];
