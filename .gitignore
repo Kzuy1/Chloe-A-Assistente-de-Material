@@ -3,3 +3,6 @@ package-lock.json/
 package-lock.json
 *.xlsx
 *.dxf
+*.dwl2
+*.dwl
+*.bak
