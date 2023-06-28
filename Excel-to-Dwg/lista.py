@@ -1,7 +1,7 @@
 import ezdxf
 import openpyxl
 
-workbook = openpyxl.load_workbook('./Chloe-Python/2023-05-17_LISTA DE MATERIAL_PLATAFORMA AR FALSO_00_CHLOE_LES.xlsx', data_only= True)
+workbook = openpyxl.load_workbook('./2023-06-20_LISTA DE MATERIAL_00_BF-B0-09_CHLOE_LES.xlsx', data_only= True)
 
 def writeFiles(elemento):
   worksheetMaterial = workbook[elemento + ' - MATERIAL']
@@ -15,9 +15,9 @@ def writeFiles(elemento):
       'POS' : worksheetMaterial.cell(row=row, column=12).value,
       'descricao' : worksheetMaterial.cell(row=row, column=13).value,
       'unidade' : worksheetMaterial.cell(row=row, column=14).value,
-      'QTDE' : worksheetMaterial.cell(row=row, column=15).value,
+      'QTDE' : f"{worksheetMaterial.cell(row=row, column=15).value:.1f}",
       'material' : worksheetMaterial.cell(row=row, column=16).value,
-      'PesoTotal' : worksheetMaterial.cell(row=row, column=17).value
+      'PesoTotal' : f"{worksheetMaterial.cell(row=row, column=17).value:.1f}"
     }
     MaterialList.append(material)
 
@@ -33,18 +33,21 @@ def writeFiles(elemento):
       'descricao' : worksheetPeca.cell(row=row, column=6).value or worksheetPeca.cell(row=row, column=7).value or worksheetPeca.cell(row=row, column=5).value,
       'QTDE' : worksheetPeca.cell(row=row, column=4).value,
       'material' : worksheetPeca.cell(row=row, column=8).value,
-      'PesoUnit' : worksheetPeca.cell(row=row, column=11).value,
-      'PesoTotal' : worksheetPeca.cell(row=row, column=12).value
+      'PesoUnit' : f"{worksheetPeca.cell(row=row, column=11).value:.1f}",
+      'PesoTotal' : f"{worksheetPeca.cell(row=row, column=12).value:.1f}"
     }
     PecaList.append(peca)
 
-  doc = ezdxf.readfile('./Chloe-Python/REDECAM-BLOCO-BRANCO.dxf')
+  doc = ezdxf.readfile('./BLOCO-BRANCO.dxf')
   msp = doc.modelspace()
+
   bloco_material = doc.blocks.get('EMB_LISTA_DE_MATERIAL')
 
+  posForBlock = None
   if bloco_material :
     for indice, objeto in enumerate(MaterialList):
         pos = 196 + 7 * indice
+        posForBlock = pos
         insert = msp.add_blockref(bloco_material.name, insert=(0, pos, 0))
         insert.add_attrib("POSICAO", objeto["POS"])
         insert.add_attrib("DESCRICAO", objeto["descricao"])
@@ -53,11 +56,14 @@ def writeFiles(elemento):
         insert.add_attrib("MATERIAL", objeto["material"])
         insert.add_attrib("PESO", objeto["PesoTotal"])
 
+  msp.add_blockref('EMB_LISTA_DE_MATERIAL_DESCRITIVO_ING', insert=(0, 182, 0))
+  msp.add_blockref('EMB_LISTA_DE_MATERIAL_INFO_ING', insert=(0, posForBlock, 0))
+
   bloco_original = doc.blocks.get('REDECAM-DISTINTA_monolingua')
 
   if bloco_original :
     for indice, objeto in enumerate(PecaList):
-        pos = 293 + 6 * indice
+        pos = posForBlock + 13 + 6 * indice
         insert = msp.add_blockref(bloco_original.name, insert=(0, pos, 0))
         insert.add_attrib("MARCA", objeto["cod"])
         insert.add_attrib("DESCRIZIONE-IT", objeto["descricao"])
@@ -66,8 +72,29 @@ def writeFiles(elemento):
         insert.add_attrib("MATERIALE", objeto["material"])
         insert.add_attrib("PESO-CAD", objeto["PesoUnit"])
         insert.add_attrib("TOTALE", objeto["PesoTotal"])
+        insert.add_attrib("LARGHEZZA", 0)
+        insert.add_attrib("PROFONDITA'", 0)
+        insert.add_attrib("ALTEZZA", 0)
+        insert.add_attrib("CICLO-VERN-INT", 0)
+        insert.add_attrib("CICLO-VERN-EST", 0)
+        insert.add_attrib("VERNICIATURA-INT", 0)
+        insert.add_attrib("VERNICIATURA-EST", 0)
 
-  doc.saveas("./Chloe-Python/" + elemento + "_LISTA.dxf")
+  mtext = msp.add_mtext(
+    text= "\A1;" + elemento,
+    dxfattribs={
+        "insert": (103.742, 585.407, 0),  
+        "char_height": 25,  
+        "width": 0,  
+        "style": "Standard",
+        "rotation": 0,
+        "color": 4,
+        "layer" : "QUOTE",
+        "attachment_point": 5
+    }
+)
+
+  doc.saveas("./" + elemento + "_LISTA.dxf")
 
 planilhas = workbook.worksheets
 nomes_planilhas = set()
