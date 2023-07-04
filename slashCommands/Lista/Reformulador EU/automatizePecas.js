@@ -1,11 +1,10 @@
 const ExcelJS = require('exceljs');
 const { findMaterialPos } = require('./findMaterial.js');
-const filename = "./2023-06-20_LISTA DE MATERIAL_00_BF-B0-09_CHLOE_LES.xlsx";
 const codigoDeProjeto = "C122005";
 
 const workbook = new ExcelJS.Workbook();
 
-async function f1() {
+async function automatizePecas(filename) {
   await workbook.xlsx.readFile(filename).then(async function() {
     let sourceWorksheet = workbook.getWorksheet(1);
 
@@ -168,9 +167,10 @@ async function f1() {
       qtde.values = valuesQtde;
     };
 
-    workbook.xlsx.writeFile(`${filename}`);
+    await workbook.xlsx.writeFile(`${filename}`);
   });
 
+  return filename;
 };
 
-f1();
+module.exports.automatizePecas = automatizePecas

@@ -1,12 +1,12 @@
 const ExcelJS = require('exceljs');
 const { findMaterial, findMaterialEsp } = require('./findMaterial.js');
 const { adjustMaterial } = require('./adjustMaterial.js')
-const filename = "./2023-06-20_LISTA DE MATERIAL_00_BF-B0-09.xlsx";
+
 const codigoDeProjeto = "C122021";
 
 const workbook = new ExcelJS.Workbook();
 
-async function f1() {
+async function automatize(filename) {
   await workbook.xlsx.readFile(filename).then(async function() {
     let sourceWorksheet = workbook.getWorksheet(1);
     let targetWorkbook = new ExcelJS.Workbook();
@@ -121,7 +121,7 @@ async function f1() {
     const qtdeBaseCol = targetSheet.getColumn(10);
     qtdeBaseCol.eachCell(function(cell, rowNumber) {
       if (cell.value == null) {
-        //console.log(`🦋 Error CHX: QTDE não encontrado ${cell.address}`);
+        console.log(`🦋 Error CHX: QTDE não encontrado ${cell.address}`);
         cell.style = {
           fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: '79553D' } },
         };
@@ -240,11 +240,11 @@ async function f1() {
       });
       column.width = maxLength < 10 ? 10 : maxLength;
     });
-
-    targetWorkbook.xlsx.writeFile(`${filename.replace(".xlsx", "")}_CHLOE_LES.xlsx`);
+    await targetWorkbook.xlsx.writeFile(`${filename.replace(".xlsx", "")}_CHLOE.xlsx`);
 
   });
 
+  return `${filename.replace(".xlsx", "")}_CHLOE.xlsx`;
 };
 
-f1();
+module.exports.automatize = automatize
