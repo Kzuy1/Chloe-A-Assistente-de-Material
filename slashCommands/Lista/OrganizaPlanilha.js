@@ -39,7 +39,7 @@ module.exports = {
         await download();
 
         const file = await automatize(path)
-        interaction.reply({content: "Aqui está a Planilha organizada", files: [file] })
+        interaction.channel.send({content: "Aqui está a Planilha organizada", files: [file] })
 
     },
 };

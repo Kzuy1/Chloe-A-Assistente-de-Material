@@ -31,32 +31,21 @@ module.exports = {
                         resolve();
                     })
                     filePath.on('error', (err) => {
+                        console.log(err)
                         fs.unlink(path, () => reject(err));
                     });
                 })
             })
         }
         await download();
+
+        const pythonProcess = spawn('python', [`${__dirname}/ExcelToDwg/lista.py`, path]);
         
-        const result = spawn("python", ["-c", `import ${__dirname}lista`, `lista.excelToDwg()`]);
-
-        let output = '';
-
-        result.stdout.on('data', (data) => {
-        output += data.toString();
-        });
-
-        result.stderr.on('data', (data) => {
-        console.error(data.toString());
-        });
-
-        result.on('close', (code) => {
-        console.log(`O processo filho foi encerrado com o código ${code}`);
-        console.log(`Saída: ${output}`);
-        // Aqui você pode fazer o que quiser com a variável de saída (output)
-        });
-
-        // interaction.reply({content: "Aqui está a Planilha organizada", files: [file] })
+        for await (const data of pythonProcess.stdout) {
+            const file = data.toString().trim();
+            interaction.channel.send({content: `<@${interaction.user.id}>Aqui está os arquivos`, files: [file]})
+          };
+        
 
     },
 };
