@@ -1,8 +1,8 @@
-import ezdxf
-import openpyxl
+import zipfile
 import os
 import sys
-import zipfile
+import ezdxf
+import openpyxl
 
 fullPath = os.path.dirname(os.path.abspath(__file__))
 workbook = openpyxl.load_workbook(sys.argv[1], data_only= True)

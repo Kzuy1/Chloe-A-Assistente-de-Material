@@ -21,6 +21,7 @@ let listMaterial = [
 
   { modelo: "SHEET TH. 10,000 mm",  materialMod: "", descricao: "SHEET TH. 10.0mm", unidade: "m²", quantidade: 78.5, material: "S235JR", peso: 0},
   { modelo: "SHEET TH. 10,000 mm",  materialMod: "COR-TEN B", descricao: "SHEET TH. 10.0mm", unidade: "m²", quantidade: 78.5, material: "COR-TEN B", peso: 0},
+  { modelo: "SHEET TH. 10,000 mm",  materialMod: "PTFE", descricao: "SHEET TH. 10.0mm", unidade: "m²", quantidade: 21, material: "PTFE", peso: 0},
 
   { modelo: "SHEET TH. 12,000 mm",  materialMod: "", descricao: "SHEET TH. 12.0mm", unidade: "m²", quantidade: 94.2, material: "S235JR", peso: 0},
   { modelo: "SHEET TH. 12,000 mm",  materialMod: "STRENX 700 E/F", descricao: "SHEET TH. 12.0mm", unidade: "m²", quantidade: 94.2, material: "STRENX 700 E/F", peso: 0},
@@ -39,6 +40,8 @@ let listMaterial = [
   { modelo: "SHEET TH. 30,000 mm",  materialMod: "", descricao: "SHEET TH. 30.0mm", unidade: "m²", quantidade: 235.5, material: "S235JR", peso: 0},
 
   { modelo: "SHEET TH. 35,000 mm",  materialMod: "", descricao: "SHEET TH. 35.0mm", unidade: "m²", quantidade: 274.75, material: "S235JR", peso: 0},
+
+  { modelo: "SHEET TH. 40,000 mm",  materialMod: "", descricao: "SHEET TH. 40.0mm", unidade: "m²", quantidade: 314, material: "S235JR", peso: 0},
 
   { modelo: "SHEET TH. 50,000 mm",  materialMod: "", descricao: "SHEET TH. 50.0mm", unidade: "m²", quantidade: 392.5, material: "S235JR", peso: 0},
   { modelo: "SHEET TH. 50,000 mm",  materialMod: "STRENX 700 E/F", descricao: "SHEET TH. 50.0mm", unidade: "m²", quantidade: 392.5, material: "STRENX 700 E/F", peso: 0},
