@@ -4,22 +4,22 @@ const fs = require('fs');
 const { spawn } = require('child_process');
 
 module.exports = {
-    name: "importa_excel_para_dwg",
-    category: "Lista de Material",
-    description: "Este comando converte os dados da planilha para o DWG",
+    name: "verifica_desenho",
+    category: "Verificador de Desenho",
+    description: "Este comando verifica o desenho",
     ownerOnly: false,
     options: [
         {
-            name: 'planilha',
-            description: 'Anexe a Planilha',
+            name: 'desenho',
+            description: 'Anexe o Desenho',
             type: ApplicationCommandOptionType.Attachment,
             required: true
         }
     ],
 
     run: async (client, interaction) => {
-        const attachment = interaction.options.get("planilha");
-        const path = `${__dirname}/PlanilhasSaves/${attachment.attachment.name}`;
+        const attachment = interaction.options.get("desenho");
+        const path = `${__dirname}/DesenhoSaves/${attachment.attachment.name}`;
 
         function download(){
             return new Promise((resolve, reject) => {
@@ -31,7 +31,6 @@ module.exports = {
                         resolve();
                     })
                     filePath.on('error', (err) => {
-                        console.log(err)
                         fs.unlink(path, () => reject(err));
                     });
                 })
@@ -39,13 +38,13 @@ module.exports = {
         }
         await download();
 
-        const pythonProcess = spawn('python', [`${__dirname}/ExcelToDwg/lista.py`, path]);
+        const pythonProcess = spawn('python', [`${__dirname}/verificador.py`, path]);
         
         for await (const data of pythonProcess.stdout) {
             const file = data.toString().trim();
-            interaction.channel.send({content: `<@${interaction.user.id}>Aqui está os arquivos`, files: [file]})
+            console.log(file)
+            // interaction.channel.send({content: `<@${interaction.user.id}>Aqui está os arquivos`, files: [file]})
         };
-        
 
     },
 };
