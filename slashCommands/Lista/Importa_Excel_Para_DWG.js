@@ -1,7 +1,8 @@
 const { ApplicationCommandOptionType } = require('discord.js');
 const https = require('https');
 const fs = require('fs');
-const { spawn } = require('child_process');
+const axios = require('axios');
+const FormData = require('form-data'); // Importar a biblioteca form-data
 
 module.exports = {
     name: "importa_excel_para_dwg",
@@ -39,13 +40,28 @@ module.exports = {
         }
         await download();
 
-        const pythonProcess = spawn('python', [`${__dirname}/ExcelToDwg/lista.py`, path]);
+        async function apiRequest(){
+            try {
+                const fileContent = fs.readFileSync(path);
+                const formData = new FormData();
+                formData.append('file', fileContent, path.match(/\/([^/]+)$/)[0]);
+                
+                // Usar o await para esperar a resposta do servidor antes de prosseguir
+                const response = await axios.post('http://127.0.0.1:8080/upload', formData, {
+                    headers: formData.getHeaders(), 
+                    responseType: 'arraybuffer',
+                });
+                
+                const filename = response.headers['content-disposition'].split('filename=')[1].replace(/"/g, '').trim();
+                const responsePath = `${__dirname}/BlockList/${filename}`;
+                fs.writeFileSync(responsePath, response.data);
+                interaction.channel.send({content: `<@${interaction.user.id}>Aqui está os arquivos`, files: [responsePath]})
+            } catch (error) {
+                console.error('Erro ao enviar o arquivo:', error.message);
+            }
+        }
+        await apiRequest();
         
-        for await (const data of pythonProcess.stdout) {
-            const file = data.toString().trim();
-            interaction.channel.send({content: `<@${interaction.user.id}>Aqui está os arquivos`, files: [file]})
-        };
-        
-
+        // Restante do código...
     },
 };
