@@ -78,7 +78,7 @@ async function automatize(filename) {
         tipoMaterial.value = "S235JR";
       }
       if (tipoMaterial.value != "S235JR") {
-        error[10].cell.push(cell.address)
+        error[10].cell.push(`H${rowNumber}`)
         material = findMaterialEsp(cell.value, tipoMaterial);
       } else {
         material = findMaterial(cell.value);

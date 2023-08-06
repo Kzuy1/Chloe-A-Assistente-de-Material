@@ -44,12 +44,12 @@ handler.loadSlashCommands(client);
 
 // Erro no Handling
 
-// process.on("uncaughtException", (err) => {
-//   console.log("Uncaught Exception: " + err);
-// });
+process.on("uncaughtException", (err) => {
+  console.log("Uncaught Exception: " + err);
+});
   
-// process.on("unhandledRejection", (reason, promise) => {
-//   console.log("[GRAVE] Rejeição possivelmente não tratada em: Promise ", promise, " motivo: ", reason.message);
-// });
+process.on("unhandledRejection", (reason, promise) => {
+  console.log("[GRAVE] Rejeição possivelmente não tratada em: Promise ", promise, " motivo: ", reason.message);
+});
 
 client.login(config.token);

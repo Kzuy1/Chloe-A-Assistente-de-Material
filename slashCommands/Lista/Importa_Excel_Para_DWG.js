@@ -2,7 +2,7 @@ const { ApplicationCommandOptionType } = require('discord.js');
 const https = require('https');
 const fs = require('fs');
 const axios = require('axios');
-const FormData = require('form-data'); // Importar a biblioteca form-data
+const FormData = require('form-data');
 
 module.exports = {
     name: "importa_excel_para_dwg",
@@ -47,7 +47,7 @@ module.exports = {
                 formData.append('file', fileContent, path.match(/\/([^/]+)$/)[0]);
                 
                 // Usar o await para esperar a resposta do servidor antes de prosseguir
-                const response = await axios.post('http://127.0.0.1:8080/upload', formData, {
+                const response = await axios.post('https://chloeape.discloud.app:443/upload', formData, {
                     headers: formData.getHeaders(), 
                     responseType: 'arraybuffer',
                 });
@@ -62,6 +62,5 @@ module.exports = {
         }
         await apiRequest();
         
-        // Restante do código...
     },
 };
