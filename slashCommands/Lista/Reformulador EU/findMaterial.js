@@ -8,6 +8,7 @@ let listMaterial = [
 
   { modelo: "SHEET TH. 5,000 mm",  materialMod: "", descricao: "SHEET TH. 5.0mm", unidade: "m²", quantidade: 39.25, material: "S235JR", peso: 0},
   { modelo: "SHEET TH. 5,000 mm",  materialMod: "AISI 304L", descricao: "SHEET TH. 5.0mm", unidade: "m²", quantidade: 39.5, material: "AISI 304L", peso: 0},
+  { modelo: "SHEET TH. 5,000 mm",  materialMod: "P265GH", descricao: "SHEET TH. 5.0mm", unidade: "m²", quantidade: 39.25, material: "P265GH", peso: 0},
 
   { modelo: "SHEET TH. 6,000 mm",  materialMod: "", descricao: "SHEET TH. 6.0mm", unidade: "m²", quantidade: 47.1, material: "S235JR", peso: 0},
   { modelo: "SHEET TH. 6,000 mm",  materialMod: "S275JR", descricao: "SHEET TH. 6.0mm", unidade: "m²", quantidade: 47.1, material: "S275JR", peso: 0},
@@ -67,10 +68,15 @@ let listMaterial = [
   { modelo: "L125x125x12",  materialMod: "S275JR", descricao: "L 125x125x12.0mm", unidade: "m", quantidade: 23.55, material: "S275JR", peso: 0},
   //BARRA CHATA
   //REDONDO LAMINADO
-  { modelo: "Ø12",  materialMod: "AISI 304L", descricao: "ROUND BAR Ø12.0mm", unidade: "m", quantidade: 0.9, material: "AISI 304L", peso: 0},
+  { modelo: "12",  materialMod: "", descricao: "ROUND BAR Ø12.0mm", unidade: "m", quantidade: 0.9, material: "S235JR", peso: 0},
+  { modelo: "12",  materialMod: "AISI 304L", descricao: "ROUND BAR Ø12.0mm", unidade: "m", quantidade: 0.9, material: "AISI 304L", peso: 0},
+  { modelo: "12",  materialMod: "P265GH", descricao: "ROUND BAR Ø12.0mm", unidade: "m", quantidade: 0.9, material: "P265GH", peso: 0},
+
   { modelo: "REDONDO TREFILADO Ø15,000 mm",  materialMod: "", descricao: "ROUND BAR Ø15.0mm", unidade: "m", quantidade: 1.38, material: "S235JR", peso: 0},
+
   { modelo: "Ø16",  materialMod: "", descricao: "ROUND BAR Ø16.0mm", unidade: "m", quantidade: 1.6, material: "S235JR", peso: 0},
   { modelo: "Ø16",  materialMod: "AISI 304L", descricao: "ROUND BAR Ø16.0mm", unidade: "m", quantidade: 1.6, material: "AISI 304L", peso: 0},
+
   { modelo: "20",  materialMod: "", descricao: "ROUND BAR Ø20.0mm", unidade: "m", quantidade: 2.5, material: "S235JR", peso: 0},
   { modelo: "40",  materialMod: "", descricao: "ROUND BAR Ø40.0mm", unidade: "m", quantidade: 9.9, material: "S235JR", peso: 0},
   //PERFIL U
