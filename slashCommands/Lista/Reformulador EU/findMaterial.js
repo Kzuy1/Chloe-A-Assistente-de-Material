@@ -41,6 +41,7 @@ let listMaterial = [
   { modelo: "SHEET TH. 20,000 mm",  materialMod: "", descricao: "SHEET TH. 20.0mm", unidade: "m²", quantidade: 157, material: "S235JR", peso: 0},
 
   { modelo: "SHEET TH. 25,000 mm",  materialMod: "", descricao: "SHEET TH. 25.0mm", unidade: "m²", quantidade: 196.25, material: "S235JR", peso: 0},
+  { modelo: "SHEET TH. 25,000 mm",  materialMod: "S275JR", descricao: "SHEET TH. 25.0mm", unidade: "m²", quantidade: 196.25, material: "S275JR", peso: 0},
   { modelo: "SHEET TH. 25,000 mm",  materialMod: "STRENX 700", descricao: "SHEET TH. 25.0mm", unidade: "m²", quantidade: 196.25, material: "STRENX 700", peso: 0},
 
   { modelo: "SHEET TH. 30,000 mm",  materialMod: "", descricao: "SHEET TH. 30.0mm", unidade: "m²", quantidade: 235.5, material: "S235JR", peso: 0},
@@ -119,6 +120,9 @@ let listMaterial = [
   { modelo: "88,9 x 5,6",  materialMod: "", descricao: "PIPE ØEXT. 88.9x5.60mm", unidade: "m", quantidade: 11.5, material: "S235JR", peso: 0},
   { modelo: "88.9x6.3",  materialMod: "", descricao: "PIPE ØEXT. 88.9x6.30mm", unidade: "m", quantidade: 12.8, material: "S235JR", peso: 0},
   { modelo: "88.9x6.3",  materialMod: "S275JR", descricao: "PIPE ØEXT. 88.9x6.30mm", unidade: "m", quantidade: 12.8, material: "S275JR", peso: 0},
+
+  { modelo: "101.6x6.0",  materialMod: "", descricao: "PIPE ØEXT. 101.6x6.00mm", unidade: "m", quantidade: 14.15, material: "S235JR", peso: 0},
+  { modelo: "101.6x6.0",  materialMod: "S275JR", descricao: "PIPE ØEXT. 101.6x6.00mm", unidade: "m", quantidade: 14.15, material: "S275JR", peso: 0},
 
   { modelo: "114.3x6.3",  materialMod: "", descricao: "PIPE ØEXT. 114.3x6.30mm", unidade: "m", quantidade: 16.78, material: "S235JR", peso: 0},
   { modelo: "114.3x6.3",  materialMod: "S275JR", descricao: "PIPE ØEXT. 114.3x6.30mm", unidade: "m", quantidade: 16.78, material: "S275JR", peso: 0},
