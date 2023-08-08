@@ -152,7 +152,7 @@ let listMaterial = [
   //CHAVETA BARRA
   //CURVAS
   //INSTRUMENTAÇÃO
-  { modelo: "CURVE ØEXT. 42.4x2.90mm",  materialMod: "", descricao: "", unidade: "N°", quantidade: 0, material: "S235JR", peso: 0},
+  { modelo: "CURVE ØEXT. 42.4x2.90mm",  materialMod: "", descricao: "CURVE ØEXT. 42.4x2.90mm", unidade: "N°", quantidade: 0, material: "S235JR", peso: 0},
   { modelo: "Tampão",  materialMod: "", descricao: "CAP", unidade: "N°", quantidade: 0, material: "S235JR", peso: 0},
   { modelo: "Bucha de redução",  materialMod: "", descricao: "REDUCING BUSH", unidade: "N°", quantidade: 0, material: "S235JR", peso: 0},
   { modelo: "Conexões de ferro fundido maleável - Plugues com rebordo T9",  materialMod: "", descricao: "PLUG", unidade: "N°", quantidade: 0, material: "S235JR", peso: 0},
@@ -161,22 +161,3 @@ let listMaterial = [
   { modelo: "DEGRAU",  materialMod: "GRATING", descricao: "GRATING TREADS - MESH 30X100  BEARING PLATE 30X4 (37.5 kg/m²)", unidade: "N°", quantidade: 8.405, material: "S235JR", peso: 0},
   { modelo: "SHEET TH. 30,000 mm",  materialMod: "GRATING", descricao: "GALVANIZED GRATING - MESH 22X66  BEARING PLATE 30X3 (38.2 kg/m²)", unidade: "N°", quantidade: 38.2, material: "S235JR", peso: 0},
   //{ modelo: ,  materialMod: , descricao: , unidade: , quantidade: , material: , peso: 0},
-];
-
-const findMaterial = (descricao) => {
-  let info = listMaterial.filter(obj => obj.modelo == descricao && obj.materialMod == "");
-  return info[0];
-};
-
-const findMaterialEsp = (descricao, material) => {
-  let info = listMaterial.filter(obj => obj.modelo == descricao && obj.materialMod == material);
-  return info[0];
-};
-
-const findMaterialPos = (descricao, material) => {
-  let pos = listMaterial.findIndex(obj => obj.descricao == descricao && obj.material == material);
-  let info = listMaterial.filter(obj => obj.descricao == descricao && obj.material == material);
-  return [pos, info[0].descricao, info[0].unidade, info[0].quantidade, info[0].material, info[0].peso];
-};
-
-module.exports = { findMaterial, findMaterialEsp, findMaterialPos };
