@@ -7,11 +7,18 @@ let listMaterial = [
   { modelo: "SHEET TH. 4,000 mm",  materialMod: "AISI 304L", descricao: "SHEET TH. 4.0mm", unidade: "m²", quantidade: 31.6, material: "AISI 304L", peso: 0},
 
   { modelo: "SHEET TH. 5,000 mm",  materialMod: "", descricao: "SHEET TH. 5.0mm", unidade: "m²", quantidade: 39.25, material: "S235JR", peso: 0},
+  { modelo: "SHEET TH. 5,000 mm",  materialMod: "S275JR", descricao: "SHEET TH. 5.0mm", unidade: "m²", quantidade: 39.25, material: "S275JR", peso: 0},
+  { modelo: "SHEET TH. 5,000 mm",  materialMod: "S3555JR", descricao: "SHEET TH. 5.0mm", unidade: "m²", quantidade: 39.25, material: "S3555JR", peso: 0},
   { modelo: "SHEET TH. 5,000 mm",  materialMod: "AISI 304L", descricao: "SHEET TH. 5.0mm", unidade: "m²", quantidade: 39.5, material: "AISI 304L", peso: 0},
+  { modelo: "SHEET TH. 5,000 mm",  materialMod: "AISI 316L", descricao: "SHEET TH. 5.0mm", unidade: "m²", quantidade: 40, material: "AISI 316L", peso: 0},
+  { modelo: "SHEET TH. 5,000 mm",  materialMod: "PTFE", descricao: "SHEET TH. 5.0mm", unidade: "m²", quantidade: 10.5, material: "PTFE", peso: 0},
+  { modelo: "SHEET TH. 5,000 mm",  materialMod: "COR-TEN B", descricao: "SHEET TH. 5.0mm", unidade: "m²", quantidade: 39.25, material: "COR-TEN B", peso: 0},
+  { modelo: "SHEET TH. 5,000 mm",  materialMod: "STRENX 700", descricao: "SHEET TH. 5.0mm", unidade: "m²", quantidade: 39.25, material: "STRENX 700", peso: 0},
   { modelo: "SHEET TH. 5,000 mm",  materialMod: "P265GH", descricao: "SHEET TH. 5.0mm", unidade: "m²", quantidade: 39.25, material: "P265GH", peso: 0},
 
   { modelo: "SHEET TH. 6,000 mm",  materialMod: "", descricao: "SHEET TH. 6.0mm", unidade: "m²", quantidade: 47.1, material: "S235JR", peso: 0},
   { modelo: "SHEET TH. 6,000 mm",  materialMod: "S275JR", descricao: "SHEET TH. 6.0mm", unidade: "m²", quantidade: 47.1, material: "S275JR", peso: 0},
+  { modelo: "SHEET TH. 6,000 mm",  materialMod: "S3555JR", descricao: "SHEET TH. 6.0mm", unidade: "m²", quantidade: 47.1, material: "S3555JR", peso: 0},
   { modelo: "SHEET TH. 6,000 mm",  materialMod: "AISI 304L", descricao: "SHEET TH. 6.0mm", unidade: "m²", quantidade: 47.4, material: "AISI 304L", peso: 0},
   { modelo: "SHEET TH. 6,000 mm",  materialMod: "AISI 316L", descricao: "SHEET TH. 6.0mm", unidade: "m²", quantidade: 48.0, material: "AISI 316L", peso: 0},
   { modelo: "SHEET TH. 6,000 mm",  materialMod: "PTFE", descricao: "SHEET TH. 6.0mm", unidade: "m²", quantidade: 12.6, material: "PTFE", peso: 0},
@@ -20,8 +27,14 @@ let listMaterial = [
   { modelo: "SHEET TH. 6,000 mm",  materialMod: "P265GH", descricao: "SHEET TH. 6.0mm", unidade: "m²", quantidade: 47.1, material: "P265GH", peso: 0},
 
   { modelo: "SHEET TH. 8,000 mm",  materialMod: "", descricao: "SHEET TH. 8.0mm", unidade: "m²", quantidade: 62.8, material: "S235JR", peso: 0},
+  { modelo: "SHEET TH. 8,000 mm",  materialMod: "S275JR", descricao: "SHEET TH. 8.0mm", unidade: "m²", quantidade: 62.8, material: "S275JR", peso: 0},
+  { modelo: "SHEET TH. 8,000 mm",  materialMod: "S3555JR", descricao: "SHEET TH. 8.0mm", unidade: "m²", quantidade: 62.8, material: "S3555JR", peso: 0},
   { modelo: "SHEET TH. 8,000 mm",  materialMod: "AISI 304L", descricao: "SHEET TH. 8.0mm", unidade: "m²", quantidade: 63.2, material: "AISI 304L", peso: 0},
+  { modelo: "SHEET TH. 8,000 mm",  materialMod: "AISI 316L", descricao: "SHEET TH. 8.0mm", unidade: "m²", quantidade: 64, material: "AISI 316L", peso: 0},
+  { modelo: "SHEET TH. 8,000 mm",  materialMod: "PTFE", descricao: "SHEET TH. 8.0mm", unidade: "m²", quantidade: 16.8, material: "PTFE", peso: 0},
+  { modelo: "SHEET TH. 8,000 mm",  materialMod: "COR-TEN B", descricao: "SHEET TH. 8.0mm", unidade: "m²", quantidade: 62.8, material: "COR-TEN B", peso: 0},
   { modelo: "SHEET TH. 8,000 mm",  materialMod: "STRENX 700", descricao: "SHEET TH. 8.0mm", unidade: "m²", quantidade: 62.8, material: "STRENX 700", peso: 0},
+  { modelo: "SHEET TH. 8,000 mm",  materialMod: "P265GH", descricao: "SHEET TH. 8.0mm", unidade: "m²", quantidade: 62.8, material: "P265GH", peso: 0},
 
   { modelo: "SHEET TH. 10,000 mm",  materialMod: "", descricao: "SHEET TH. 10.0mm", unidade: "m²", quantidade: 78.5, material: "S235JR", peso: 0},
   { modelo: "SHEET TH. 10,000 mm",  materialMod: "PTFE", descricao: "SHEET TH. 10.0mm", unidade: "m²", quantidade: 21, material: "PTFE", peso: 0},
@@ -33,6 +46,14 @@ let listMaterial = [
   { modelo: "SHEET TH. 12,000 mm",  materialMod: "P265GH", descricao: "SHEET TH. 12.0mm", unidade: "m²", quantidade: 94.2, material: "P265GH", peso: 0},
 
   { modelo: "SHEET TH. 15,000 mm",  materialMod: "", descricao: "SHEET TH. 15.0mm", unidade: "m²", quantidade: 117.75, material: "S235JR", peso: 0},
+  { modelo: "SHEET TH. 15,000 mm",  materialMod: "S275JR", descricao: "SHEET TH. 15.0mm", unidade: "m²", quantidade:  117.75, material: "S275JR", peso: 0},
+  { modelo: "SHEET TH. 15,000 mm",  materialMod: "S3555JR", descricao: "SHEET TH. 15.0mm", unidade: "m²", quantidade:  117.75, material: "S3555JR", peso: 0},
+  { modelo: "SHEET TH. 15,000 mm",  materialMod: "AISI 304L", descricao: "SHEET TH. 15.0mm", unidade: "m²", quantidade:  118.5, material: "AISI 304L", peso: 0},
+  { modelo: "SHEET TH. 15,000 mm",  materialMod: "AISI 316L", descricao: "SHEET TH. 15.0mm", unidade: "m²", quantidade:  120, material: "AISI 316L", peso: 0},
+  { modelo: "SHEET TH. 15,000 mm",  materialMod: "PTFE", descricao: "SHEET TH. 15.0mm", unidade: "m²", quantidade:  31.5, material: "PTFE", peso: 0},
+  { modelo: "SHEET TH. 15,000 mm",  materialMod: "COR-TEN B", descricao: "SHEET TH. 15.0mm", unidade: "m²", quantidade:  117.75, material: "COR-TEN B", peso: 0},
+  { modelo: "SHEET TH. 15,000 mm",  materialMod: "STRENX 700", descricao: "SHEET TH. 15.0mm", unidade: "m²", quantidade:  117.75, material: "STRENX 700", peso: 0},
+  { modelo: "SHEET TH. 15,000 mm",  materialMod: "P265GH", descricao: "SHEET TH. 15.0mm", unidade: "m²", quantidade:  117.75, material: "P265GH", peso: 0},
 
   { modelo: "SHEET TH. 16,000 mm",  materialMod: "", descricao: "SHEET TH. 16.0mm", unidade: "m²", quantidade: 125.6, material: "S235JR", peso: 0},
   { modelo: "SHEET TH. 16,000 mm",  materialMod: "COR-TEN B", descricao: "SHEET TH. 16.0mm", unidade: "m²", quantidade: 125.6, material: "COR-TEN B", peso: 0},
@@ -62,8 +83,10 @@ let listMaterial = [
   { modelo: "L50x50x6",  materialMod: "", descricao: "L 50x50x6.0mm", unidade: "m", quantidade: 4.47, material: "S235JR", peso: 0},
 
   { modelo: "L60x60x5",  materialMod: "", descricao: "L 60x60x5.0mm", unidade: "m", quantidade: 4.57, material: "S235JR", peso: 0},
+
   { modelo: "L60x60x6",  materialMod: "", descricao: "L 60x60x6.0mm", unidade: "m", quantidade: 5.42, material: "S235JR", peso: 0},
   { modelo: "L60x60x6",  materialMod: "AISI 304L", descricao: "L 60x60x6.0mm", unidade: "m", quantidade: 5.7, material: "AISI 304L", peso: 0},
+  { modelo: "L60x60x6",  materialMod: "P265GH", descricao: "L 60x60x6.0mm", unidade: "m", quantidade: 5.42, material: "P265GH", peso: 0},
 
   { modelo: "L80x80x6",  materialMod: "", descricao: "L 80x80x6.0mm", unidade: "m", quantidade: 7.34, material: "S235JR", peso: 0},
   { modelo: "L80x80x8",  materialMod: "", descricao: "L 80x80x8.0mm", unidade: "m", quantidade: 9.63, material: "S235JR", peso: 0},
@@ -86,8 +109,13 @@ let listMaterial = [
   //PERFIL U
   { modelo: "U 80",  materialMod: "", descricao: "UNP 80", unidade: "m", quantidade: 8.64, material: "S235JR", peso: 0},
   { modelo: "U 100",  materialMod: "", descricao: "UNP 100", unidade: "m", quantidade: 10.6, material: "S235JR", peso: 0},
+
   { modelo: "U 120",  materialMod: "", descricao: "UNP 120", unidade: "m", quantidade: 13.4, material: "S235JR", peso: 0},
+  { modelo: "U 120",  materialMod: "P265GH", descricao: "UNP 120", unidade: "m", quantidade: 13.4, material: "P265GH", peso: 0},
+
   { modelo: "U 140",  materialMod: "", descricao: "UNP 140", unidade: "m", quantidade: 16, material: "S235JR", peso: 0},
+  { modelo: "U 140",  materialMod: "P265GH", descricao: "UNP 140", unidade: "m", quantidade: 16, material: "P265GH", peso: 0},
+
   { modelo: "U 160",  materialMod: "", descricao: "UNP 160", unidade: "m", quantidade: 18.8, material: "S235JR", peso: 0},
   { modelo: "U 200",  materialMod: "", descricao: "UNP 200", unidade: "m", quantidade: 25.3, material: "S235JR", peso: 0},
   { modelo: "U 240 x 85",  materialMod: "", descricao: "UNP 240", unidade: "m", quantidade: 33.2, material: "S235JR", peso: 0},
@@ -117,8 +145,10 @@ let listMaterial = [
   { modelo: "PIPE ØEXT. 60,300 mmx2,800 mm",  materialMod: "", descricao: "PIPE ØEXT. 60.3x2.80mm", unidade: "m", quantidade: 4.0, material: "S235JR", peso: 0},
   { modelo: "60,3 x 2,9",  materialMod: "AISI 304L", descricao: "PIPE ØEXT. 60.3x2.90mm", unidade: "m", quantidade: 4.2, material: "AISI 304L", peso: 0},
   { modelo: "60,3 x 3,2",  materialMod: "", descricao: "PIPE ØEXT. 60.3x3.20mm", unidade: "m", quantidade: 4.5, material: "S235JR", peso: 0},
+
   { modelo: "60,3 x 4",  materialMod: "", descricao: "PIPE ØEXT. 60.3x4.00mm", unidade: "m", quantidade: 5.55, material: "S235JR", peso: 0},
   { modelo: "60.3x4.0",  materialMod: "", descricao: "PIPE ØEXT. 60.3x4.00mm", unidade: "m", quantidade: 5.55, material: "S235JR", peso: 0},
+  { modelo: "60,3 x 4",  materialMod: "P265GH", descricao: "PIPE ØEXT. 60.3x4.00mm", unidade: "m", quantidade: 5.55, material: "P265GH", peso: 0},
 
   { modelo: "73,0 x 5,2",  materialMod: "AISI 304L", descricao: "PIPE ØEXT. 73.0x5.20mm", unidade: "m", quantidade: 8.8, material: "AISI 304L", peso: 0},
   { modelo: "73 x 5,4",  materialMod: "", descricao: "PIPE ØEXT. 73.0x5.40mm", unidade: "m", quantidade: 9.0, material: "S235JR", peso: 0},
