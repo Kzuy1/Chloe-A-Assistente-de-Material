@@ -55,8 +55,11 @@ let listMaterial = [
   //CHAPA XADREZ
   { modelo: "EMBOSSED PLATE Sp. 5,000 mm",  materialMod: "", descricao: "TEARDROP PATTERNED SHEET PLATE Sp. 3+2", unidade: "m²", quantidade: 27, material: "S235JR", peso: 0},
   //PERFIL L
+  { modelo: "L40x40x4",  materialMod: "", descricao: "L 40x40x4.0mm", unidade: "m", quantidade: 2.42, material: "S235JR", peso: 0},
+
   { modelo: "L50x50x4",  materialMod: "", descricao: "L 50x50x4.0mm", unidade: "m", quantidade: 3.07, material: "S235JR", peso: 0},
   { modelo: "L50x50x5",  materialMod: "", descricao: "L 50x50x5.0mm", unidade: "m", quantidade: 3.77, material: "S235JR", peso: 0},
+  { modelo: "L50x50x6",  materialMod: "", descricao: "L 50x50x6.0mm", unidade: "m", quantidade: 4.47, material: "S235JR", peso: 0},
 
   { modelo: "L60x60x5",  materialMod: "", descricao: "L 60x60x5.0mm", unidade: "m", quantidade: 4.57, material: "S235JR", peso: 0},
   { modelo: "L60x60x6",  materialMod: "", descricao: "L 60x60x6.0mm", unidade: "m", quantidade: 5.42, material: "S235JR", peso: 0},
@@ -85,6 +88,7 @@ let listMaterial = [
   { modelo: "U 100",  materialMod: "", descricao: "UNP 100", unidade: "m", quantidade: 10.6, material: "S235JR", peso: 0},
   { modelo: "U 120",  materialMod: "", descricao: "UNP 120", unidade: "m", quantidade: 13.4, material: "S235JR", peso: 0},
   { modelo: "U 140",  materialMod: "", descricao: "UNP 140", unidade: "m", quantidade: 16, material: "S235JR", peso: 0},
+  { modelo: "U 160",  materialMod: "", descricao: "UNP 160", unidade: "m", quantidade: 18.8, material: "S235JR", peso: 0},
   { modelo: "U 200",  materialMod: "", descricao: "UNP 200", unidade: "m", quantidade: 25.3, material: "S235JR", peso: 0},
   { modelo: "U 240 x 85",  materialMod: "", descricao: "UNP 240", unidade: "m", quantidade: 33.2, material: "S235JR", peso: 0},
   { modelo: "U 300",  materialMod: "", descricao: "UNP 300", unidade: "m", quantidade: 46.2, material: "S235JR", peso: 0},
@@ -96,7 +100,9 @@ let listMaterial = [
   { modelo: "PIPE ØEXT. 21,300 mmx2,600 mm",  materialMod: "AISI 304L", descricao: "PIPE ØEXT. 21.3x2.60mm", unidade: "m", quantidade: 1.2, material: "AISI 304L", peso: 0},
   { modelo: "21,3 x 2,9",  materialMod: "", descricao: "PIPE ØEXT. 21.3x2.90mm", unidade: "m", quantidade: 1.3, material: "S235JR", peso: 0},
 
-  { modelo: "26,7 x 2,9",  materialMod: "", descricao: "PIPE ØEXT. 26.7x2.90mm", unidade: "m", quantidade: 1.56, material: "S235JR", peso: 0},
+  { modelo: "26,7 x 2,9",  materialMod: "", descricao: "PIPE ØEXT. 26.7x2.90mm", unidade: "m", quantidade: 1.7, material: "S235JR", peso: 0},
+
+  { modelo: "26,9 x 2,3",  materialMod: "", descricao: "PIPE ØEXT. 26.9x2.30mm", unidade: "m", quantidade: 1.72, material: "S235JR", peso: 0},
 
   { modelo: "33,7 x 3,2",  materialMod: "", descricao: "PIPE ØEXT. 33.7x3.20mm", unidade: "m", quantidade: 2.4, material: "S235JR", peso: 0},
 
@@ -146,10 +152,14 @@ let listMaterial = [
   //CHAVETA BARRA
   //CURVAS
   //INSTRUMENTAÇÃO
+  { modelo: "CURVE ØEXT. 42.4x2.90mm",  materialMod: "", descricao: "", unidade: "N°", quantidade: 0, material: "S235JR", peso: 0},
   { modelo: "Tampão",  materialMod: "", descricao: "CAP", unidade: "N°", quantidade: 0, material: "S235JR", peso: 0},
   { modelo: "Bucha de redução",  materialMod: "", descricao: "REDUCING BUSH", unidade: "N°", quantidade: 0, material: "S235JR", peso: 0},
   { modelo: "Conexões de ferro fundido maleável - Plugues com rebordo T9",  materialMod: "", descricao: "PLUG", unidade: "N°", quantidade: 0, material: "S235JR", peso: 0},
   { modelo: "Encanamento - Conexões de aço inox com rosca de acordo com ISO 7-1 - Bolsa S2",  materialMod: "", descricao: "SOCKET", unidade: "N°", quantidade: 0, material: "S235JR", peso: 0},
+  //GRADES
+  { modelo: "DEGRAU",  materialMod: "GRATING", descricao: "GRATING TREADS - MESH 30X100  BEARING PLATE 30X4 (37.5 kg/m²)", unidade: "N°", quantidade: 8.405, material: "S235JR", peso: 0},
+  { modelo: "SHEET TH. 30,000 mm",  materialMod: "GRATING", descricao: "GALVANIZED GRATING - MESH 22X66  BEARING PLATE 30X3 (38.2 kg/m²)", unidade: "N°", quantidade: 38.2, material: "S235JR", peso: 0},
   //{ modelo: ,  materialMod: , descricao: , unidade: , quantidade: , material: , peso: 0},
 ];
 
