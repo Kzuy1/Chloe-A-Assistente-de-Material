@@ -19,6 +19,7 @@ let listMaterial = [
   { modelo: "SHEET TH. 6,000 mm",  materialMod: "", descricao: "SHEET TH. 6.0mm", unidade: "m²", quantidade: 47.1, material: "S235JR", peso: 0},
   { modelo: "SHEET TH. 6,000 mm",  materialMod: "S275JR", descricao: "SHEET TH. 6.0mm", unidade: "m²", quantidade: 47.1, material: "S275JR", peso: 0},
   { modelo: "SHEET TH. 6,000 mm",  materialMod: "S3555JR", descricao: "SHEET TH. 6.0mm", unidade: "m²", quantidade: 47.1, material: "S3555JR", peso: 0},
+  { modelo: "SHEET TH. 6,000 mm",  materialMod: "S32205", descricao: "SHEET TH. 6.0mm", unidade: "m²", quantidade: 48, material: "S32205", peso: 0},
   { modelo: "SHEET TH. 6,000 mm",  materialMod: "AISI 304L", descricao: "SHEET TH. 6.0mm", unidade: "m²", quantidade: 47.4, material: "AISI 304L", peso: 0},
   { modelo: "SHEET TH. 6,000 mm",  materialMod: "AISI 316L", descricao: "SHEET TH. 6.0mm", unidade: "m²", quantidade: 48.0, material: "AISI 316L", peso: 0},
   { modelo: "SHEET TH. 6,000 mm",  materialMod: "PTFE", descricao: "SHEET TH. 6.0mm", unidade: "m²", quantidade: 12.6, material: "PTFE", peso: 0},
