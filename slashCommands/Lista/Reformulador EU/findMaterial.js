@@ -4,6 +4,7 @@ let listMaterial = [
   { modelo: "SHEET TH. 2,000 mm",  materialMod: "AISI 304L", descricao: "SHEET TH. 2.0mm", unidade: "m²", quantidade: 15.8, material: "AISI 304L", peso: 0},
 
   { modelo: "SHEET TH. 4,000 mm",  materialMod: "", descricao: "SHEET TH. 4.0mm", unidade: "m²", quantidade: 31.4, material: "S235JR", peso: 0},
+  { modelo: "SHEET TH. 4,000 mm",  materialMod: "S32205", descricao: "SHEET TH. 4.0mm", unidade: "m²", quantidade: 31.4, material: "S32205", peso: 0},
   { modelo: "SHEET TH. 4,000 mm",  materialMod: "AISI 304L", descricao: "SHEET TH. 4.0mm", unidade: "m²", quantidade: 31.6, material: "AISI 304L", peso: 0},
   { modelo: "SHEET TH. 4,000 mm",  materialMod: "PTFE", descricao: "SHEET TH. 4.0mm", unidade: "m²", quantidade: 8.4, material: "PTFE", peso: 0},
   { modelo: "SHEET TH. 4,000 mm",  materialMod: "COR-TEN B", descricao: "SHEET TH. 4.0mm", unidade: "m²", quantidade: 31.6, material: "COR-TEN B", peso: 0},
@@ -11,6 +12,7 @@ let listMaterial = [
   { modelo: "SHEET TH. 5,000 mm",  materialMod: "", descricao: "SHEET TH. 5.0mm", unidade: "m²", quantidade: 39.25, material: "S235JR", peso: 0},
   { modelo: "SHEET TH. 5,000 mm",  materialMod: "S275JR", descricao: "SHEET TH. 5.0mm", unidade: "m²", quantidade: 39.25, material: "S275JR", peso: 0},
   { modelo: "SHEET TH. 5,000 mm",  materialMod: "S3555JR", descricao: "SHEET TH. 5.0mm", unidade: "m²", quantidade: 39.25, material: "S3555JR", peso: 0},
+  { modelo: "SHEET TH. 5,000 mm",  materialMod: "S32205", descricao: "SHEET TH. 5.0mm", unidade: "m²", quantidade: 39.25, material: "S32205", peso: 0},
   { modelo: "SHEET TH. 5,000 mm",  materialMod: "AISI 304L", descricao: "SHEET TH. 5.0mm", unidade: "m²", quantidade: 39.5, material: "AISI 304L", peso: 0},
   { modelo: "SHEET TH. 5,000 mm",  materialMod: "AISI 316L", descricao: "SHEET TH. 5.0mm", unidade: "m²", quantidade: 40, material: "AISI 316L", peso: 0},
   { modelo: "SHEET TH. 5,000 mm",  materialMod: "PTFE", descricao: "SHEET TH. 5.0mm", unidade: "m²", quantidade: 10.5, material: "PTFE", peso: 0},
@@ -102,10 +104,10 @@ let listMaterial = [
   { modelo: "12",  materialMod: "AISI 304L", descricao: "ROUND BAR Ø12.0mm", unidade: "m", quantidade: 0.9, material: "AISI 304L", peso: 0},
   { modelo: "12",  materialMod: "P265GH", descricao: "ROUND BAR Ø12.0mm", unidade: "m", quantidade: 0.9, material: "P265GH", peso: 0},
 
-  { modelo: "REDONDO TREFILADO Ø15,000 mm",  materialMod: "", descricao: "ROUND BAR Ø15.0mm", unidade: "m", quantidade: 1.38, material: "S235JR", peso: 0},
+  { modelo: "15",  materialMod: "", descricao: "ROUND BAR Ø15.0mm", unidade: "m", quantidade: 1.38, material: "S235JR", peso: 0},
 
-  { modelo: "Ø16",  materialMod: "", descricao: "ROUND BAR Ø16.0mm", unidade: "m", quantidade: 1.6, material: "S235JR", peso: 0},
-  { modelo: "Ø16",  materialMod: "AISI 304L", descricao: "ROUND BAR Ø16.0mm", unidade: "m", quantidade: 1.6, material: "AISI 304L", peso: 0},
+  { modelo: "16",  materialMod: "", descricao: "ROUND BAR Ø16.0mm", unidade: "m", quantidade: 1.6, material: "S235JR", peso: 0},
+  { modelo: "16",  materialMod: "AISI 304L", descricao: "ROUND BAR Ø16.0mm", unidade: "m", quantidade: 1.6, material: "AISI 304L", peso: 0},
 
   { modelo: "20",  materialMod: "", descricao: "ROUND BAR Ø20.0mm", unidade: "m", quantidade: 2.5, material: "S235JR", peso: 0},
   { modelo: "30",  materialMod: "", descricao: "ROUND BAR Ø30.0mm", unidade: "m", quantidade: 5.54, material: "S235JR", peso: 0},
@@ -128,10 +130,14 @@ let listMaterial = [
   { modelo: "U 240 x 85",  materialMod: "", descricao: "UNP 240", unidade: "m", quantidade: 33.2, material: "S235JR", peso: 0},
   { modelo: "U 300",  materialMod: "", descricao: "UNP 300", unidade: "m", quantidade: 46.2, material: "S235JR", peso: 0},
   //TUBOS
+  { modelo: "17,3 x 2,31",  materialMod: "", descricao: "PIPE ØEXT. 17.3x2.31", unidade: "m", quantidade: 0.85, material: "S235JR", peso: 0},
+  { modelo: "17,3 x 2,31",  materialMod: "AISI 304L", descricao: "PIPE ØEXT. 17.3x2.31", unidade: "m", quantidade: 0.86, material: "AISI 304L", peso: 0},
+
   { modelo: "21,3 x 2,6",  materialMod: "", descricao: "PIPE ØEXT. 21.3x2.60mm", unidade: "m", quantidade: 1.2, material: "S235JR", peso: 0},
   { modelo: "21,3 x 2,9",  materialMod: "", descricao: "PIPE ØEXT. 21.3x2.90mm", unidade: "m", quantidade: 1.3, material: "S235JR", peso: 0},
 
   { modelo: "26,7 x 2,9",  materialMod: "", descricao: "PIPE ØEXT. 26.7x2.90mm", unidade: "m", quantidade: 1.7, material: "S235JR", peso: 0},
+  { modelo: "26,7 x 2,9",  materialMod: "S32205", descricao: "PIPE ØEXT. 26.7x2.90mm", unidade: "m", quantidade: 1.7, material: "S32205", peso: 0},
 
   { modelo: "26,9 x 2,3",  materialMod: "", descricao: "PIPE ØEXT. 26.9x2.30mm", unidade: "m", quantidade: 1.72, material: "S235JR", peso: 0},
 
@@ -143,14 +149,23 @@ let listMaterial = [
   { modelo: "48.3x3.0",  materialMod: "", descricao: "PIPE ØEXT. 48.3x3.00mm", unidade: "m", quantidade: 3.35, material: "S235JR", peso: 0},
   { modelo: "48.3x3.0",  materialMod: "P265GH", descricao: "PIPE ØEXT. 48.3x3.00mm", unidade: "m", quantidade: 3.35, material: "P265GH", peso: 0},
   { modelo: "48,3 x 3,6",  materialMod: "AISI 304L", descricao: "PIPE ØEXT. 48.3x3.60mm", unidade: "m", quantidade: 4.0, material: "AISI 304L", peso: 0},
+  { modelo: "48,3 x 4",  materialMod: "", descricao: "PIPE ØEXT. 48.3x4.00mm", unidade: "m", quantidade: 4.37, material: "S235JR", peso: 0},
+  { modelo: "48,3 x 4",  materialMod: "AISI 304L", descricao: "PIPE ØEXT. 48.3x4.00mm", unidade: "m", quantidade: 4.4, material: "AISI 304L", peso: 0},
+  { modelo: "48,3 x 4",  materialMod: "P265GH", descricao: "PIPE ØEXT. 48.3x4.00mm", unidade: "m", quantidade: 4.37, material: "P265GH", peso: 0},
 
+  { modelo: "60,3 x 2,8",  materialMod: "", descricao: "PIPE ØEXT. 60.3x2.80mm", unidade: "m", quantidade: 3.97, material: "S235JR", peso: 0},
   { modelo: "60,3 x 2,9",  materialMod: "AISI 304L", descricao: "PIPE ØEXT. 60.3x2.90mm", unidade: "m", quantidade: 4.2, material: "AISI 304L", peso: 0},
+  { modelo: "60,3 x 3",  materialMod: "", descricao: "PIPE ØEXT. 60.3x3.00mm", unidade: "m", quantidade: 4.24, material: "S235JR", peso: 0},
+  { modelo: "60,3 x 3",  materialMod: "S32205", descricao: "PIPE ØEXT. 60.3x3.00mm", unidade: "m", quantidade: 4.24, material: "S32205", peso: 0},
+  { modelo: "60,3 x 3",  materialMod: "AISI 304L", descricao: "PIPE ØEXT. 60.3x3.00mm", unidade: "m", quantidade: 4.27, material: "AISI 304L", peso: 0},
   { modelo: "60,3 x 3,2",  materialMod: "", descricao: "PIPE ØEXT. 60.3x3.20mm", unidade: "m", quantidade: 4.5, material: "S235JR", peso: 0},
 
   { modelo: "60,3 x 4",  materialMod: "", descricao: "PIPE ØEXT. 60.3x4.00mm", unidade: "m", quantidade: 5.55, material: "S235JR", peso: 0},
   { modelo: "60.3x4.0",  materialMod: "", descricao: "PIPE ØEXT. 60.3x4.00mm", unidade: "m", quantidade: 5.55, material: "S235JR", peso: 0},
   { modelo: "60,3 x 4",  materialMod: "P265GH", descricao: "PIPE ØEXT. 60.3x4.00mm", unidade: "m", quantidade: 5.55, material: "P265GH", peso: 0},
 
+  { modelo: "73 x 5,16",  materialMod: "", descricao: "PIPE ØEXT. 73.0x5.16mm", unidade: "m", quantidade: 8.63, material: "S235JR", peso: 0},
+  { modelo: "73 x 5,16",  materialMod: "AISI 304L", descricao: "PIPE ØEXT. 73.0x5.16mm", unidade: "m", quantidade: 8.69, material: "AISI 304L", peso: 0},
   { modelo: "73,0 x 5,2",  materialMod: "AISI 304L", descricao: "PIPE ØEXT. 73.0x5.20mm", unidade: "m", quantidade: 8.8, material: "AISI 304L", peso: 0},
   { modelo: "73 x 5,4",  materialMod: "", descricao: "PIPE ØEXT. 73.0x5.40mm", unidade: "m", quantidade: 9.0, material: "S235JR", peso: 0},
 
@@ -183,7 +198,7 @@ let listMaterial = [
   { modelo: "IPE 200",  materialMod: "", descricao: "IPE 200", unidade: "m", quantidade: 22.4, material: "S235JR", peso: 0},
   { modelo: "IPE 220",  materialMod: "", descricao: "IPE 220", unidade: "m", quantidade: 26.2, material: "S235JR", peso: 0},
   //CHAVETA BARRA
-  { modelo: "PARALLEL KEY 10,000 mmx8,000 mmx60,000 mm",  materialMod: "SAE 1045", descricao: "PARALLEL KEY 10.0x8.0x6.0mm", unidade: "N°", quantidade: 0, material: "SAE 1045", peso: 0},
+  { modelo: "PARALLEL KEY 10,000 mmx8,000 mmx60,000 mm",  materialMod: "SAE 1045", descricao: "PARALLEL KEY 10.0x8.0x60.0mm", unidade: "N°", quantidade: 0, material: "SAE 1045", peso: 0},
   //CURVAS
   { modelo: "CURVE ØEXT. 42.4x2.90mm",  materialMod: "", descricao: "CURVE ØEXT. 42.4x2.90mm", unidade: "N°", quantidade: 0, material: "S235JR", peso: 0},
   //COMERCIAL
