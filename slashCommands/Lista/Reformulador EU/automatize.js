@@ -58,6 +58,7 @@ async function automatize(filename) {
   //Procura o material e substitui
   const estoqueCol2 = targetSheet.getColumn(7);
   estoqueCol2.eachCell(function(cell, rowNumber) {
+    cell.value = cell.value !== null ? cell.value.toString() : "";
     if (cell.value == null) {
       if (targetSheet.getCell(`H${rowNumber}`).value != "Generic") {
         error[1].cell.push(cell.address)
