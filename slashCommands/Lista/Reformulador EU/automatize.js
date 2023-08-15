@@ -49,7 +49,7 @@ async function automatize(filename) {
   const estoqueCol = targetSheet.getColumn(6);
   estoqueCol.eachCell(function(cell, rowNumber) {
     let valor = targetSheet.getCell(`G${rowNumber}`).value;
-    valor = valor != null ? valor : "";
+    valor = valor != null ? valor.toString() : "";
     if (!valor.includes("CURVA") && cell.value != null) {
       targetSheet.getCell(`G${rowNumber}`).value = cell.value;
     }
