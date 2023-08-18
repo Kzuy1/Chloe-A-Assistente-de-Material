@@ -8,6 +8,7 @@ let listMaterial = [
   { modelo: "SHEET TH. 4,000 mm",  materialMod: "AISI 304L", descricao: "SHEET TH. 4.0mm", unidade: "m²", quantidade: 31.6, material: "AISI 304L", peso: 0},
   { modelo: "SHEET TH. 4,000 mm",  materialMod: "PTFE", descricao: "SHEET TH. 4.0mm", unidade: "m²", quantidade: 8.4, material: "PTFE", peso: 0},
   { modelo: "SHEET TH. 4,000 mm",  materialMod: "COR-TEN B", descricao: "SHEET TH. 4.0mm", unidade: "m²", quantidade: 31.6, material: "COR-TEN B", peso: 0},
+  { modelo: "SHEET TH. 4,000 mm",  materialMod: "P265GH", descricao: "SHEET TH. 4.0mm", unidade: "m²", quantidade: 31.6, material: "P265GH", peso: 0},
 
   { modelo: "SHEET TH. 5,000 mm",  materialMod: "", descricao: "SHEET TH. 5.0mm", unidade: "m²", quantidade: 39.25, material: "S235JR", peso: 0},
   { modelo: "SHEET TH. 5,000 mm",  materialMod: "S275JR", descricao: "SHEET TH. 5.0mm", unidade: "m²", quantidade: 39.25, material: "S275JR", peso: 0},
@@ -65,6 +66,7 @@ let listMaterial = [
   { modelo: "SHEET TH. 16,000 mm",  materialMod: "STRENX 700", descricao: "SHEET TH. 16.0mm", unidade: "m²", quantidade: 125.6, material: "STRENX 700", peso: 0},
 
   { modelo: "SHEET TH. 20,000 mm",  materialMod: "", descricao: "SHEET TH. 20.0mm", unidade: "m²", quantidade: 157, material: "S235JR", peso: 0},
+  { modelo: "SHEET TH. 20,000 mm",  materialMod: "P265GH", descricao: "SHEET TH. 20.0mm", unidade: "m²", quantidade: 157, material: "P265GH", peso: 0},
 
   { modelo: "SHEET TH. 25,000 mm",  materialMod: "", descricao: "SHEET TH. 25.0mm", unidade: "m²", quantidade: 196.25, material: "S235JR", peso: 0},
   { modelo: "SHEET TH. 25,000 mm",  materialMod: "S275JR", descricao: "SHEET TH. 25.0mm", unidade: "m²", quantidade: 196.25, material: "S275JR", peso: 0},
@@ -110,11 +112,41 @@ let listMaterial = [
   { modelo: "16",  materialMod: "AISI 304L", descricao: "ROUND BAR Ø16.0mm", unidade: "m", quantidade: 1.6, material: "AISI 304L", peso: 0},
 
   { modelo: "20",  materialMod: "", descricao: "ROUND BAR Ø20.0mm", unidade: "m", quantidade: 2.5, material: "S235JR", peso: 0},
+
+  { modelo: "25",  materialMod: "", descricao: "ROUND BAR Ø25.0mm", unidade: "m", quantidade: 3.85, material: "S235JR", peso: 0},
+  { modelo: "25",  materialMod: "P265GH", descricao: "ROUND BAR Ø25.0mm", unidade: "m", quantidade: 3.85, material: "P265GH", peso: 0},
+
   { modelo: "30",  materialMod: "", descricao: "ROUND BAR Ø30.0mm", unidade: "m", quantidade: 5.54, material: "S235JR", peso: 0},
+
+  { modelo: "35",  materialMod: "", descricao: "ROUND BAR Ø35.0mm", unidade: "m", quantidade: 7.55, material: "S235JR", peso: 0},
+  { modelo: "35",  materialMod: "P265GH", descricao: "ROUND BAR Ø35.0mm", unidade: "m", quantidade: 7.55, material: "P265GH", peso: 0},
+
   { modelo: "40",  materialMod: "", descricao: "ROUND BAR Ø40.0mm", unidade: "m", quantidade: 9.9, material: "S235JR", peso: 0},
+  { modelo: "40",  materialMod: "P265GH", descricao: "ROUND BAR Ø40.0mm", unidade: "m", quantidade: 9.9, material: "P265GH", peso: 0},
+
+  { modelo: "45",  materialMod: "", descricao: "ROUND BAR Ø45.0mm", unidade: "m", quantidade: 12.48, material: "S235JR", peso: 0},
+  { modelo: "45",  materialMod: "P265GH", descricao: "ROUND BAR Ø45.0mm", unidade: "m", quantidade: 12.48, material: "P265GH", peso: 0},
+
+  { modelo: "50",  materialMod: "", descricao: "ROUND BAR Ø50.0mm", unidade: "m", quantidade: 15.41, material: "S235JR", peso: 0},
+  { modelo: "50",  materialMod: "P265GH", descricao: "ROUND BAR Ø50.0mm", unidade: "m", quantidade: 15.41, material: "P265GH", peso: 0},
+
   { modelo: "65",  materialMod: "", descricao: "ROUND BAR Ø65.0mm", unidade: "m", quantidade: 26, material: "S235JR", peso: 0},
+
+  { modelo: "75",  materialMod: "", descricao: "ROUND BAR Ø75.0mm", unidade: "m", quantidade: 34.68, material: "S235JR", peso: 0},
+  { modelo: "75",  materialMod: "P265GH", descricao: "ROUND BAR Ø75.0mm", unidade: "m", quantidade: 34.68, material: "P265GH", peso: 0},
+
   { modelo: "85",  materialMod: "", descricao: "ROUND BAR Ø85.0mm", unidade: "m", quantidade: 44.54, material: "S235JR", peso: 0},
+
+  { modelo: "90",  materialMod: "", descricao: "ROUND BAR Ø90.0mm", unidade: "m", quantidade: 49.93, material: "S235JR", peso: 0},
+  { modelo: "90",  materialMod: "P265GH", descricao: "ROUND BAR Ø90.0mm", unidade: "m", quantidade: 49.93, material: "P265GH", peso: 0},
+
+  { modelo: "100",  materialMod: "", descricao: "ROUND BAR Ø100.0mm", unidade: "m", quantidade: 61.65, material: "S235JR", peso: 0},
+  { modelo: "100",  materialMod: "P265GH", descricao: "ROUND BAR Ø100.0mm", unidade: "m", quantidade: 61.65, material: "P265GH", peso: 0},
+
   { modelo: "115",  materialMod: "", descricao: "ROUND BAR Ø115.0mm", unidade: "m", quantidade: 81.5, material: "S235JR", peso: 0},
+
+  { modelo: "125",  materialMod: "", descricao: "ROUND BAR Ø125.0mm", unidade: "m", quantidade: 96.33, material: "S235JR", peso: 0},
+  { modelo: "125",  materialMod: "P265GH", descricao: "ROUND BAR Ø125.0mm", unidade: "m", quantidade: 96.33, material: "P265GH", peso: 0},
   //PERFIL U
   { modelo: "U 80",  materialMod: "", descricao: "UNP 80", unidade: "m", quantidade: 8.64, material: "S235JR", peso: 0},
   { modelo: "U 100",  materialMod: "", descricao: "UNP 100", unidade: "m", quantidade: 10.6, material: "S235JR", peso: 0},
@@ -174,8 +206,12 @@ let listMaterial = [
   { modelo: "80,0 x 10,0",  materialMod: "", descricao: "PIPE ØEXT. 80.0x10.0mm", unidade: "m", quantidade: 44.54, material: "S235JR", peso: 0},
 
   { modelo: "88,9 x 5,6",  materialMod: "", descricao: "PIPE ØEXT. 88.9x5.60mm", unidade: "m", quantidade: 11.5, material: "S235JR", peso: 0},
+  { modelo: "88,9 x 5,6",  materialMod: "S275JR", descricao: "PIPE ØEXT. 88.9x5.60mm", unidade: "m", quantidade: 11.5, material: "S275JR", peso: 0},
   { modelo: "88.9x6.3",  materialMod: "", descricao: "PIPE ØEXT. 88.9x6.30mm", unidade: "m", quantidade: 12.8, material: "S235JR", peso: 0},
   { modelo: "88.9x6.3",  materialMod: "S275JR", descricao: "PIPE ØEXT. 88.9x6.30mm", unidade: "m", quantidade: 12.8, material: "S275JR", peso: 0},
+
+  { modelo: "90,0 x 10,0",  materialMod: "", descricao: "PIPE ØEXT. 90.0x10.0mm", unidade: "m", quantidade: 19.73, material: "S235JR", peso: 0},
+  { modelo: "90,0 x 10,0",  materialMod: "P265GH", descricao: "PIPE ØEXT. 90.0x10.0mm", unidade: "m", quantidade: 19.73, material: "P265GH", peso: 0},
 
   { modelo: "101.6x6.0",  materialMod: "", descricao: "PIPE ØEXT. 101.6x6.00mm", unidade: "m", quantidade: 14.15, material: "S235JR", peso: 0},
   { modelo: "101.6x6.0",  materialMod: "S275JR", descricao: "PIPE ØEXT. 101.6x6.00mm", unidade: "m", quantidade: 14.15, material: "S275JR", peso: 0},
@@ -199,6 +235,9 @@ let listMaterial = [
   { modelo: "IPE 220",  materialMod: "", descricao: "IPE 220", unidade: "m", quantidade: 26.2, material: "S235JR", peso: 0},
   //CHAVETA BARRA
   { modelo: "PARALLEL KEY 10,000 mmx8,000 mmx60,000 mm",  materialMod: "SAE 1045", descricao: "PARALLEL KEY 10.0x8.0x60.0mm", unidade: "N°", quantidade: 0, material: "SAE 1045", peso: 0},
+  { modelo: "PARALLEL KEY 14,000 mmx8,000 mmx50,000 mm",  materialMod: "SAE 1045", descricao: "PARALLEL KEY 14.0x8.0x50.0mm", unidade: "N°", quantidade: 0, material: "SAE 1045", peso: 0},
+  { modelo: "PARALLEL KEY 20,000 mmx12,000 mmx80,000 mm",  materialMod: "SAE 1045", descricao: "PARALLEL KEY 20.0x12.0x80.0mm", unidade: "N°", quantidade: 0, material: "SAE 1045", peso: 0},
+  { modelo: "PARALLEL KEY 25,000 mmx14,000 mmx50,000 mm",  materialMod: "SAE 1045", descricao: "PARALLEL KEY 25.0x14.0x50.0mm", unidade: "N°", quantidade: 0, material: "SAE 1045", peso: 0},
   //CURVAS
   { modelo: "CURVE ØEXT. 42.4x2.90mm",  materialMod: "", descricao: "CURVE ØEXT. 42.4x2.90mm", unidade: "N°", quantidade: 0, material: "S235JR", peso: 0},
   //COMERCIAL
