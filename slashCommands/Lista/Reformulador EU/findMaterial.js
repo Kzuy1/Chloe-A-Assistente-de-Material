@@ -90,6 +90,7 @@ let listMaterial = [
   { modelo: "L50x50x6",  materialMod: "", descricao: "L 50x50x6.0mm", unidade: "m", quantidade: 4.47, material: "S235JR", peso: 0},
 
   { modelo: "L60x60x5",  materialMod: "", descricao: "L 60x60x5.0mm", unidade: "m", quantidade: 4.57, material: "S235JR", peso: 0},
+  { modelo: "L60x60x5",  materialMod: "S275JR", descricao: "L 60x60x5.0mm", unidade: "m", quantidade: 4.57, material: "S275JR", peso: 0},
 
   { modelo: "L60x60x6",  materialMod: "", descricao: "L 60x60x6.0mm", unidade: "m", quantidade: 5.42, material: "S235JR", peso: 0},
   { modelo: "L60x60x6",  materialMod: "AISI 304L", descricao: "L 60x60x6.0mm", unidade: "m", quantidade: 5.7, material: "AISI 304L", peso: 0},
@@ -149,6 +150,8 @@ let listMaterial = [
   { modelo: "125",  materialMod: "P265GH", descricao: "ROUND BAR Ø125.0mm", unidade: "m", quantidade: 96.33, material: "P265GH", peso: 0},
   //PERFIL U
   { modelo: "U 80",  materialMod: "", descricao: "UNP 80", unidade: "m", quantidade: 8.64, material: "S235JR", peso: 0},
+  { modelo: "U 80",  materialMod: "S275JR", descricao: "UNP 80", unidade: "m", quantidade: 8.64, material: "S275JR", peso: 0},
+
   { modelo: "U 100",  materialMod: "", descricao: "UNP 100", unidade: "m", quantidade: 10.6, material: "S235JR", peso: 0},
 
   { modelo: "U 120",  materialMod: "", descricao: "UNP 120", unidade: "m", quantidade: 13.4, material: "S235JR", peso: 0},
@@ -158,6 +161,8 @@ let listMaterial = [
   { modelo: "U 140",  materialMod: "P265GH", descricao: "UNP 140", unidade: "m", quantidade: 16, material: "P265GH", peso: 0},
 
   { modelo: "U 160",  materialMod: "", descricao: "UNP 160", unidade: "m", quantidade: 18.8, material: "S235JR", peso: 0},
+  { modelo: "U 160",  materialMod: "S275JR", descricao: "UNP 160", unidade: "m", quantidade: 18.8, material: "S275JR", peso: 0},
+
   { modelo: "U 200",  materialMod: "", descricao: "UNP 200", unidade: "m", quantidade: 25.3, material: "S235JR", peso: 0},
   { modelo: "U 240 x 85",  materialMod: "", descricao: "UNP 240", unidade: "m", quantidade: 33.2, material: "S235JR", peso: 0},
   { modelo: "U 300",  materialMod: "", descricao: "UNP 300", unidade: "m", quantidade: 46.2, material: "S235JR", peso: 0},
@@ -223,16 +228,26 @@ let listMaterial = [
   //PERFIL HEA
   { modelo: "HE 100 A",  materialMod: "", descricao: "HEA 100", unidade: "m", quantidade: 16.7, material: "S235JR", peso: 0},
   { modelo: "HE 120 A",  materialMod: "", descricao: "HEA 120", unidade: "m", quantidade: 19.9, material: "S235JR", peso: 0},
+
   { modelo: "HE 160 A",  materialMod: "", descricao: "HEA 160", unidade: "m", quantidade: 30.4, material: "S235JR", peso: 0},
+  { modelo: "HE 160 A",  materialMod: "S275JR", descricao: "HEA 160", unidade: "m", quantidade: 30.4, material: "S275JR", peso: 0},
+
   { modelo: "HE 200 A",  materialMod: "", descricao: "HEA 200", unidade: "m", quantidade: 42.3, material: "S235JR", peso: 0},
   //PERFIL HEB
   { modelo: "HE 100 B",  materialMod: "", descricao: "HEB 100", unidade: "m", quantidade: 20.4, material: "S235JR", peso: 0},
+
+  { modelo: "HE 160 B",  materialMod: "", descricao: "HEB 160", unidade: "m", quantidade: 42.6, material: "S235JR", peso: 0},
+  { modelo: "HE 160 B",  materialMod: "S275JR", descricao: "HEB 160", unidade: "m", quantidade: 42.6, material: "S275JR", peso: 0},
+
   { modelo: "HE 240 B",  materialMod: "", descricao: "HEB 240", unidade: "m", quantidade: 83.2, material: "S235JR", peso: 0},
   //PERFIL IPE
   { modelo: "IPE 100",  materialMod: "", descricao: "IPE 100", unidade: "m", quantidade: 8.1, material: "S235JR", peso: 0},
   { modelo: "IPE 180",  materialMod: "", descricao: "IPE 180", unidade: "m", quantidade: 18.8, material: "S235JR", peso: 0},
   { modelo: "IPE 200",  materialMod: "", descricao: "IPE 200", unidade: "m", quantidade: 22.4, material: "S235JR", peso: 0},
   { modelo: "IPE 220",  materialMod: "", descricao: "IPE 220", unidade: "m", quantidade: 26.2, material: "S235JR", peso: 0},
+
+  { modelo: "IPE 240",  materialMod: "", descricao: "IPE 240", unidade: "m", quantidade: 30.7, material: "S235JR", peso: 0},
+  { modelo: "IPE 240",  materialMod: "S275JR", descricao: "IPE 240", unidade: "m", quantidade: 30.7, material: "S275JR", peso: 0},
   //CHAVETA BARRA
   { modelo: "PARALLEL KEY 10,000 mmx8,000 mmx60,000 mm",  materialMod: "SAE 1045", descricao: "PARALLEL KEY 10.0x8.0x60.0mm", unidade: "N°", quantidade: 0, material: "SAE 1045", peso: 0},
   { modelo: "PARALLEL KEY 14,000 mmx8,000 mmx50,000 mm",  materialMod: "SAE 1045", descricao: "PARALLEL KEY 14.0x8.0x50.0mm", unidade: "N°", quantidade: 0, material: "SAE 1045", peso: 0},
