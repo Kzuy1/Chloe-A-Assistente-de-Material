@@ -49,7 +49,7 @@ async function automatize(filename) {
   const estoqueCol = targetSheet.getColumn(6);
   estoqueCol.eachCell(function(cell, rowNumber) {
     let valor = targetSheet.getCell(`G${rowNumber}`).value;
-    valor = valor != null ? valor : "";
+    valor = valor != null ? valor.toString() : "";
     if (!valor.includes("CURVA") && cell.value != null) {
       targetSheet.getCell(`G${rowNumber}`).value = cell.value;
     }
@@ -58,6 +58,7 @@ async function automatize(filename) {
   //Procura o material e substitui
   const estoqueCol2 = targetSheet.getColumn(7);
   estoqueCol2.eachCell(function(cell, rowNumber) {
+    cell.value = cell.value !== null ? cell.value.toString() : "";
     if (cell.value == null) {
       if (targetSheet.getCell(`H${rowNumber}`).value != "Generic") {
         error[1].cell.push(cell.address)
