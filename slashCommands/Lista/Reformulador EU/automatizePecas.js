@@ -97,20 +97,22 @@ async function automatizePecas(filename) {
     targetSheet.spliceColumns(10, 1, [], [], ["POS."], ["DESCRIÇÃO"], ["UNIDADE"], ["QUANTIDADE"], ["MATERIAL/PADRÃO"], ["PESO [kg]"]);
     let materialList = [""];
 
-    for (c = 2; c <= targetSheet.lastRow.number; c++) {
-      let materialTarget = targetSheet.getRow(c).values
+    for (cAb = 2; cAb <= targetSheet.lastRow.number; cAb++) {
+      let materialTarget = targetSheet.getRow(cAb).values
+      
       for (cont = 0; cont < materialList.length; cont++) {
         if (materialTarget[1] == materialList[cont][1] && materialTarget[2] == materialList[cont][4]) {
           materialList[cont][5] += materialTarget[4];
           break;
         } else if (cont == materialList.length - 1) {
           let materialCorri = findMaterialPos(materialTarget[1], materialTarget[2]);
+
           materialCorri[5] += materialTarget[4];
           materialList.push(materialCorri);
           break;
         }
-      };
-
+       };
+      
     };
 
     materialList.shift();

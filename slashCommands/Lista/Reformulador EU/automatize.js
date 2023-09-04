@@ -1,8 +1,7 @@
 const ExcelJS = require('exceljs');
-const { findMaterial, findMaterialEsp } = require('./findMaterial.js');
+const { findMaterial } = require('./findMaterial.js');
 const { adjustMaterial } = require('./adjustMaterial.js');
 const { error, print} = require('./error.js');
-
 const codigoDeProjeto = "C122021";
 
 async function automatize(filename) {
@@ -80,11 +79,10 @@ async function automatize(filename) {
       }
       if (tipoMaterial.value != "S235JR") {
         error[10].cell.push(`H${rowNumber}`)
-        material = findMaterialEsp(cell.value, tipoMaterial);
-      } else {
-        material = findMaterial(cell.value);
-      };
+      } 
 
+      material = findMaterial(cell.value, tipoMaterial.value);
+      
       if (material == undefined) {
         error[2].cell.push(cell.address)
         cell.style = {
