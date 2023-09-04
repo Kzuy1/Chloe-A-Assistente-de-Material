@@ -101,7 +101,7 @@ let listMaterial = [
   
     { modelo: "L125x125x12",  materialMod: "", descricao: "L 125x125x12.0mm", unidade: "m", quantidade: 23.55, material: "S235JR", peso: 0},
     { modelo: "L125x125x12",  materialMod: "S275JR", descricao: "L 125x125x12.0mm", unidade: "m", quantidade: 23.55, material: "S275JR", peso: 0},
-    //PERFIL L DESIGUAL (CM² dividido por 10)
+    //PERFIL L DESIGUAL
     { modelo: "L80x 60x 6",  materialMod: "", descricao: "L 80x60x6.0mm", unidade: "m", quantidade: 6.36, material: "S235JR", peso: 0},
     { modelo: "L90x 60x 8",  materialMod: "", descricao: "L 90x60x8.0mm", unidade: "m", quantidade: 8.94, material: "S235JR", peso: 0},
     { modelo: "L100x 50x10",  materialMod: "", descricao: "L 100x50x10.0mm", unidade: "m", quantidade: 11.06, material: "S235JR", peso: 0},
