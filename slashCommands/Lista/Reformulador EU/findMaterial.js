@@ -184,6 +184,7 @@ let listMaterial = [
     { modelo: "26,9 x 2,3",  materialMod: "", descricao: "PIPE ØEXT. 26.9x2.30mm", unidade: "m", quantidade: 1.72, material: "S235JR", peso: 0},
   
     { modelo: "33,7 x 3,2",  materialMod: "", descricao: "PIPE ØEXT. 33.7x3.20mm", unidade: "m", quantidade: 2.4, material: "S235JR", peso: 0},
+    { modelo: "33,7 x 3,6" , materialMod: "", descricao: "PIPE ØEXT. 33.7x3.60mm", unidade: "m", quantidade: 2.669, material: "S235JR", peso: 0},
   
     { modelo: "42,4 x 2,9",  materialMod: "", descricao: "PIPE ØEXT. 42.4x2.90mm", unidade: "m", quantidade: 2.9, material: "S235JR", peso: 0},
     { modelo: "42,4 x 3,6",  materialMod: "AISI 304L", descricao: "PIPE ØEXT. 42.4x3.60mm", unidade: "m", quantidade: 3.5, material: "AISI 304L", peso: 0},
@@ -212,6 +213,7 @@ let listMaterial = [
     { modelo: "73 x 5,4",  materialMod: "", descricao: "PIPE ØEXT. 73.0x5.40mm", unidade: "m", quantidade: 9.0, material: "S235JR", peso: 0},
   
     { modelo: "76,1 x 3,6",  materialMod: "", descricao: "PIPE ØEXT. 76.1x3.60mm", unidade: "m", quantidade: 6.45, material: "S235JR", peso: 0},
+    { modelo: "76,1 x 5" ,  materialMod: "", descricao: "PIPE ØEXT. 76.1x5.00mm", unidade: "m", quantidade: 8.768, material: "S235JR", peso: 0},
   
     { modelo: "80,0 x 10,0",  materialMod: "", descricao: "PIPE ØEXT. 80.0x10.0mm", unidade: "m", quantidade: 44.54, material: "S235JR", peso: 0},
   
@@ -253,6 +255,8 @@ let listMaterial = [
   
     { modelo: "IPE 240",  materialMod: "", descricao: "IPE 240", unidade: "m", quantidade: 30.7, material: "S235JR", peso: 0},
     { modelo: "IPE 240",  materialMod: "S275JR", descricao: "IPE 240", unidade: "m", quantidade: 30.7, material: "S275JR", peso: 0},
+    //H-BEAM
+    { modelo: "HW - 100 x 100 x 6 x 8",  materialMod: "", descricao: "H-BEAM 100x100x6.0x8.0mm", unidade: "m", quantidade: 16.9, material: "S235JR", peso: 0},
     //CHAVETA BARRA
     { modelo: "PARALLEL KEY 10,000 mmx8,000 mmx60,000 mm",  materialMod: "SAE 1045", descricao: "PARALLEL KEY 10.0x8.0x60.0mm", unidade: "N°", quantidade: 0, material: "SAE 1045", peso: 0},
     { modelo: "PARALLEL KEY 14,000 mmx8,000 mmx50,000 mm",  materialMod: "SAE 1045", descricao: "PARALLEL KEY 14.0x8.0x50.0mm", unidade: "N°", quantidade: 0, material: "SAE 1045", peso: 0},
