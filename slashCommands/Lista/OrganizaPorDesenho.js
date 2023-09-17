@@ -38,8 +38,13 @@ module.exports = {
         }
         await download();
 
-        const file = await automatizePecas(path)
-        interaction.channel.send({content: "Aqui está a Planilha organizada", files: [file] })
+        try{
+            const file = await automatizePecas(path);
+            interaction.channel.send({content: `<@${interaction.user.id}>, aqui está a Planilha organizada`, files: [file] });
+        } catch (error) {
+            console.error('Erro:', error.message);
+            interaction.channel.send(`<@${interaction.user.id}>, ocorreu um erro ao processar a planilha.`);
+        };
 
     },
 };

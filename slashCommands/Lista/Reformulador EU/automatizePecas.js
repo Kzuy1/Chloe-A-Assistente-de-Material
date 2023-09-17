@@ -159,7 +159,7 @@ async function automatizePecas(filename) {
     for (c4 = 0; c4 < materialList.length; c4++) {
       let pesoMaterial = targetSheet.getCell(`Q${c4 + 2}`).value;
       let result = pesoMaterial / materialList[c4][3];
-      valuesQtde.push(result < 0.1 ? 0.1 : +result.toFixed(1));
+      valuesQtde.push(isFinite(result) ? (result < 0.1 ? 0.1 : +result.toFixed(1)) : "NULL");
     }
     qtde.values = valuesQtde;
   };

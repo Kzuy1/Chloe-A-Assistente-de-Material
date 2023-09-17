@@ -29,7 +29,7 @@ module.exports = {
                     filePath.on('finish',() => {
                         filePath.close();
                         resolve();
-                    })
+                    });
                     filePath.on('error', (err) => {
                         fs.unlink(path, () => reject(err));
                     });
@@ -38,8 +38,12 @@ module.exports = {
         }
         await download();
 
-        const file = await automatize(path)
-        interaction.channel.send({content: `Aqui está a Planilha organizada\n${file[0]}`, files: [file[1]] })
-
+        try{
+            const file = await automatize(path);
+            interaction.channel.send({content: `<@${interaction.user.id}>, aqui está a Planilha organizada\n${file[0]}`, files: [file[1]] });
+        } catch (error) {
+            console.error('Erro:', error.message);
+            interaction.channel.send(`<@${interaction.user.id}>, ocorreu um erro ao processar a planilha.`);
+        };
     },
 };

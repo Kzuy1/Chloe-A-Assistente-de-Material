@@ -1094,7 +1094,7 @@ let listMaterial = [
   { modelo: "Encanamento - Conexões de aço inox com rosca de acordo com ISO 7-1 - Bolsa S2",  descricao: "SOCKET", unidade: "N°", quantidade: 0, material: "", peso: 0},
   //GRADES
   { modelo: "DEGRAU",  descricao: "GRATING TREADS - MESH 30X100  BEARING PLATE 30X4 (37.5 kg/m²)", unidade: "N°", quantidade: 0, material: "", peso: 0},
-  { modelo: "SHEET TH. 30,000 mm",  descricao: "GALVANIZED GRATING - MESH 22X66  BEARING PLATE 30X3 (38.2 kg/m²)", unidade: "N°", quantidade: 0, material: "", peso: 0},
+  { modelo: "GRATING 30,000 mm",  descricao: "GALVANIZED GRATING - MESH 22X66  BEARING PLATE 30X3 (38.2 kg/m²)", unidade: "N°", quantidade: 0, material: "", peso: 0},
   //{ modelo: ,  descricao: , unidade: , quantidade: , material: , peso: 0},
 ];
 
