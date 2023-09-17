@@ -1,8 +1,7 @@
 const ExcelJS = require('exceljs');
-const { findMaterial, findMaterialEsp } = require('./findMaterial.js');
+const { findMaterial } = require('./findMaterial.js');
 const { adjustMaterial } = require('./adjustMaterial.js');
 const { error, print} = require('./error.js');
-
 const codigoDeProjeto = "C122021";
 
 async function automatize(filename) {
@@ -28,13 +27,13 @@ async function automatize(filename) {
   const itemCol = targetSheet.getColumn(3);
   let rowAdd = [];
   itemCol.eachCell(function(cell, rowNumber) {
-    cell.value = cell.value !== null ? cell.value.toString() : "";
-    if (cell.value == "") {
+    cell.value = cell.value !== null ? cell.value.toString() : null;
+    if (cell.value == null) {
       error[0].cell.push(cell.address)
       cell.style = {
         fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: '6ddd35' } },
       };
-    } else if (!cell.value.includes(".") && cell.value !== "ITEM" && rowNumber != 2) {
+    } else if (!cell?.value?.includes(".") && cell.value !== "ITEM" && rowNumber != 2) {
       rowAdd.push(rowNumber);
     }
   });
@@ -42,15 +41,12 @@ async function automatize(filename) {
   //Adiciona uma linha em cima
   for (i = 0; i < rowAdd.length; i++) {
     targetSheet.insertRow(rowAdd[i] + i);
-
   }
 
   //Move do Estoque Perfil para outra coluna de material
   const estoqueCol = targetSheet.getColumn(6);
   estoqueCol.eachCell(function(cell, rowNumber) {
-    let valor = targetSheet.getCell(`G${rowNumber}`).value;
-    valor = valor != null ? valor.toString() : "";
-    if (!valor.includes("CURVA") && cell.value != null) {
+    if (cell.value !== null) {
       targetSheet.getCell(`G${rowNumber}`).value = cell.value;
     }
   });
@@ -58,7 +54,7 @@ async function automatize(filename) {
   //Procura o material e substitui
   const estoqueCol2 = targetSheet.getColumn(7);
   estoqueCol2.eachCell(function(cell, rowNumber) {
-    cell.value = cell.value !== null ? cell.value.toString() : "";
+    cell.value = cell.value !== null ? cell.value.toString() : null;
     if (cell.value == null) {
       if (targetSheet.getCell(`H${rowNumber}`).value != "Generic") {
         error[1].cell.push(cell.address)
@@ -66,25 +62,33 @@ async function automatize(filename) {
           fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: '6ddd35' } },
         };
       }
-    } else if (!(cell.value.includes("NÚMERO DE ESTOQUE") || cell.value.includes("Descrição"))) {
+    } else if (!(cell?.value?.includes("NÚMERO DE ESTOQUE") || cell?.value?.includes("Descrição"))) {
       cell.value = cell.value.replace(/^\s+|\s+$/g, "");
       let material;
       let tipoMaterial = targetSheet.getCell(`H${rowNumber}`);
 
-      if(tipoMaterial.value.includes("+")){
+      if(tipoMaterial?.value?.includes("+")){
         let materialEstoque = targetSheet.getCell(`F${rowNumber}`);
         let materialEstoque1 = targetSheet.getCell(`G${rowNumber}`);
         materialEstoque.value = materialEstoque.value.replace("SHEET TH.", "EMBOSSED PLATE Sp.");
         materialEstoque1.value = materialEstoque1.value.replace("SHEET TH.", "EMBOSSED PLATE Sp.");
         tipoMaterial.value = "S235JR";
       }
+
+      if(tipoMaterial?.value?.includes("GRATING")){
+        let materialEstoque = targetSheet.getCell(`F${rowNumber}`);
+        let materialEstoque1 = targetSheet.getCell(`G${rowNumber}`);
+        materialEstoque.value = materialEstoque.value.replace("SHEET TH.", "GRATING");
+        materialEstoque1.value = materialEstoque1.value.replace("SHEET TH.", "GRATING");
+        tipoMaterial.value = "S235JR";
+      }
+
       if (tipoMaterial.value != "S235JR") {
         error[10].cell.push(`H${rowNumber}`)
-        material = findMaterialEsp(cell.value, tipoMaterial);
-      } else {
-        material = findMaterial(cell.value);
-      };
+      } 
 
+      material = findMaterial(cell.value, tipoMaterial.value);
+      
       if (material == undefined) {
         error[2].cell.push(cell.address)
         cell.style = {
@@ -107,10 +111,12 @@ async function automatize(filename) {
       cell.style = {
         fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: '6ddd35' } },
       };
-    } else if (cell.value.includes("kg")) {
+    } else if (typeof cell.value === 'number'){
+
+    } else if (cell?.value?.includes("kg")) {
       cell.value = cell.value.replace(" kg", "").replace(",", ".");
       cell.value = Number(cell.value);
-    } else if (cell.value.includes("lb_massa")) {
+    } else if (cell?.value?.includes("lb_massa")) {
       error[4].cell.push(cell.address)
       cell.style = {
         fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: 'F08080' } },
@@ -126,15 +132,15 @@ async function automatize(filename) {
       cell.style = {
         fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: '79553D' } },
       };
-    } else if (cell.value == 1) {
+    } else if (typeof cell.value === 'number') {
 
-    } else if (cell.value.includes("mm")) {
+    } else if (cell?.value?.includes("mm")) {
       cell.value = cell.value.replace(" mm", "").replace(",", ".");
       cell.value = Number(cell.value);
-    } else if (cell.value.includes("in")) {
+    } else if (cell?.value?.includes("in")) {
       cell.value = cell.value.replace(" in", "").replace(",", ".");
       cell.value = Number(cell.value) * 25.4;
-    } else if (cell.value.includes("pol")) {
+    } else if (cell?.value?.includes("pol")) {
       cell.value = cell.value.replace(" pol", "").replace(",", ".");
       cell.value = Number(cell.value) * 25.4;
     }
@@ -210,7 +216,7 @@ async function automatize(filename) {
   //Verifica se a peça tem código
   const numberoPeca = targetSheet.getColumn(5);
   numberoPeca.eachCell(function(cell, rowNumber) {
-    if ((cell.value != null) && (!cell.value.includes(codigoDeProjeto)) && (cell.value != "NÚMERO DA PEÇA")) {
+    if ((!cell?.value?.includes(codigoDeProjeto)) && (cell.value != "NÚMERO DA PEÇA")) {
       error[9].cell.push(cell.address)
       cell.style = {
         fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: 'CB2821' } },

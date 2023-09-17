@@ -55,7 +55,7 @@ module.exports = {
                 const filename = response.headers['content-disposition'].split('filename=')[1].replace(/"/g, '').trim();
                 const responsePath = `${__dirname}/BlockList/${filename}`;
                 fs.writeFileSync(responsePath, response.data);
-                interaction.channel.send({content: `<@${interaction.user.id}>Aqui está os arquivos`, files: [responsePath]})
+                interaction.channel.send({content: `<@${interaction.user.id}>, aqui está os arquivos`, files: [responsePath]})
             } catch (error) {
                 console.error('Erro ao enviar o arquivo:', error.message);
             }
