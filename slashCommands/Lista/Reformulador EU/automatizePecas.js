@@ -42,6 +42,7 @@ async function automatizePecas(filename) {
   //Copia da planilha principal e move para secundária
   const itemCol = sourceWorksheet.getColumn(3);
   itemCol.eachCell(function(cell, rowNumber) {
+    cell.value = cell.value !== null ? cell.value.toString() : null;
     if (!(cell.value.includes(".") || cell.value.includes("ITEM"))) {
       let copyPecaRow = sourceWorksheet.getRow(rowNumber);
       if (copyPecaRow.values[1] != undefined) {
