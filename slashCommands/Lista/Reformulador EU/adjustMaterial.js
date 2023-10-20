@@ -1,6 +1,7 @@
 const materialList = [
     {pos: "", nome: "S235JR", densidade: 7.850, modeloMod: "S235JR"},
     {pos: "", nome: "S275JR", densidade: 7.850, modeloMod: "S275JR"},
+    {pos: "", nome: "S355JR", densidade: 7.850, modeloMod: "S355JR"},
     {pos: "", nome: "S3555JR", densidade: 7.850, modeloMod: "S3555JR"},
     {pos: "", nome: "S32205", densidade: 7.850, modeloMod: "S32205"},
     {pos: "", nome: "AISI 304L", densidade: 8.000, modeloMod: "AISI 304L"},
