@@ -43,7 +43,7 @@ async function automatizePecas(filename) {
   const itemCol = sourceWorksheet.getColumn(3);
   itemCol.eachCell(function(cell, rowNumber) {
     cell.value = cell.value !== null ? cell.value.toString() : null;
-    if (!(cell.value.includes(".") || cell.value.includes("ITEM"))) {
+    if (!(cell?.value?.includes(".") || cell?.value?.includes("ITEM"))) {
       let copyPecaRow = sourceWorksheet.getRow(rowNumber);
       if (copyPecaRow.values[1] != undefined) {
         let targetSheet = workbook.getWorksheet(`${copyPecaRow.values[1]} - PEÇAS`);
@@ -59,7 +59,7 @@ async function automatizePecas(filename) {
           targetSheetMat.insertRow(targetSheetMat.lastRow.number + 1, copyPecaRowProcess);
         };
       };
-    } else if (cell.value.includes(".")) {
+    } else if (cell?.value?.includes(".")) {
       let copyPecaRow = sourceWorksheet.getRow(rowNumber);
       if (copyPecaRow.values[1] != undefined) {
         let targetSheet = workbook.getWorksheet(`${copyPecaRow.values[1]} - MATERIAL`);
