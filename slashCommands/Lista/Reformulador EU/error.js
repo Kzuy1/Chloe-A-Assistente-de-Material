@@ -18,9 +18,7 @@ const print = () => {
     let string = "";
     for(const int of error){
         if(int.cell.length > 0){
-            string += int.descriçãoError + "\n" + "Cell: ";
-            string += int.cell.length > 1 ? int.cell.join(', ') : int.cell[0];
-            string += "\n";
+            string += int.descriçãoError + "\n";
             int.cell = [];
         }
     }
