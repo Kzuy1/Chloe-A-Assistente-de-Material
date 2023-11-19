@@ -14,5 +14,8 @@
     "discord.js": "^14.11.0",
     "exceljs": "^4.3.0",
     "package.json": "^2.0.1"
+  },
+  "devDependencies": {
+    "eslint": "^8.54.0"
   }
 }
