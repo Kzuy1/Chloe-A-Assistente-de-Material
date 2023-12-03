@@ -90,6 +90,19 @@ async function automatizePecas(filename) {
 			saveRows[c - 2].push("", pesoPeca, pesoPeca * saveRows[c - 2][4]);
 			targetSheet.getRow(c).values = saveRows[c - 2];
 		}
+
+		//Ajeita o Tamanho das colunas
+		targetSheet.columns.forEach(function(column) {
+			let maxLength = 0;
+			column["eachCell"]({ includeEmpty: false }, function(cell) {
+				var columnLength = cell.value ? cell.value.toString().length : 10;
+				if (columnLength > maxLength) {
+					maxLength = columnLength;
+				}
+			});
+			
+			column.width = maxLength < 10 ? 10 : maxLength;
+		});
 	}
 
 	//Ajeita planilha de Matérial
@@ -163,6 +176,19 @@ async function automatizePecas(filename) {
 			valuesQtde.push(isFinite(result) ? (result < 0.1 ? 0.1 : +result.toFixed(1)) : "NULL");
 		}
 		qtde.values = valuesQtde;
+
+		//Ajeita o Tamanho das colunas
+		targetSheet.columns.forEach(function(column) {
+			let maxLength = 0;
+			column["eachCell"]({ includeEmpty: false }, function(cell) {
+				var columnLength = cell.value ? cell.value.toString().length : 10;
+				if (columnLength > maxLength) {
+					maxLength = columnLength;
+				}
+			});
+					
+			column.width = maxLength < 10 ? 10 : maxLength;
+		});
 	}
 
 	await workbook.xlsx.writeFile(`${filename}`);

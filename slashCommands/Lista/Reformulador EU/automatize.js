@@ -1,12 +1,13 @@
 const ExcelJS = require("exceljs");
 const { findMaterial } = require("./findMaterial.js");
 const { adjustMaterial } = require("./adjustMaterial.js");
-const { error, print} = require("./error.js");
+const { errors } = require("./error.js");
 
 async function automatize(filename) {
 	const workbook = new ExcelJS.Workbook();
 	await workbook.xlsx.readFile(filename);
 
+	const errorFile = Object.create(errors);
 	let sourceWorksheet = workbook.getWorksheet(1);
 	let targetWorkbook = new ExcelJS.Workbook();
 	let targetSheet = targetWorkbook.addWorksheet(sourceWorksheet.name);
@@ -28,7 +29,7 @@ async function automatize(filename) {
 	itemCol.eachCell(function(cell, rowNumber) {
 		cell.value = cell.value !== null ? cell.value.toString() : null;
 		if (cell.value == null) {
-			error[0].boleanValue = true;
+			errorFile.errorCH01.boleanValue = true;
 			cell.style = {
 				fill: { type: "pattern", pattern: "solid", fgColor: { argb: "6ddd35" } },
 			};
@@ -56,7 +57,7 @@ async function automatize(filename) {
 		cell.value = cell.value !== null ? cell.value.toString() : null;
 		if (cell.value == null) {
 			if (targetSheet.getCell(`H${rowNumber}`).value != "Generic") {
-				error[1].boleanValue = true;
+				errorFile.errorCH02.boleanValue = true;
 				cell.style = {
 					fill: { type: "pattern", pattern: "solid", fgColor: { argb: "6ddd35" } },
 				};
@@ -83,13 +84,13 @@ async function automatize(filename) {
 			}
 
 			if (tipoMaterial.value != "S235JR") {
-				error[10].boleanValue = true;
+				errorFile.alertCL01.boleanValue = true;
 			} 
 
 			material = findMaterial(cell.value, tipoMaterial.value);
-      
+			
 			if (material == undefined) {
-				error[2].boleanValue = true;
+				errorFile.errorCH03.boleanValue = true;
 				cell.style = {
 					fill: { type: "pattern", pattern: "solid", fgColor: { argb: "6ddd35" } },
 				};
@@ -97,16 +98,14 @@ async function automatize(filename) {
 				cell.value = material.descricao;
 				targetSheet.getCell(`H${rowNumber}`).value = material.material;
 			}
-
 		}
-
 	});
 
 	//Verifica o Peso
 	const massaCol = targetSheet.getColumn(9);
 	massaCol.eachCell(function(cell) {
 		if (cell.value == null) {
-			error[3].boleanValue = true;
+			errorFile.errorCH04.boleanValue = true;
 			cell.style = {
 				fill: { type: "pattern", pattern: "solid", fgColor: { argb: "6ddd35" } },
 			};
@@ -114,7 +113,7 @@ async function automatize(filename) {
 			cell.value = cell.value.replace(" kg", "").replace(",", ".");
 			cell.value = Number(cell.value);
 		} else if (typeof cell.value === "string" && cell?.value?.includes("lb_massa")) {
-			error[4].boleanValue = true;
+			errorFile.errorCH05.boleanValue = true;
 			cell.style = {
 				fill: { type: "pattern", pattern: "solid", fgColor: { argb: "F08080" } },
 			};
@@ -125,7 +124,7 @@ async function automatize(filename) {
 	const qtdeBaseCol = targetSheet.getColumn(10);
 	qtdeBaseCol.eachCell(function(cell) {
 		if (cell.value == null) {
-			error[5].boleanValue = true;
+			errorFile.errorCH06.boleanValue = true;
 			cell.style = {
 				fill: { type: "pattern", pattern: "solid", fgColor: { argb: "79553D" } },
 			};
@@ -139,7 +138,6 @@ async function automatize(filename) {
 			cell.value = cell.value.replace(" pol", "").replace(",", ".");
 			cell.value = Number(cell.value) * 25.4;
 		}
-
 	});
 
 	//Verifica tem Descrição dentro de uma peça
@@ -147,13 +145,12 @@ async function automatize(filename) {
 	estoqueCol21.eachCell(function(cell, rowNumber) {
 		if ((cell.value != null) && (cell.value.includes("Descrição"))) {
 			if (targetSheet.getCell(`C${rowNumber}`).value.includes(".")) {
-				error[6].boleanValue = true;
+				errorFile.errorCH07.boleanValue = true;
 				cell.style = {
 					fill: { type: "pattern", pattern: "solid", fgColor: { argb: "F5D033" } },
 				};
 			}
 		}
-
 	});
 
 	//Adiciona as formulas e colhe o material para colocar nas peças
@@ -182,7 +179,6 @@ async function automatize(filename) {
 			localizePontos[conjuntoIndex].material.push(material.value);
 			localizePontos[conjuntoIndex].pesoMaterial += result;
 		}
-
 	});
   
 	//Adiciona os matériais as Peças
@@ -195,12 +191,12 @@ async function automatize(filename) {
 			let pesoPeca = infoPeca.value.result;
 
 			if(pesoPeca == undefined){
-				error[7].boleanValue = true;
+				errorFile.errorCH04.boleanValue = true;
 				infoPeca.style = {
 					fill: { type: "pattern", pattern: "solid", fgColor: { argb: "39FF42" } },
 				};
 			} else if (localizePontos[i].pesoMaterial > (pesoPeca + 0.1) || localizePontos[i].pesoMaterial < (pesoPeca - 0.1) || isNaN(localizePontos[i].pesoMaterial)) {
-				error[8].boleanValue = true;  
+				errorFile.errorCH09.boleanValue = true;
 				infoPeca.style = {
 					fill: { type: "pattern", pattern: "solid", fgColor: { argb: "7F7679" } },
 				};
@@ -217,6 +213,7 @@ async function automatize(filename) {
 			countOccurrences[cellValue] = (countOccurrences[cellValue] || 0) + 1;
 		}
 	});
+
 	// Encontrando o valor mais comum
 	let projectCode = null;
 	let highestCount = 0;
@@ -228,9 +225,10 @@ async function automatize(filename) {
 		}
 	});
 
+	//Verifica na planilha
 	numberoPeca.eachCell(function(cell) {
 		if ((!cell?.value?.includes(projectCode)) && (cell.value != "NÚMERO DA PEÇA")) {
-			error[9].boleanValue = true;
+			errorFile.errorCH10.boleanValue = true;
 			cell.style = {
 				fill: { type: "pattern", pattern: "solid", fgColor: { argb: "CB2821" } },
 			};
@@ -263,7 +261,7 @@ async function automatize(filename) {
 
 	await targetWorkbook.xlsx.writeFile(`${filename.replace(".xlsx", "")}_CHLOE.xlsx`);
 
-	const mergedError = print();
+	const mergedError = await errorFile.printErrors();
 
 	return [mergedError, `${filename.replace(".xlsx", "")}_CHLOE.xlsx`];
 }
