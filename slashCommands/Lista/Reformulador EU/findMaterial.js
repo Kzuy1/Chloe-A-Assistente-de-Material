@@ -1135,12 +1135,19 @@ let listMaterial = [
 
 const findMaterial = (descricao, material) => {
 	let info = listMaterial.filter(obj => obj.modelo == descricao);
-	if(info.length === 0) return;
-
-	let materialNew = findTypeMaterial(material);
-	info[0].material = materialNew.nome;
+	if (info.length === 0) return;
   
-	return info[0];
+	let materialNew = findTypeMaterial(material);
+	
+	let infoCopy = Object.create(info[0]); // Cria uma cópia do objeto info[0]
+  
+	if (materialNew.densidade === 0) {
+		infoCopy.peso = null;
+	}
+	
+	infoCopy.material = materialNew.nome;
+	
+	return infoCopy;
 };
 
 const findMaterialPos = (descricao, material) => {

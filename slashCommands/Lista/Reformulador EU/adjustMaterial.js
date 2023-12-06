@@ -16,19 +16,21 @@ const materialList = [
 //{pos: "", nome: , densidade: },
 
 const adjustMaterial = (material) => {
-	let nameMaterial = "";
+	let materialCompost = {nameMaterial: "", error: false};
     
 	for(let c = 0; c < materialList.length; c++){
 		if(material.includes(materialList[c].nome)){
-			if(nameMaterial != ""){
-				nameMaterial = `${nameMaterial} / ${materialList[c].nome}`;
+			if(materialCompost.nameMaterial != ""){
+				materialCompost.nameMaterial = `${materialCompost.nameMaterial} / ${materialList[c].nome}`;
 			} else {
-				nameMaterial = materialList[c].nome;
+				materialCompost.nameMaterial = materialList[c].nome;
 			}
+		} else {
+			materialCompost.error = true;
 		}
 	}
     
-	return nameMaterial;
+	return materialCompost;
 };
 
 const findTypeMaterial = (material) => {
@@ -40,7 +42,6 @@ const findTypeMaterial = (material) => {
 	}
 
 	return {pos: materialList.length, nome: material, densidade: 0, modeloMod: material};
-    
 };
 
 module.exports = {adjustMaterial, findTypeMaterial};

@@ -40,7 +40,7 @@ module.exports = {
 
 		try{
 			const file = await automatizePecas(path);
-			interaction.channel.send({content: `<@${interaction.user.id}>, aqui está a Planilha organizada por Desenho`, files: [file] });
+			interaction.channel.send({content: `<@${interaction.user.id}>, aqui está a Planilha organizada por Desenho\n${file[0]}`,files: [file[1]] });
 		} catch (error) {
 			console.error("Erro:", error.message);
 			interaction.channel.send(`<@${interaction.user.id}>, ocorreu um erro ao processar a planilha.`);

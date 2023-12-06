@@ -92,7 +92,12 @@ async function automatize(filename) {
 			if (material == undefined) {
 				errorFile.errorCH03.boleanValue = true;
 				cell.style = {
-					fill: { type: "pattern", pattern: "solid", fgColor: { argb: "6ddd35" } },
+					fill: { type: "pattern", pattern: "solid", fgColor: { argb: "E6D690" } },
+				};
+			} if (material.peso === null) {
+				errorFile.errorCH11.boleanValue = true;
+				tipoMaterial.style = {
+					fill: { type: "pattern", pattern: "solid", fgColor: { argb: "D48719" } },
 				};
 			} else {
 				cell.value = material.descricao;
@@ -114,6 +119,11 @@ async function automatize(filename) {
 			cell.value = Number(cell.value);
 		} else if (typeof cell.value === "string" && cell?.value?.includes("lb_massa")) {
 			errorFile.errorCH05.boleanValue = true;
+			cell.style = {
+				fill: { type: "pattern", pattern: "solid", fgColor: { argb: "F08080" } },
+			};
+		} else if(typeof cell.value === "string" && cell?.value?.includes("*Varia*")){
+			errorFile.errorCH12.boleanValue = true;
 			cell.style = {
 				fill: { type: "pattern", pattern: "solid", fgColor: { argb: "F08080" } },
 			};
@@ -180,12 +190,20 @@ async function automatize(filename) {
 			localizePontos[conjuntoIndex].pesoMaterial += result;
 		}
 	});
-  
+	
 	//Adiciona os matériais as Peças
 	for (let i = 0; i < localizePontos.length; i++) {
 		if (localizePontos[i].material != false) {
 			let newMaterial = adjustMaterial(localizePontos[i].material);
-			targetSheet.getCell(`H${localizePontos[i].adress}`).value = newMaterial;
+			let materialPieceCell = targetSheet.getCell(`H${localizePontos[i].adress}`);
+			materialPieceCell.value= newMaterial.nameMaterial;
+
+			if (newMaterial.error){
+				errorFile.errorCH11.boleanValue = true;
+				materialPieceCell.style = {
+					fill: { type: "pattern", pattern: "solid", fgColor: { argb: "D48719" } },
+				};
+			}
 
 			let infoPeca = targetSheet.getCell(`K${localizePontos[i].adress}`);
 			let pesoPeca = infoPeca.value.result;
@@ -225,7 +243,7 @@ async function automatize(filename) {
 		}
 	});
 
-	//Verifica na planilha
+	//Verifica na planilha o codigo do projeto
 	numberoPeca.eachCell(function(cell) {
 		if ((!cell?.value?.includes(projectCode)) && (cell.value != "NÚMERO DA PEÇA")) {
 			errorFile.errorCH10.boleanValue = true;
