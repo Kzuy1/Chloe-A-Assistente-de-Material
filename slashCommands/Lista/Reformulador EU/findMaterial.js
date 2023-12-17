@@ -1139,27 +1139,26 @@ const findMaterial = (descricao, material) => {
   
 	let materialNew = findTypeMaterial(material);
 	
-	let infoCopy = Object.create(info[0]); // Cria uma cópia do objeto info[0]
+	let infoCopy = Object.create(info[0]);
   
 	if (materialNew.densidade === 0) {
 		infoCopy.peso = null;
 	}
 	
 	infoCopy.material = materialNew.nome;
-	
 	return infoCopy;
 };
 
 const findMaterialPos = (descricao, material) => {
-	let pos = listMaterial.findIndex(obj => obj.descricao == descricao) * 100;
+	let pos = listMaterial.findIndex(obj => obj.descricao == descricao);
 	let info = listMaterial.filter(obj => obj.descricao == descricao);
 	let materialEsp = findTypeMaterial(material);
 
 	if(info.length === 0) {
-		return [listMaterial.length * 100, descricao, "NULL", 0, material, 0];
+		return [listMaterial.length + 1, descricao, "NULL", 0, material, 0];
 	}
 
-	const infoCopy = Object.assign({}, info[0]);
+	const infoCopy = Object.create(info[0]);
 
 	pos += materialEsp.pos;
 	infoCopy.quantidade *= materialEsp.densidade;

@@ -88,13 +88,13 @@ async function automatize(filename) {
 			} 
 
 			material = findMaterial(cell.value, tipoMaterial.value);
-			
+
 			if (material == undefined) {
 				errorFile.errorCH03.boleanValue = true;
 				cell.style = {
 					fill: { type: "pattern", pattern: "solid", fgColor: { argb: "E6D690" } },
 				};
-			} if (material.peso === null) {
+			} else if (material.peso === null) {
 				errorFile.errorCH11.boleanValue = true;
 				tipoMaterial.style = {
 					fill: { type: "pattern", pattern: "solid", fgColor: { argb: "D48719" } },

@@ -16,20 +16,29 @@ const materialList = [
 //{pos: "", nome: , densidade: },
 
 const adjustMaterial = (material) => {
-	let materialCompost = {nameMaterial: "", error: false};
-    
-	for(let c = 0; c < materialList.length; c++){
-		if(material.includes(materialList[c].nome)){
-			if(materialCompost.nameMaterial != ""){
-				materialCompost.nameMaterial = `${materialCompost.nameMaterial} / ${materialList[c].nome}`;
-			} else {
-				materialCompost.nameMaterial = materialList[c].nome;
-			}
-		} else {
-			materialCompost.error = true;
+	const foundMaterials = [];
+	let error = false;
+
+	// Verifica cada material na ordem da materialList
+	materialList.forEach((listItem) => {
+		if (material.includes(listItem.nome)) {
+			foundMaterials.push(listItem.nome);
 		}
-	}
-    
+	});
+
+	// Verifica se algum material desconhecido está presente no array 'material'
+	material.forEach((item) => {
+		if(!materialList.includes(item) && !foundMaterials.includes(item)){
+			foundMaterials.push(item);
+			error = true;
+		}
+	});
+
+	const materialCompost = { 
+		nameMaterial: foundMaterials.join(" / "), 
+		error: error 
+	};
+
 	return materialCompost;
 };
 
