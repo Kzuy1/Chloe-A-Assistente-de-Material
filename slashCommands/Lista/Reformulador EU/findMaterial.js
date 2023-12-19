@@ -3,6 +3,7 @@ const { findTypeMaterial } = require("./adjustMaterial.js");
 let listMaterial = [
 	//CHAPA (Coloca o mesmo Valor da espessura)
 	{ modelo: "SHEET TH. 2,000 mm",  descricao: "SHEET TH. 2.0mm", unidade: "m²", quantidade: 2, material: "", peso: 0},
+	{ modelo: "SHEET TH. 3,000 mm",  descricao: "SHEET TH. 3.0mm", unidade: "m²", quantidade: 3, material: "", peso: 0},
 	{ modelo: "SHEET TH. 4,000 mm",  descricao: "SHEET TH. 4.0mm", unidade: "m²", quantidade: 4, material: "", peso: 0},
 	{ modelo: "SHEET TH. 5,000 mm", descricao: "SHEET TH. 5.0mm", unidade: "m²", quantidade: 5, material: "", peso: 0},
 	{ modelo: "SHEET TH. 6,000 mm", descricao: "SHEET TH. 6.0mm", unidade: "m²", quantidade: 6, material: "", peso: 0},
@@ -1155,7 +1156,7 @@ const findMaterialPos = (descricao, material) => {
 	let materialEsp = findTypeMaterial(material);
 
 	if(info.length === 0) {
-		return [listMaterial.length + 1, descricao, "NULL", 0, material, 0];
+		return [listMaterial.length * 101, descricao, "NULL", 0, material, 0];
 	}
 
 	const infoCopy = Object.create(info[0]);

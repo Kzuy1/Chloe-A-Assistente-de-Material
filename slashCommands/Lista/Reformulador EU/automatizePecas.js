@@ -168,7 +168,7 @@ async function automatizePecas(filename) {
 				}
 			}
 
-			if(weightTotal != materialWeightTotal){
+			if(weightTotal != materialWeightTotal.toFixed(1)){
 				errorFile.errorCH13.boleanValue = true;
 				targetSheet.properties.tabColor = {
 					argb: "FFC00000"
@@ -193,7 +193,7 @@ async function automatizePecas(filename) {
 
 	const mergedError = await errorFile.printErrors();
 
-	return [mergedError, `${filename.replace(".xlsx", "")}_CHLOE.xlsx`];
+	return [mergedError, `${filename.replace(".xlsx", "")}.xlsx`];
 }
 
 module.exports.automatizePecas = automatizePecas;
