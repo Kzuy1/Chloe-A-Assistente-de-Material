@@ -10,8 +10,9 @@ const errors = {
 	errorCH09: {description: ":lady_beetle: [Error CH09:](https://discordapp.com/channels/1122685290205679748/1127326125824159774/1148959635064225852) Peso da Peça não batendo com soma dos Componentes", boleanValue: false},
 	errorCH10: {description: ":lady_beetle: [Error CH10:](https://discordapp.com/channels/1122685290205679748/1127326125824159774/1149695206258642964) Peça sem código", boleanValue: false},
 	errorCH11: {description: ":lady_beetle: [Error CH11:]() Elemento não cadastrado", boleanValue: false},
-	errorCH12: {description: ":lady_beetle: [Error CH12:]()) Divergência no arredondamento entre peças e a lista de material", boleanValue: false},
-	errorCH13: {description: ":lady_beetle: [Error CH13:]()) Não foi possível calcular a quantidade do material", boleanValue: false},
+	errorCH12: {description: ":lady_beetle: [Error CH12:]() Peso com Varia", boleanValue: false},
+	errorCH13: {description: ":lady_beetle: [Error CH13:]() Divergência no arredondamento entre peças e a lista de material", boleanValue: false},
+	errorCH14: {description: ":lady_beetle: [Error CH14:]() Não foi possível calcular a quantidade do material", boleanValue: false},
 	alertCL01: {description: "🚨 [Alerta CL01:](https://discordapp.com/channels/1122685290205679748/1127326125824159774/1151862684195758080) Material diferente de Aço Carbono", boleanValue: false},
 
 	printErrors: function() {

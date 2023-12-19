@@ -141,7 +141,7 @@ async function automatizePecas(filename) {
 				// Preencher "UNIDADE" e indicar ao usuario caso seja NULL
 				targetSheet.getCell(`N${i + 2}`).value = materialList[i][2];
 				if (materialList[i][2] === "NULL") {
-					errorFile.errorCH13.boleanValue = true;
+					errorFile.errorCH14.boleanValue = true;
 					targetSheet.getCell(`N${i + 2}`).style = {
 						fill: { type: "pattern", pattern: "solid", fgColor: { argb: "6D88AD" } },
 					};
@@ -161,7 +161,7 @@ async function automatizePecas(filename) {
 				qtyMaterial = isFinite(qtyMaterial) ? (qtyMaterial < 0.1 ? 0.1 : +qtyMaterial.toFixed(1)) : "NULL";
 				targetSheet.getCell(`O${i + 2}`).value = qtyMaterial;
 				if (qtyMaterial === "NULL") {
-					errorFile.errorCH13.boleanValue = true;
+					errorFile.errorCH14.boleanValue = true;
 					targetSheet.getCell(`O${i + 2}`).style = {
 						fill: { type: "pattern", pattern: "solid", fgColor: { argb: "6D88AD" } },
 					};
@@ -169,7 +169,7 @@ async function automatizePecas(filename) {
 			}
 
 			if(weightTotal != materialWeightTotal){
-				errorFile.errorCH12.boleanValue = true;
+				errorFile.errorCH13.boleanValue = true;
 				targetSheet.properties.tabColor = {
 					argb: "FFC00000"
 				};
