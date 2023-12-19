@@ -54,13 +54,13 @@ async function automatizePecasTeste(){
 			let diferencaEncontrada = false;
 
 			for(let i = 1; i <= quantidadeFolhas; i++){
-				const sheet1 = workbook1.getWorksheet(i);
-				const sheet2 = workbook2.getWorksheet(i);
+				const sheet1 = await workbook1.getWorksheet(i);
+				const sheet2 = await workbook2.getWorksheet(i);
   
 				for (let row = 1; row <= sheet1.rowCount; row++) {
 					for (let col = 1; col <= sheet1.columnCount; col++) {
-						const cell1 = sheet1.getCell(row, col);
-						const cell2 = sheet2.getCell(row, col);
+						const cell1 = await sheet1.getCell(row, col);
+						const cell2 = await sheet2.getCell(row, col);
       
 						if (cell1.formula && cell2.formula) {
 							if (cell1.result.toFixed(3) !== cell2.result.toFixed(3)) {

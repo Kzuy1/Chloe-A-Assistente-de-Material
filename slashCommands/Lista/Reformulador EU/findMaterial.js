@@ -1150,7 +1150,7 @@ const findMaterial = (descricao, material) => {
 };
 
 const findMaterialPos = (descricao, material) => {
-	let pos = listMaterial.findIndex(obj => obj.descricao == descricao);
+	let pos = listMaterial.findIndex(obj => obj.descricao == descricao) * 100;
 	let info = listMaterial.filter(obj => obj.descricao == descricao);
 	let materialEsp = findTypeMaterial(material);
 
