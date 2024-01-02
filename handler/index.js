@@ -1,4 +1,5 @@
 const fs = require("fs");
+const { connect } = require("mongoose");
 
 //Carregar eventos
 const loadEvents = async function (client) {
@@ -56,7 +57,18 @@ const loadSlashCommands = async function (client) {
 	});
 };
 
+//Conecta ao Banco de Dados
+const loadDateBase = async function (mongoUrl){
+	try {
+		await connect(mongoUrl);
+		console.log(" ✔️  => Conexão bem-sucedida com o banco de dados!");
+	} catch (error) {
+		console.error(" ❌ => Erro ao conectar ao banco de dados!", error);
+	}
+};
+
 module.exports = {
 	loadEvents,
-	loadSlashCommands
+	loadSlashCommands,
+	loadDateBase
 };

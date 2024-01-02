@@ -39,12 +39,12 @@ client.commands = new Collection();
 client.slash = new Collection();
 client.config = require("./config");
 
-// Carregar comando e eventos
+// Carregar comando, eventos e DataBase
 handler.loadEvents(client);
 handler.loadSlashCommands(client);
+handler.loadDateBase(config.mongoUrl);
 
 // Erro no Handling
-
 process.on("uncaughtException", (err) => {
 	console.log("Uncaught Exception: " + err);
 });
