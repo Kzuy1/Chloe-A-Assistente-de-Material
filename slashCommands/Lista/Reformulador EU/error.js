@@ -13,6 +13,7 @@ const errors = {
 	errorCH12: {description: ":lady_beetle: [Error CH12:](https://discord.com/channels/1122685290205679748/1127326125824159774/1186709389915201556) Peso com Varia", boleanValue: false},
 	errorCH13: {description: ":lady_beetle: [Error CH13:](https://discord.com/channels/1122685290205679748/1127326125824159774/1186714112340791366) Divergência no arredondamento entre peças e a lista de material", boleanValue: false},
 	errorCH14: {description: ":lady_beetle: [Error CH14:](https://discord.com/channels/1122685290205679748/1127326125824159774/1186719345552924833) Não foi possível calcular a quantidade do material", boleanValue: false},
+	errorCH15: {description: ":lady_beetle: [Error CH15:]() Projeto não cadastrado no Banco de Dados", boleanValue: false},
 	alertCL01: {description: "🚨 [Alerta CL01:](https://discordapp.com/channels/1122685290205679748/1127326125824159774/1151862684195758080) Material diferente de Aço Carbono", boleanValue: false},
 
 	printErrors: function() {
@@ -27,7 +28,5 @@ const errors = {
 		return string;
 	},
 };
-
-//{descriçãoError: "", cell: []};
 
 module.exports.errors = errors;

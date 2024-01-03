@@ -51,20 +51,25 @@ async function automatize(filename) {
 		}
 	});
 	
-	// Encontrar projetos que atendem a um critério do Codigo
+	// Procura informações do Projeto
 	const projectInfo = await project.findOne({ cod: projectCode });
 
-	// Configure i18n
-	i18n.configure({
-		locales: [projectInfo.standard],
-		defaultLocale: "brazil",
-		directory: "../../standardLanguage/",
-		objectNotation: true,
-	});
-
-	// Log the translated text
-	console.log(i18n.__("EMBOSSED_PLATE"));
-	
+	// Configura i18n
+	if (projectInfo && projectInfo.standard) {
+		i18n.configure({
+			defaultLocale: projectInfo.standard,
+			directory: "./standardLanguage/",
+			objectNotation: true,
+		});
+	} else {
+		// Caso `project.standard` seja null, configura para o Brazil
+		errorFile.errorCH15.boleanValue = true;
+		i18n.configure({
+			defaultLocale: "brazil",
+			directory: "./standardLanguage/",
+			objectNotation: true,
+		});
+	}
 	
 	//Adiciona coluna Desenho e Peça
 	for (let rowIndex = 1; rowIndex <= targetSheet.rowCount; rowIndex++) {
@@ -120,7 +125,7 @@ async function automatize(filename) {
 				let materialEstoque1 = targetSheet.getCell(`G${rowNumber}`);
 				materialEstoque.value = materialEstoque.value.replace("SHEET TH.", "EMBOSSED PLATE Sp.");
 				materialEstoque1.value = materialEstoque1.value.replace("SHEET TH.", "EMBOSSED PLATE Sp.");
-				tipoMaterial.value = "S235JR";
+				tipoMaterial.value = i18n.__("SHEET_STANDARD");
 			}
 
 			if(tipoMaterial?.value?.includes("GRATING")){
@@ -128,10 +133,10 @@ async function automatize(filename) {
 				let materialEstoque1 = targetSheet.getCell(`G${rowNumber}`);
 				materialEstoque.value = materialEstoque.value.replace("SHEET TH.", "GRATING");
 				materialEstoque1.value = materialEstoque1.value.replace("SHEET TH.", "GRATING");
-				tipoMaterial.value = "S235JR";
+				tipoMaterial.value = i18n.__("SHEET_STANDARD");
 			}
 
-			if (tipoMaterial.value != "S235JR") {
+			if (tipoMaterial.value != "S235JR" && tipoMaterial.value != "ASTM-A36") {
 				errorFile.alertCL01.boleanValue = true;
 			} 
 
