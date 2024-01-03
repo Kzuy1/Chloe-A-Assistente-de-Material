@@ -1,4 +1,6 @@
 const ExcelJS = require("exceljs");
+const i18n = require("i18n");
+const project = require("../../../dataBaseSchema/projectSchema");
 const { findMaterial } = require("./findMaterial.js");
 const { adjustMaterial } = require("./adjustMaterial.js");
 const { errors } = require("./error.js");
@@ -15,9 +17,55 @@ async function automatize(filename) {
 	targetSheet.model = Object.assign(sourceWorksheet.model, {
 		views: [{ state: "frozen", ySplit: 1 }],
 	});
-
+	
 	targetSheet.spliceColumns(1, 0, ["DESENHO"], ["PEÇA"]);
+	
+	//Procura o Código de Projeto que mais se repete, e verifica se estão em todas as peças
+	const numberoPeca = targetSheet.getColumn(5);
+	let countOccurrences = {};
+	numberoPeca.eachCell(function(cell) {
+		if (typeof cell.value == "string" && (cell.value != "NÚMERO DA PEÇA")) {
+			const cellValue = cell.value.substring(0, 7);
+			countOccurrences[cellValue] = (countOccurrences[cellValue] || 0) + 1;
+		}
+	});
+	
+	// Encontrando o valor mais comum
+	let projectCode = null;
+	let highestCount = 0;
+	
+	Object.entries(countOccurrences).forEach(([value, count]) => {
+		if (count > highestCount) {
+			projectCode = value;
+			highestCount = count;
+		}
+	});
+	
+	//Verifica na planilha o codigo do projeto
+	numberoPeca.eachCell(function(cell) {
+		if ((!cell?.value?.includes(projectCode)) && (cell.value != "NÚMERO DA PEÇA")) {
+			errorFile.errorCH10.boleanValue = true;
+			cell.style = {
+				fill: { type: "pattern", pattern: "solid", fgColor: { argb: "CB2821" } },
+			};
+		}
+	});
+	
+	// Encontrar projetos que atendem a um critério do Codigo
+	const projectInfo = await project.findOne({ cod: projectCode });
 
+	// Configure i18n
+	i18n.configure({
+		locales: [projectInfo.standard],
+		defaultLocale: "brazil",
+		directory: "../../standardLanguage/",
+		objectNotation: true,
+	});
+
+	// Log the translated text
+	console.log(i18n.__("EMBOSSED_PLATE"));
+	
+	
 	//Adiciona coluna Desenho e Peça
 	for (let rowIndex = 1; rowIndex <= targetSheet.rowCount; rowIndex++) {
 		targetSheet.getRow(rowIndex).alignment = { wrapText: false };
@@ -37,7 +85,7 @@ async function automatize(filename) {
 			rowAdd.push(rowNumber);
 		}
 	});
-
+	
 	//Adiciona uma linha em cima
 	for (let i = 0; i < rowAdd.length; i++) {
 		targetSheet.insertRow(rowAdd[i] + i);
@@ -221,37 +269,6 @@ async function automatize(filename) {
 			}
 		}
 	}
-
-	//Procura o Código de Projeto que mais se repete, e verifica se estão em todas as peças
-	const numberoPeca = targetSheet.getColumn(5);
-	let countOccurrences = {};
-	numberoPeca.eachCell(function(cell) {
-		if (typeof cell.value == "string" && (cell.value != "NÚMERO DA PEÇA")) {
-			const cellValue = cell.value.substring(0, 7);
-			countOccurrences[cellValue] = (countOccurrences[cellValue] || 0) + 1;
-		}
-	});
-
-	// Encontrando o valor mais comum
-	let projectCode = null;
-	let highestCount = 0;
-
-	Object.entries(countOccurrences).forEach(([value, count]) => {
-		if (count > highestCount) {
-			projectCode = value;
-			highestCount = count;
-		}
-	});
-
-	//Verifica na planilha o codigo do projeto
-	numberoPeca.eachCell(function(cell) {
-		if ((!cell?.value?.includes(projectCode)) && (cell.value != "NÚMERO DA PEÇA")) {
-			errorFile.errorCH10.boleanValue = true;
-			cell.style = {
-				fill: { type: "pattern", pattern: "solid", fgColor: { argb: "CB2821" } },
-			};
-		}
-	});
 	
 	//Adiciona o Filtro
 	targetSheet.autoFilter = {

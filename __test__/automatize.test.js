@@ -3,11 +3,17 @@ const fs = require("fs");
 const util = require("util");
 const path = require("path");
 const readdir = util.promisify(fs.readdir);
+const process = require("node:process");
+const config = require("../config.json");
+const handler = require("../handler/index");
 const { automatize }  = require("../slashCommands/Lista/Reformulador EU/automatize.js");
 
 async function automatizeTeste(){
 	const pasta = `${__dirname}/_BASE`;
 	const files = await readdir(pasta);
+
+	// Carregar DataBase
+	handler.loadDateBase(config.mongoUrl);
 
 	for (const file of files) {
 		if (!file.includes("_CHLOE")) {
@@ -80,5 +86,7 @@ async function automatizeTeste(){
 			}
 		}
 	}
+
+	process.exit(1);
 }
 automatizeTeste();
