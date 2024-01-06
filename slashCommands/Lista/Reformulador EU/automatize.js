@@ -1,5 +1,4 @@
 const ExcelJS = require("exceljs");
-const i18n = require("i18n");
 const project = require("../../../dataBaseSchema/projectSchema");
 const { findMaterial } = require("./findMaterial.js");
 const { adjustMaterial } = require("./adjustMaterial.js");
@@ -53,22 +52,15 @@ async function automatize(filename) {
 	
 	// Procura informações do Projeto
 	const projectInfo = await project.findOne({ cod: projectCode });
+	let projectStandardConfig;
 
-	// Configura i18n
+	// Configura o Padrão do projeto
 	if (projectInfo && projectInfo.standard) {
-		i18n.configure({
-			defaultLocale: projectInfo.standard,
-			directory: "./standardLanguage/",
-			objectNotation: true,
-		});
+		projectStandardConfig = require(`../../../standardLanguage/${projectInfo.standard}.json`);
 	} else {
 		// Caso `project.standard` seja null, configura para o Brazil
 		errorFile.errorCH15.boleanValue = true;
-		i18n.configure({
-			defaultLocale: "brazil",
-			directory: "./standardLanguage/",
-			objectNotation: true,
-		});
+		projectStandardConfig = require("../../../standardLanguage/brazil.json");
 	}
 	
 	//Adiciona coluna Desenho e Peça
@@ -125,7 +117,7 @@ async function automatize(filename) {
 				let materialEstoque1 = targetSheet.getCell(`G${rowNumber}`);
 				materialEstoque.value = materialEstoque.value.replace("SHEET TH.", "EMBOSSED PLATE Sp.");
 				materialEstoque1.value = materialEstoque1.value.replace("SHEET TH.", "EMBOSSED PLATE Sp.");
-				tipoMaterial.value = i18n.__("SHEET_STANDARD");
+				tipoMaterial.value = projectStandardConfig.SHEET_STANDARD;
 			}
 
 			if(tipoMaterial?.value?.includes("GRATING")){
@@ -133,14 +125,14 @@ async function automatize(filename) {
 				let materialEstoque1 = targetSheet.getCell(`G${rowNumber}`);
 				materialEstoque.value = materialEstoque.value.replace("SHEET TH.", "GRATING");
 				materialEstoque1.value = materialEstoque1.value.replace("SHEET TH.", "GRATING");
-				tipoMaterial.value = i18n.__("SHEET_STANDARD");
+				tipoMaterial.value = projectStandardConfig.SHEET_STANDARD;
 			}
 
 			if (tipoMaterial.value != "S235JR" && tipoMaterial.value != "ASTM-A36") {
 				errorFile.alertCL01.boleanValue = true;
 			} 
 
-			material = findMaterial(cell.value, tipoMaterial.value);
+			material = findMaterial(cell.value, tipoMaterial.value, projectStandardConfig.LANGUAGE);
 
 			if (material == undefined) {
 				errorFile.errorCH03.boleanValue = true;
