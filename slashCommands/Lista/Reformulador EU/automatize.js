@@ -145,7 +145,16 @@ async function automatize(filename) {
 					fill: { type: "pattern", pattern: "solid", fgColor: { argb: "D48719" } },
 				};
 			} else {
-				cell.value = material.descricao;
+				let materialDescription;
+
+				// Verifica o valor de projectInfo.standard e define materialDescricao conforme necessário
+				if (projectStandardConfig.LANGUAGE === "en") {
+					materialDescription = material.descriptionEN;
+				} else {
+					materialDescription = material.descriptionPT;
+				}
+			
+				cell.value = materialDescription;
 				targetSheet.getCell(`H${rowNumber}`).value = material.material;
 			}
 		}
