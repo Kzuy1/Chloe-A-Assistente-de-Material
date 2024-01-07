@@ -16,20 +16,23 @@ const findMaterial = (modeloMaterialValue, material) => {
 	return infoCopy;
 };
 
-const findMaterialPos = (descricao, material) => {
-	let pos = listMaterial.findIndex(obj => obj.descricao == descricao) * 100;
-	let info = listMaterial.filter(obj => obj.descricao == descricao);
+const findMaterialPos = (findMaterialValue, material, language) => {
+	// Verifica o valor de language e define idioma da decrição do material
+	let materialDescription = language === "en" ? "descriptionEN" : "descriptionPT";
+
+	let pos = listMaterial.findIndex(obj => obj[materialDescription] == findMaterialValue) * 100;
+	let info = listMaterial.filter(obj => obj[materialDescription] == findMaterialValue);
 	let materialEsp = findTypeMaterial(material);
 
 	if(info.length === 0) {
-		return [listMaterial.length * 101, descricao, "NULL", 0, material, 0];
+		return [listMaterial.length * 101, findMaterialValue, "NULL", 0, material, 0];
 	}
 
 	const infoCopy = Object.create(info[0]);
 
 	pos += materialEsp.pos;
 	infoCopy.quantidade *= materialEsp.densidade;
-	return [pos, infoCopy.descricao, infoCopy.unidade, infoCopy.quantidade, material, infoCopy.peso];
+	return [pos, infoCopy[materialDescription], infoCopy.unidade, infoCopy.quantidade, material, infoCopy.peso];
 };
 
 module.exports = { findMaterial, findMaterialPos };
@@ -1160,5 +1163,5 @@ let listMaterial = [
 	//GRADES
 	{ modelo: "DEGRAU", descriptionEN: "GRATING TREADS - MESH x1 BEARING PLATE x2 (x3 kg/m²) - x4mm", descriptionPT: "DEGRAU GALV. - MALHA x1 BARRA PORTANTE x2 (x3 kg/m²) - x4mm", unidade: "N°", quantidade: 0, material: "", peso: 0},
 	{ modelo: "GRATING 30,000 mm", descriptionEN: "GALVANIZED GRATING - MESH x1 BEARING PLATE x2 (x3 kg/m²) - x4 m²", descriptionPT: "GRADE DE PISO GALV. - MALHA x1 BARRA PORTANTE x2 (x3 kg/m²) - x4 m²", unidade: "N°", quantidade: 0, material: "", peso: 0},
-	//{ modelo:, descriptionEN: , unidade: , quantidade: , material: , peso: 0},
+	//{ modelo: , descriptionEN: , descriptionPT: , unidade: , quantidade: , material: , peso: 0},
 ];

@@ -3,12 +3,18 @@ const fs = require("fs");
 const util = require("util");
 const path = require("path");
 const readdir = util.promisify(fs.readdir);
+const process = require("node:process");
+const config = require("../config.json");
+const handler = require("../handler/index");
 const { automatize }  = require("../slashCommands/Lista/Reformulador EU/automatize.js");
 const { automatizePecas }  = require("../slashCommands/Lista/Reformulador EU/automatizePecas.js");
 
 async function automatizePecasTeste(){
 	const pasta = `${__dirname}/_BASE`;
 	const files = await readdir(pasta);
+
+	// Carregar DataBase
+	handler.loadDateBase(config.mongoUrl);
 
 	for (const file of files) {
 		if (!file.includes("_CHLOE")) {
@@ -70,8 +76,18 @@ async function automatizePecasTeste(){
 								diferencaEncontrada = true;
 							}
 						} else {
-							// Se não forem fórmulas, comparar os valores diretamente
-							if (cell1.value !== cell2.value) {
+							// Se não forem fórmulas, compara numberos com arredondamento, se não for numero compara, e adiciona a mensagem de erro.
+							if (typeof cell1.value === "number" && typeof cell2.value === "number") {
+								const cell1NumberRound = Math.round(cell1.value * 1000) / 1000;
+								const cell2NumberRound = Math.round(cell2.value * 1000) / 1000;
+
+								if(Math.abs(cell1NumberRound - cell2NumberRound) > 0.001){
+									cell2.style = {
+										fill: { type: "pattern", pattern: "solid", fgColor: { argb: "6ddd35" } },
+									};
+									diferencaEncontrada = true;
+								}
+							} else if (cell1.value !== cell2.value) {
 								cell2.style = {
 									fill: { type: "pattern", pattern: "solid", fgColor: { argb: "6ddd35" } },
 								};
@@ -91,9 +107,9 @@ async function automatizePecasTeste(){
 			} else {
 				fs.unlinkSync(newFileName);
 			}
-      
-      
 		}
 	}
+
+	process.exit(1);
 }
 automatizePecasTeste();

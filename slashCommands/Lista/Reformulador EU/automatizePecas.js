@@ -1,4 +1,5 @@
 const ExcelJS = require("exceljs");
+const project = require("../../../dataBaseSchema/projectSchema");
 const { findMaterialPos } = require("./findMaterial.js");
 const { errors } = require("./error.js");
 
@@ -13,6 +14,39 @@ async function automatizePecas(filename) {
 	let woksheetsQuantity = workbook.worksheets.length;
 	for(let i = 2; i <= woksheetsQuantity; i++){
 		workbook.removeWorksheet(i);
+	}
+
+	const pieceNumber = sourceWorksheet.getColumn(5);
+	let countOccurrences = {};
+	pieceNumber.eachCell(function(cell) {
+		if (typeof cell.value == "string" && (cell.value != "NÚMERO DA PEÇA")) {
+			const cellValue = cell.value.substring(0, 7);
+			countOccurrences[cellValue] = (countOccurrences[cellValue] || 0) + 1;
+		}
+	});
+	
+	// Encontrando o valor mais comum
+	let projectCode = null;
+	let highestCount = 0;
+	
+	Object.entries(countOccurrences).forEach(([value, count]) => {
+		if (count > highestCount) {
+			projectCode = value;
+			highestCount = count;
+		}
+	});
+
+	// Procura informações do Projeto
+	const projectInfo = await project.findOne({ cod: projectCode });
+	let projectStandardConfig;
+	
+	// Configura o Padrão do projeto
+	if (projectInfo && projectInfo.standard) {
+		projectStandardConfig = require(`../../../standardLanguage/${projectInfo.standard}.json`);
+	} else {
+		// Caso `project.standard` seja null, configura para o Brazil
+		errorFile.errorCH15.boleanValue = true;
+		projectStandardConfig = require("../../../standardLanguage/brazil.json");
 	}
 
 	//Le os códigos e cria planilhas correspondentes
@@ -78,7 +112,6 @@ async function automatizePecas(filename) {
 	let weightTotal = 0;
 	let materialWeightTotal = 0;
 
-	
 	for (let i = 1; i < workbook.worksheets.length; i++) {
 		let targetSheet = workbook.worksheets[i];
 		
@@ -121,7 +154,7 @@ async function automatizePecas(filename) {
 				}
 
 				if (!found) {
-					let findPosMaterial = findMaterialPos(materialTarget[1], materialTarget[2]);
+					let findPosMaterial = findMaterialPos(materialTarget[1], materialTarget[2], projectStandardConfig.LANGUAGE);
 					findPosMaterial[5] += materialTarget[4];
 					materialList.push(findPosMaterial);
 				}
@@ -129,7 +162,6 @@ async function automatizePecas(filename) {
 
 			materialList.shift();
 			materialList = materialList.sort((a, b) => a[0] - b[0]);
-
 
 			for (let i = 0; i < materialList.length; i++){
 				// Preencher "POS."
