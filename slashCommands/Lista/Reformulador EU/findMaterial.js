@@ -28,7 +28,7 @@ const findMaterialPos = (findMaterialValue, material, language) => {
 		return [listMaterial.length * 101, findMaterialValue, "NULL", 0, material, 0];
 	}
 
-	const infoCopy = Object.create(info[0]);
+	const infoCopy = Object.assign({}, info[0]);
 
 	pos += materialEsp.pos;
 	infoCopy.quantidade *= materialEsp.densidade;

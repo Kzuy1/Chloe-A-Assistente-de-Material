@@ -18,11 +18,12 @@ const errors = {
 
 	printErrors: function() {
 		let string = "";
-		
 		for (const error in this){
 			if(this[error].boleanValue){
 				string += `${this[error].description}\n`;
 			}
+			
+			this[error].boleanValue = false;
 		}
 
 		return string;
