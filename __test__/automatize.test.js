@@ -1,12 +1,12 @@
-const ExcelJS = require("exceljs");
-const fs = require("fs");
-const util = require("util");
-const path = require("path");
+const ExcelJS = require('exceljs');
+const fs = require('fs');
+const util = require('util');
+const path = require('path');
 const readdir = util.promisify(fs.readdir);
-const process = require("node:process");
-const config = require("../config.json");
-const handler = require("../handler/index");
-const { automatize }  = require("../slashCommands/Lista/Reformulador EU/automatize.js");
+const process = require('node:process');
+const config = require('../config.json');
+const handler = require('../handler/index');
+const { automatize }  = require('../slashCommands/Lista/Reformulador EU/automatize.js');
 
 async function automatizeTeste(){
 	const pasta = `${__dirname}/_BASE`;
@@ -16,15 +16,19 @@ async function automatizeTeste(){
 	handler.loadDateBase(config.mongoUrl);
 
 	for (const file of files) {
-		if (!file.includes("_CHLOE")) {
+		if (!file.includes('_BASESHEET')){
+			fs.unlinkSync(file);
+			break;
+		}
+		if (!file.includes('_CHLOE')) {
 			let sheet = await automatize(`${pasta}/${file}`);
 
-			let newFileName = sheet[1].replace("_BASESHEET", ""); 
-			let baseFileName = newFileName.replace(".xlsx", "_BASESHEET.xlsx"); 
+			let newFileName = sheet[1].replace('_BASESHEET', ''); 
+			let baseFileName = newFileName.replace('.xlsx', '_BASESHEET.xlsx'); 
 
 			fs.rename(sheet[1], newFileName, (err) => {
 				if (err) {
-					console.error("Erro ao renomear o arquivo:", err);
+					console.error('Erro ao renomear o arquivo:', err);
 				}
 			});
 
@@ -59,7 +63,7 @@ async function automatizeTeste(){
 						try {cell1.result.toFixed(3);} catch(e) {console.log(row, col, cell1.result);}
 						if (cell1.result.toFixed(3) !== cell2.result.toFixed(3)) {
 							cell2.style = {
-								fill: { type: "pattern", pattern: "solid", fgColor: { argb: "6ddd35" } },
+								fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: '6ddd35' } },
 							};
 							diferencaEncontrada = true;
 						}
@@ -67,7 +71,7 @@ async function automatizeTeste(){
 						// Se não forem fórmulas, comparar os valores diretamente
 						if (cell1.value !== cell2.value) {
 							cell2.style = {
-								fill: { type: "pattern", pattern: "solid", fgColor: { argb: "6ddd35" } },
+								fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: '6ddd35' } },
 							};
 							diferencaEncontrada = true;
 						}

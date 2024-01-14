@@ -1,13 +1,13 @@
-const ExcelJS = require("exceljs");
-const fs = require("fs");
-const util = require("util");
-const path = require("path");
+const ExcelJS = require('exceljs');
+const fs = require('fs');
+const util = require('util');
+const path = require('path');
 const readdir = util.promisify(fs.readdir);
-const process = require("node:process");
-const config = require("../config.json");
-const handler = require("../handler/index");
-const { automatize }  = require("../slashCommands/Lista/Reformulador EU/automatize.js");
-const { automatizePecas }  = require("../slashCommands/Lista/Reformulador EU/automatizePecas.js");
+const process = require('node:process');
+const config = require('../config.json');
+const handler = require('../handler/index');
+const { automatize }  = require('../slashCommands/Lista/Reformulador EU/automatize.js');
+const { automatizePecas }  = require('../slashCommands/Lista/Reformulador EU/automatizePecas.js');
 
 async function automatizePecasTeste(){
 	const pasta = `${__dirname}/_BASE`;
@@ -17,15 +17,27 @@ async function automatizePecasTeste(){
 	handler.loadDateBase(config.mongoUrl);
 
 	for (const file of files) {
-		if (!file.includes("_CHLOE")) {
+		if (!file.includes('_BASESHEET')){
+			try {
+				fs.unlinkSync(file);
+				console.log(`Arquivo ${file} excluído com sucesso.`);
+			} catch (error) {
+				if (error.code === 'ENOENT') {
+				// Se o erro for ENOENT (arquivo não encontrado), apenas imprima uma mensagem e siga em frente.
+					console.log(`O arquivo ${file} não existe.`);
+				}
+			}
+			break;
+		}
+		if (!file.includes('_CHLOE')) {
 			let sheet = await automatize(`${pasta}/${file}`);
 
-			let newFileName = sheet[1].replace("_BASESHEET", ""); 
-			let baseFileName = newFileName.replace(".xlsx", "_BASESHEET.xlsx"); 
+			let newFileName = sheet[1].replace('_BASESHEET', ''); 
+			let baseFileName = newFileName.replace('.xlsx', '_BASESHEET.xlsx'); 
 
 			fs.rename(sheet[1], newFileName, (err) => {
 				if (err) {
-					console.error("Erro ao renomear o arquivo:", err);
+					console.error('Erro ao renomear o arquivo:', err);
 				}
 			});
 
@@ -71,25 +83,25 @@ async function automatizePecasTeste(){
 						if (cell1.formula && cell2.formula) {
 							if (cell1.result.toFixed(3) !== cell2.result.toFixed(3)) {
 								cell2.style = {
-									fill: { type: "pattern", pattern: "solid", fgColor: { argb: "6ddd35" } },
+									fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: '6ddd35' } },
 								};
 								diferencaEncontrada = true;
 							}
 						} else {
 							// Se não forem fórmulas, compara numberos com arredondamento, se não for numero compara, e adiciona a mensagem de erro.
-							if (typeof cell1.value === "number" && typeof cell2.value === "number") {
+							if (typeof cell1.value === 'number' && typeof cell2.value === 'number') {
 								const cell1NumberRound = Math.round(cell1.value * 1000) / 1000;
 								const cell2NumberRound = Math.round(cell2.value * 1000) / 1000;
 
 								if(Math.abs(cell1NumberRound - cell2NumberRound) > 0.001){
 									cell2.style = {
-										fill: { type: "pattern", pattern: "solid", fgColor: { argb: "6ddd35" } },
+										fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: '6ddd35' } },
 									};
 									diferencaEncontrada = true;
 								}
 							} else if (cell1.value !== cell2.value) {
 								cell2.style = {
-									fill: { type: "pattern", pattern: "solid", fgColor: { argb: "6ddd35" } },
+									fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: '6ddd35' } },
 								};
 								diferencaEncontrada = true;
 							}

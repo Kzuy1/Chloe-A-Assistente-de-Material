@@ -132,7 +132,7 @@ async function automatize(filename) {
 				errorFile.alertCL01.boleanValue = true;
 			} 
 
-			material = findMaterial(cell.value, tipoMaterial.value, projectStandardConfig.LANGUAGE);
+			material = findMaterial(cell.value, tipoMaterial.value, projectStandardConfig.STANDARD);
 
 			if (material == undefined) {
 				errorFile.errorCH03.boleanValue = true;
