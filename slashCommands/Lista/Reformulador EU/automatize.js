@@ -139,12 +139,13 @@ async function automatize(filename) {
 				cell.style = {
 					fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: 'E6D690' } },
 				};
-			} else if (material.peso === null) {
-				errorFile.errorCH11.boleanValue = true;
-				tipoMaterial.style = {
-					fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: 'D48719' } },
-				};
 			} else {
+				if (material.peso === null) {
+					errorFile.errorCH11.boleanValue = true;
+					tipoMaterial.style = {
+						fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: 'D48719' } },
+					};
+				}
 				cell.value = material.description;
 				targetSheet.getCell(`H${rowNumber}`).value = material.material;
 			}
