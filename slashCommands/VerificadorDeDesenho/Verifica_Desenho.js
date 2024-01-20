@@ -1,50 +1,68 @@
-const { ApplicationCommandOptionType } = require("discord.js");
-const https = require("https");
-const fs = require("fs");
-const { spawn } = require("child_process");
+const { ApplicationCommandOptionType } = require('discord.js');
+const { get } = require('https');
+const { createWriteStream, readFileSync, unlink } = require('fs');
+const { post } = require('axios');
+const FormData = require('form-data');
 
 module.exports = {
-	name: "verifica_desenho",
-	category: "Verificador de Desenho",
-	description: "Este comando verifica o desenho",
-	ownerOnly: false,
-	options: [
-		{
-			name: "desenho",
-			description: "Anexe o Desenho",
-			type: ApplicationCommandOptionType.Attachment,
-			required: true
-		}
-	],
+  name: 'verifica_desenho',
+  category: 'Verificador de Desenho',
+  description: 'Este comando verifica o desenho',
+  ownerOnly: false,
+  options: [
+    {
+      name: 'desenho',
+      description: 'Anexe o Desenho',
+      type: ApplicationCommandOptionType.Attachment,
+      required: true,
+    },
+  ],
 
-	run: async (client, interaction) => {
-		const attachment = interaction.options.get("desenho");
-		const path = `${__dirname}/DesenhoSaves/${attachment.attachment.name}`;
+  run: async (client, interaction) => {
+    const attachment = interaction.options.get('desenho');
+    const path = `${__dirname}/drawingSaves/${attachment.attachment.name}`;
 
-		function download(){
-			return new Promise((resolve, reject) => {
-				https.get(attachment.attachment.url,(res) => {
-					const filePath = fs.createWriteStream(path);
-					res.pipe(filePath);
-					filePath.on("finish",() => {
-						filePath.close();
-						resolve();
-					});
-					filePath.on("error", (err) => {
-						fs.unlink(path, () => reject(err));
-					});
-				});
-			});
-		}
-		await download();
+    // Verifica se a extensão do arquivo é .dxf
+    const isDxfFile = path.toLowerCase().endsWith('.dxf');
 
-		const pythonProcess = spawn("python", [`${__dirname}/verificador.py`, path]);
-        
-		for await (const data of pythonProcess.stdout) {
-			const file = data.toString().trim();
-			console.log(file);
-			// interaction.channel.send({content: `<@${interaction.user.id}>Aqui está os arquivos`, files: [file]})
-		}
+    if (!isDxfFile) {
+      return interaction.channel.send(`<@${interaction.user.id}>, envie apenas arquivo .dxf`);
+    }
 
-	},
+    function download() {
+      return new Promise((resolve, reject) => {
+        get(attachment.attachment.url, (res) => {
+          const filePath = createWriteStream(path);
+          res.pipe(filePath);
+
+          filePath.on('finish', () => {
+            filePath.close();
+            resolve();
+          });
+
+          filePath.on('error', (err) => {
+            unlink(path, () => reject(err));
+          });
+        });
+      });
+    }
+    await download();
+
+    // Função para enviar para API verificar e retornar
+    try {
+      const fileContent = readFileSync(path);
+      const formData = new FormData();
+      formData.append('file', fileContent, path.match(/\/([^/]+)$/)[0]);
+
+      // Usar o await para esperar a resposta do servidor antes de prosseguir
+      const response = await post('http://127.0.0.1:5000/verify', formData, {
+        headers: formData.getHeaders(),
+      });
+
+      return interaction.channel.send({ content: `<@${interaction.user.id}>, aqui erros:\n ${response.data}` });
+    } catch (error) {
+      console.error('Erro ao enviar o arquivo:', error.message);
+      return interaction.channel.send(`<@${interaction.user.id}>, ocorreu um erro ao verificar o desenho.`);
+    }
+  },
 };
