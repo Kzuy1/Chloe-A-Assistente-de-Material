@@ -55,11 +55,11 @@ module.exports = {
       formData.append('file', fileContent, path.match(/\/([^/]+)$/)[0]);
 
       // Usar o await para esperar a resposta do servidor antes de prosseguir
-      const response = await post('http://127.0.0.1:5000/verify', formData, {
+      const response = await post('https://chloeape.discloud.app:443/verify', formData, {
         headers: formData.getHeaders(),
       });
 
-      return interaction.channel.send({ content: `<@${interaction.user.id}>, aqui erros:\n ${response.data}` });
+      return interaction.channel.send({ content: `<@${interaction.user.id}>, aqui erros:\n${response.data}` });
     } catch (error) {
       console.error('Erro ao enviar o arquivo:', error.message);
       return interaction.channel.send(`<@${interaction.user.id}>, ocorreu um erro ao verificar o desenho.`);
