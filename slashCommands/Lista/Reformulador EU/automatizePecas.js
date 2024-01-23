@@ -8,7 +8,7 @@ const workbook = new ExcelJS.Workbook();
 async function automatizePecas(filename) {
   await workbook.xlsx.readFile(filename);
   const sourceWorksheet = workbook.getWorksheet(1);
-  const errorFile = Object.create(errors);
+  const errorFile = { ...errors };
 
   // Remove as planilhas subsquententes que podem ser um processo anterior
   const woksheetsQuantity = workbook.worksheets.length;
