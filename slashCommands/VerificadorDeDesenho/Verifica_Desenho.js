@@ -57,7 +57,7 @@ module.exports = {
 
       // Usar o await para esperar a resposta do servidor antes de prosseguir
       //https://chloeape.discloud.app:443/verify'
-      const response = await post('/https://chloeape.discloud.app:443/verify', formData, {
+      const response = await post('https://chloeape.discloud.app:443/verify', formData, {
         headers: formData.getHeaders(),
       });
       
