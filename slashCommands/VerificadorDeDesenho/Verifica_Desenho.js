@@ -20,6 +20,7 @@ module.exports = {
 
   run: async (client, interaction) => {
     const attachment = interaction.options.get('desenho');
+    const fileNameWithoutExtension = attachment.attachment.name.replace('.dxf', '');
     const path = `${__dirname}/drawingSaves/${attachment.attachment.name}`;
 
     // Verifica se a extensão do arquivo é .dxf
@@ -55,11 +56,21 @@ module.exports = {
       formData.append('file', fileContent, path.match(/\/([^/]+)$/)[0]);
 
       // Usar o await para esperar a resposta do servidor antes de prosseguir
-      const response = await post('https://chloeape.discloud.app:443/verify', formData, {
+      //https://chloeape.discloud.app:443/verify'
+      const response = await post('http://127.0.0.1:5000/verify', formData, {
         headers: formData.getHeaders(),
       });
+      
+      // Se o arquivo não tenha nenhum erro
+      if(response.data[0].trim() === ''){
+        return interaction.channel.send({ content: `<@${interaction.user.id}>, o arquivo ${fileNameWithoutExtension} não possui erros!` });
+      }
 
-      return interaction.channel.send({ content: `<@${interaction.user.id}>, aqui erros:\n${response.data}` });
+      // Se o arquivo tiver erros manda um mensagem e os erros
+      interaction.channel.send({ content: `<@${interaction.user.id}>, segue abaixo a lista de erros do arquivo ${fileNameWithoutExtension};` });
+      response.data.forEach(errorMessage => {
+        interaction.channel.send({ content: errorMessage });
+      });
     } catch (error) {
       console.error('Erro ao enviar o arquivo:', error.message);
       return interaction.channel.send(`<@${interaction.user.id}>, ocorreu um erro ao verificar o desenho.`);
