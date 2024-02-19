@@ -13,6 +13,9 @@ async function automatize(filename) {
   const targetWorkbook = new ExcelJS.Workbook();
   const targetSheet = targetWorkbook.addWorksheet(sourceWorksheet.name);
 
+  // Save configError
+  let startErrorBD = errorFile.errorCH15.boleanValue;
+
   targetSheet.model = Object.assign(sourceWorksheet.model, {
     views: [{ state: 'frozen', ySplit: 1 }],
   });
@@ -60,6 +63,16 @@ async function automatize(filename) {
   } else {
     // Caso `project.standard` seja null, configura para o Brazil
     errorFile.errorCH15.boleanValue = true;
+
+    // Tentativa de achar o Erro do DB
+    if (errorFile.errorCH15.boleanValue){
+      console.log(' ❌ => Error de DB:');
+      console.log(` Arquivo: ${filename}`);
+      console.log(` StartError: ${startErrorBD}`);
+      console.log(` ProjectCode: ${projectCode}`);
+      console.log(` ProjectInfo: ${projectInfo}`);
+    }
+
     projectStandardConfig = require('../../../standardLanguage/brazil.json');
   }
 
@@ -297,7 +310,7 @@ async function automatize(filename) {
   await targetWorkbook.xlsx.writeFile(`${filename.replace('.xlsx', '')}_CHLOE.xlsx`);
 
   const mergedError = await errorFile.printErrors();
-
+  
   return [mergedError, `${filename.replace('.xlsx', '')}_CHLOE.xlsx`];
 }
 
