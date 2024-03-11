@@ -200,7 +200,8 @@ async function automatizePecas(filename) {
         }
       }
 
-      if (weightTotal != materialWeightTotal.toFixed(1)) {
+      // Verifica o Peso entre Lista de Peças e Lista de Material
+      if (Math.abs(weightTotal - materialWeightTotal) > 0.1) {
         errorFile.errorCH13.boleanValue = true;
         targetSheet.properties.tabColor = {
           argb: 'FFC00000',
