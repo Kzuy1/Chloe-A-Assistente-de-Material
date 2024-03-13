@@ -16,12 +16,40 @@ module.exports = {
       type: ApplicationCommandOptionType.Attachment,
       required: true,
     },
+    {
+      name: 'data',
+      description: 'Especifique a data de emissão do desenho. Exemplo: 04/06/24',
+      type: ApplicationCommandOptionType.String,
+      required: false,
+    },
   ],
 
   run: async (client, interaction) => {
     const attachment = interaction.options.get('desenho');
     const fileNameWithoutExtension = attachment.attachment.name.replace('.dxf', '');
     const path = `${__dirname}/drawingSaves/${attachment.attachment.name}`;
+
+    // Verifica a opção 'data' se estiver presente caso não coloca a Data de Hoje
+    const dataOption = interaction.options.get('data');
+    let dataValue;
+    if (dataOption) {
+      dataValue = dataOption.value;
+    
+      // Expressão regular para validar o formato dd/mm/yy
+      const dateRegex = /^\d{2}\/\d{2}\/\d{2}$/;
+    
+      // Verifica se a data tem o formato correto
+      if (!dateRegex.test(dataValue)) {
+        return interaction.channel.send(`<@${interaction.user.id}>, a data especificada não está no formato correto. Por favor, insira uma data válida no formato dd/mm/yy.`);
+      }
+    } else {
+      // Se nenhum valor foi fornecido para o parâmetro 'data', obtenha a data atual
+      const currentDate = new Date();
+      
+      // Formata a data atual para o formato dd/mm/yy
+      dataValue = currentDate.toLocaleDateString('pt-BR', { timeZone: 'UTC', day: '2-digit', month: '2-digit', year: '2-digit' });
+    }
+    
 
     // Verifica se a extensão do arquivo é .dxf
     const isDxfFile = path.toLowerCase().endsWith('.dxf');
@@ -54,9 +82,10 @@ module.exports = {
       const fileContent = readFileSync(path);
       const formData = new FormData();
       formData.append('file', fileContent, path.match(/\/([^/]+)$/)[0]);
+      formData.append('data', dataValue);
 
       // Usar o await para esperar a resposta do servidor antes de prosseguir
-      //https://chloeape.discloud.app:443/verify'
+      // 'http://127.0.0.1:5000/verify'
       const response = await post('https://chloeape.discloud.app:443/verify', formData, {
         headers: formData.getHeaders(),
       });
@@ -73,7 +102,7 @@ module.exports = {
       });
     } catch (error) {
       console.error('Erro ao enviar o arquivo:', error.message);
-      return interaction.channel.send(`<@${interaction.user.id}>, ocorreu um erro ao verificar o desenho.`);
+      return interaction.channel.send(`<@${interaction.user.id}>, ocorreu um erro ao verificar o desenho. Código do erro: ${error.code}`);
     }
   },
 };
