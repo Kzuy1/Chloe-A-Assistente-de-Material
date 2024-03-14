@@ -141,7 +141,7 @@ async function automatize(filename) {
         tipoMaterial.value = projectStandardConfig.SHEET_STANDARD;
       }
 
-      if (tipoMaterial.value != 'S235JR' && tipoMaterial.value != 'ASTM-A36') {
+      if (tipoMaterial.value != 'S235JR' && tipoMaterial.value != 'ASTM A36') {
         errorFile.alertCL01.boleanValue = true;
       }
 
