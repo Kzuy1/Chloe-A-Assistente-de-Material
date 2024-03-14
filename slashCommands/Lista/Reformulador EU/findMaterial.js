@@ -1987,6 +1987,9 @@ let brasilListMaterial = [
 	{ modelo: 'SHEET TH. 35,000 mm', description: 'CHAPA ESP. 35.0mm', unidade: 'm²', quantidade: 35, material: '', peso: 0},
 	{ modelo: 'SHEET TH. 40,000 mm', description: 'CHAPA ESP. 40.0mm', unidade: 'm²', quantidade: 40, material: '', peso: 0},
 	{ modelo: 'SHEET TH. 50,000 mm', description: 'CHAPA ESP. 50.0mm', unidade: 'm²', quantidade: 50, material: '', peso: 0},
+	{ modelo: 'SHEET TH. 4,763 mm', description: 'CHAPA ESP. 3/16"', unidade: 'm²', quantidade: 4.763, material: '', peso: 0},
+	{ modelo: 'SHEET TH. 9,525 mm', description: 'CHAPA ESP. 3/8"', unidade: 'm²', quantidade: 9.525, material: '', peso: 0},
+	{ modelo: 'SHEET TH. 12,700 mm', description: 'CHAPA ESP. 1/2"', unidade: 'm²', quantidade: 12.700, material: '', peso: 0},
 	//CHAPA XADREZ (Divide Kg/m² por 7,850)
 	{ modelo: 'EMBOSSED PLATE Sp. 5,000 mm', description: 'CHAPA XADREZ 1/8" - 3+2', unidade: 'm²', quantidade: 3.439, material: '', peso: 0},
 	//PERFIL L (CM² dividido por 10)
