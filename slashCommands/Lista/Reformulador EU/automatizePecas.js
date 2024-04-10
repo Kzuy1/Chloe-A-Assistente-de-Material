@@ -201,7 +201,7 @@ async function automatizePecas(filename) {
       }
 
       // Verifica o Peso entre Lista de Peças e Lista de Material
-      if (Math.abs(weightTotal - materialWeightTotal) > 0.1) {
+      if (Math.abs(weightTotal - materialWeightTotal) > 0.01) {
         errorFile.errorCH13.boleanValue = true;
         targetSheet.properties.tabColor = {
           argb: 'FFC00000',
