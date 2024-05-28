@@ -12,6 +12,7 @@ const materialList = [
   {pos: '', nome: 'COR-TEN B', densidade: 7.850, modeloMod: 'COR-TEN B'},
   {pos: '', nome: 'STRENX 700', densidade: 7.850, modeloMod: 'STRENX 700'},
   {pos: '', nome: 'P265GH', densidade: 7.850, modeloMod: 'P265GH'},
+  {pos: '', nome: 'CDP 4666', densidade: 8.000, modeloMod: 'CDP 4666'},
   {pos: '', nome: 'SAE 1045', densidade: 7.850, modeloMod: 'SAE 1045'},
 ];
 
