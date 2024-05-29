@@ -311,6 +311,9 @@ async function automatize(filename) {
 
   const mergedError = await errorFile.printErrors();
   
+  // Testando banco de dados
+  console.log(projectInfo);
+
   return [mergedError, `${filename.replace('.xlsx', '')}_CHLOE.xlsx`];
 }
 
