@@ -1,50 +1,66 @@
-const { ApplicationCommandOptionType } = require("discord.js");
-const { automatizePecas }  = require("./Reformulador EU/automatizePecas.js");
-const https = require("https");
-const fs = require("fs");
+const { ApplicationCommandOptionType } = require('discord.js');
+const { automatizePecas }  = require('./Reformulador EU/automatizePecas.js');
+const https = require('https');
+const path = require('path');
+const fs = require('fs');
 
 module.exports = {
-	name: "organiza_por_desenho",
-	category: "Lista de Material",
-	description: "Este comando separa as informações da planilha por desenho",
-	ownerOnly: false,
-	options: [
-		{
-			name: "planilha",
-			description: "Anexe a Planilha",
-			type: ApplicationCommandOptionType.Attachment,
-			required: true
-		}
-	],
+  name: 'organiza_por_desenho',
+  category: 'Lista de Material',
+  description: 'Este comando separa as informações da planilha por desenho',
+  ownerOnly: false,
+  options: [
+    {
+      name: 'planilha',
+      description: 'Anexe a Planilha',
+      type: ApplicationCommandOptionType.Attachment,
+      required: true
+    }
+  ],
 
-	run: async (client, interaction) => {
-		const attachment = interaction.options.get("planilha");
-		const path = `${__dirname}/PlanilhasSaves/${attachment.attachment.name}`;
+  run: async (client, interaction) => {
+    const optionSheet = interaction.options.get('planilha');
+    const attachment = optionSheet.attachment;
+    const filePath = path.resolve(__dirname, 'download', attachment.name);
 
-		function download(){
-			return new Promise((resolve, reject) => {
-				https.get(attachment.attachment.url,(res) => {
-					const filePath = fs.createWriteStream(path);
-					res.pipe(filePath);
-					filePath.on("finish",() => {
-						filePath.close();
-						resolve();
-					});
-					filePath.on("error", (err) => {
-						fs.unlink(path, () => reject(err));
-					});
-				});
-			});
-		}
-		await download();
+    // Verifica se a extensão do arquivo é .xlsx
+    if (!attachment || !attachment.name.toLowerCase().endsWith('.xlsx')) {
+      return interaction.channel.send(
+        `<@${interaction.user.id}>, envie apenas arquivo .xlsx`
+      );
+    }
+	
+    // Função para baixar o arquivo
+    function downloadFile(url, path) {
+      return new Promise((resolve, reject) => {
+        const file = fs.createWriteStream(path);
+        https.get(url, (response) => {
+          response.pipe(file);
+          file.on('finish', () => {
+            file.close(resolve);
+          });
+        }).on('error', (err) => {
+          fs.unlink(path, () => reject(err));
+        });
+      });
+    }
+    await downloadFile(attachment.url, filePath);
 
-		try{
-			const file = await automatizePecas(path);
-			interaction.channel.send({content: `<@${interaction.user.id}>, aqui está a Planilha organizada por Desenho\n${file[0]}`,files: [file[1]] });
-		} catch (error) {
-			console.error("Erro:", error.message);
-			interaction.channel.send(`<@${interaction.user.id}>, ocorreu um erro ao processar a planilha.`);
-		}
+    try{
+      // Processa o Arquivo
+      const file = await automatizePecas(filePath);
 
-	},
+      // Retorna o Arquivo para Usuário
+      await interaction.channel.send({
+        content: `<@${interaction.user.id}>, aqui está a planilha organizada por desenho\n${file[0]}`,
+        files: [file[1]] 
+      });
+    } catch (error) {
+      console.error('Erro:', error.message);
+      interaction.channel.send(`<@${interaction.user.id}>, ocorreu um erro ao processar a planilha.\nErro: ${error.message}`);
+    }
+
+    // Remove o arquivo temporário
+    fs.unlinkSync(filePath);
+  },
 };

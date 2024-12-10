@@ -1,8 +1,9 @@
 const { ApplicationCommandOptionType } = require('discord.js');
-const { get } = require('https');
-const { createWriteStream, readFileSync, unlink } = require('fs');
 const { post } = require('axios');
+const https = require('https');
+const fs = require('fs');
 const FormData = require('form-data');
+const path = require('path');
 
 module.exports = {
   name: 'verifica_desenho',
@@ -25,9 +26,17 @@ module.exports = {
   ],
 
   run: async (client, interaction) => {
-    const attachment = interaction.options.get('desenho');
-    const fileNameWithoutExtension = attachment.attachment.name.replace('.dxf', '');
-    const path = `${__dirname}/drawingSaves/${attachment.attachment.name}`;
+    const optionDrawing = interaction.options.get('desenho');
+    const attachment = optionDrawing.attachment;
+    const fileNameWithoutExtension = attachment.name.replace('.dxf', '');
+    const filePath = path.resolve(__dirname, 'download', attachment.name);
+
+    // Verifica se a extensão do arquivo é .dxf
+    if (!attachment || !attachment.name.toLowerCase().endsWith('.dxf')) {
+      return interaction.channel.send(
+        `<@${interaction.user.id}>, envie apenas arquivo .dxf`
+      );
+    }
 
     // Verifica a opção 'data' se estiver presente caso não coloca a Data de Hoje
     const dataOption = interaction.options.get('data');
@@ -50,42 +59,30 @@ module.exports = {
       dataValue = currentDate.toLocaleDateString('pt-BR', { timeZone: 'UTC', day: '2-digit', month: '2-digit', year: '2-digit' });
     }
     
-
-    // Verifica se a extensão do arquivo é .dxf
-    const isDxfFile = path.toLowerCase().endsWith('.dxf');
-
-    if (!isDxfFile) {
-      return interaction.channel.send(`<@${interaction.user.id}>, envie apenas arquivo .dxf`);
-    }
-
-    function download() {
+    // Função para baixar o arquivo
+    function downloadFile(url, path) {
       return new Promise((resolve, reject) => {
-        get(attachment.attachment.url, (res) => {
-          const filePath = createWriteStream(path);
-          res.pipe(filePath);
-
-          filePath.on('finish', () => {
-            filePath.close();
-            resolve();
+        const file = fs.createWriteStream(path);
+        https.get(url, (response) => {
+          response.pipe(file);
+          file.on('finish', () => {
+            file.close(resolve);
           });
-
-          filePath.on('error', (err) => {
-            unlink(path, () => reject(err));
-          });
+        }).on('error', (err) => {
+          fs.unlink(path, () => reject(err));
         });
       });
     }
-    await download();
+    await downloadFile(attachment.url, filePath);
 
     // Função para enviar para API verificar e retornar
     try {
-      const fileContent = readFileSync(path);
+      const fileContent = fs.readFileSync(filePath);
       const formData = new FormData();
-      formData.append('file', fileContent, path.match(/\/([^/]+)$/)[0]);
+      formData.append('file', fileContent, attachment.name);
       formData.append('data', dataValue);
 
       // Usar o await para esperar a resposta do servidor antes de prosseguir
-      // 'http://127.0.0.1:5000/verify'
       const response = await post('https://chloeape.discloud.app:443/verify', formData, {
         headers: formData.getHeaders(),
       });
@@ -100,9 +97,12 @@ module.exports = {
       response.data.forEach(errorMessage => {
         interaction.channel.send({ content: errorMessage });
       });
+
+      // Apaga o arquivo dxf
+      fs.unlinkSync(filePath);
     } catch (error) {
       console.error('Erro ao enviar o arquivo:', error.message);
-      return interaction.channel.send(`<@${interaction.user.id}>, ocorreu um erro ao verificar o desenho. Código do erro: ${error.code}`);
+      return interaction.channel.send(`<@${interaction.user.id}>, ocorreu um erro ao verificar o desenho.\nErro: ${error.message}`);
     }
   },
 };

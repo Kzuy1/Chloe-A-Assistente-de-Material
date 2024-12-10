@@ -64,14 +64,11 @@ async function automatize(filename) {
     // Caso `project.standard` seja null, configura para o Brazil
     errorFile.errorCH15.boleanValue = true;
 
-    // Tentativa de achar o Erro do DB
-    if (errorFile.errorCH15.boleanValue){
-      console.log(' ❌ => Error de DB:');
-      console.log(` Arquivo: ${filename}`);
-      console.log(` StartError: ${startErrorBD}`);
-      console.log(` ProjectCode: ${projectCode}`);
-      console.log(` ProjectInfo: ${projectInfo}`);
-    }
+    console.log(' ❌ => Error de DB:');
+    console.log(` Arquivo: ${filename}`);
+    console.log(` StartError: ${startErrorBD}`);
+    console.log(` ProjectCode: ${projectCode}`);
+    console.log(` ProjectInfo: ${projectInfo}`);
 
     projectStandardConfig = require('../../../standardLanguage/brazil.json');
   }
@@ -213,7 +210,8 @@ async function automatize(filename) {
   const estoqueCol21 = targetSheet.getColumn(7);
   estoqueCol21.eachCell((cell, rowNumber) => {
     if ((cell.value != null) && (cell.value.includes('Descrição'))) {
-      if (targetSheet.getCell(`C${rowNumber}`).value.includes('.')) {
+      const indexCellValue = targetSheet.getCell(`C${rowNumber}`).value;
+      if (indexCellValue != null && indexCellValue.includes('.')) {
         errorFile.errorCH07.boleanValue = true;
         cell.style = {
           fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: 'F5D033' } },
@@ -297,22 +295,28 @@ async function automatize(filename) {
 
   // Ajeita o Tamanho das colunas
   targetSheet.columns.forEach((column) => {
-    let maxLength = 0;
-    column.eachCell({ includeEmpty: false }, (cell) => {
-      const columnLength = cell.value ? cell.value.toString().length : 10;
-      if (columnLength > maxLength) {
-        maxLength = columnLength;
-      }
+    // Verifique se o número da coluna está dentro do limite
+    if (column.number > 20) {
+      return;
+    }
+  
+    let maxColumnLength = 0;
+    column.eachCell({ includeEmpty: true }, (cell) => {
+      maxColumnLength = Math.max(
+        maxColumnLength,
+        10,
+        cell.value ? cell.value.toString().length : 0
+      );
     });
-    column.width = maxLength < 10 ? 10 : maxLength;
+  
+    // Ajuste a largura da coluna
+    column.width = maxColumnLength + 2;
   });
+
 
   await targetWorkbook.xlsx.writeFile(`${filename.replace('.xlsx', '')}_CHLOE.xlsx`);
 
   const mergedError = await errorFile.printErrors();
-  
-  // Testando banco de dados
-  console.log(projectInfo);
 
   return [mergedError, `${filename.replace('.xlsx', '')}_CHLOE.xlsx`];
 }
