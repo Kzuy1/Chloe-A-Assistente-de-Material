@@ -44,14 +44,14 @@ async function sendFilesToAPI(zipPath, xlsxPath) {
   formData.append('zip', zipContent, zipName);
   formData.append('xlsx', xlsxContent, xlsxName);
 
-  const response = await post('http://0.0.0.0:3000/add-attributes', formData, {
+  const response = await post('http://localhost:3000/add-attributes', formData, {
     headers: formData.getHeaders(),
   });
 
   return response.data;
 }
 
-async function processFiles(folderPath, interaction) {
+async function processFiles(folderPath, zipLength, interaction) {
   const errors = [];
   const files = fs.readdirSync(folderPath);
   const xlsxFile = files.find(file => file.toLowerCase().endsWith('.xlsx'));
@@ -60,6 +60,7 @@ async function processFiles(folderPath, interaction) {
   const sheet = workBook.Sheets[workBook.SheetNames[0]];
   const data = xlsx.utils.sheet_to_json(sheet);
   //console.log(data);
+  // console.log(zipLength);
 
   for (let i = 0; i < data.length; i++) {
     const row = data[i];
@@ -86,6 +87,13 @@ async function processFiles(folderPath, interaction) {
   if (errors.length > 0) {
     await interaction.followUp(
       `<@${interaction.user.id}>, foram encontrados os seguintes erros:\n` + errors.join('\n')
+    );
+    return false;
+  }
+
+  if (zipLength > data.length) { // pra ver se tem mais arquivos no zip do que no xlsx.
+    await interaction.followUp(
+      `<@${interaction.user.id}>, o arquivo .zip contém ${zipLength} arquivo(s), mas o .xlsx possui apenas ${data.length} registro(s).`
     );
     return false;
   }
@@ -143,6 +151,7 @@ module.exports = {
 
     try {
       let extractedFiles = [];
+      let zipLength = 0;
 
       if (modelName.toLowerCase().endsWith('.zip')) { // Verifica se o Arg2 é .zip. Se for, prossegue no if
 
@@ -150,9 +159,20 @@ module.exports = {
         const zip = new AdmZip(modelPath);
         const zipEntries = zip.getEntries();
 
+        zipLength = zipEntries.length;
+
         const notDXF = zipEntries.filter(entry => // Percorre o .zip procurando se tem alguma coisa que nao é .dxf, se tiver, atribui a variavel notDXF 
           !entry.isDirectory && !entry.entryName.toLowerCase().endsWith('.dxf')
         );
+
+        if (zipLength == 0) { // pra ver se o zip está vazio
+          await interaction.followUp(
+            `<@${interaction.user.id}>, o arquivo .zip está vazio.`);
+
+          fs.existsSync(spreadsheetPath) && fs.unlinkSync(spreadsheetPath);
+          fs.existsSync(modelPath) && fs.unlinkSync(modelPath);
+          return;
+        }
 
         if (notDXF.length > 0) { // Se notDXF tem alguma coisa, dai avisa pro usuário
           await interaction.followUp(
@@ -171,7 +191,7 @@ module.exports = {
         extractZip(modelPath, outputFolder);
       }
 
-      const valid = await processFiles(outputFolder, interaction);
+      const valid = await processFiles(outputFolder, zipLength, interaction);
 
       if (!valid) {
         //console.log('alcool isopropilico');

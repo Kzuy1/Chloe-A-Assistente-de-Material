@@ -42,7 +42,7 @@ client.config = require("./config");
 // Carregar comando, eventos e DataBase
 handler.loadEvents(client);
 handler.loadSlashCommands(client);
-//handler.loadDateBase(config.mongoUrl);
+handler.loadDateBase(config.mongoUrl);
 
 // Erro no Handling
 process.on("uncaughtException", (err) => {
