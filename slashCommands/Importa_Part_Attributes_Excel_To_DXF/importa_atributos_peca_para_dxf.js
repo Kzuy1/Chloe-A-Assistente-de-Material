@@ -46,6 +46,7 @@ async function sendFilesToAPI(zipPath, xlsxPath) {
 
   const response = await post('http://localhost:3000/add-attributes', formData, {
     headers: formData.getHeaders(),
+    responseType: 'arraybuffer',
   });
 
   return response.data;
@@ -59,8 +60,6 @@ async function processFiles(folderPath, zipLength, interaction) {
   const workBook = xlsx.readFile(path.join(folderPath, xlsxFile));
   const sheet = workBook.Sheets[workBook.SheetNames[0]];
   const data = xlsx.utils.sheet_to_json(sheet);
-  //console.log(data);
-  // console.log(zipLength);
 
   for (let i = 0; i < data.length; i++) {
     const row = data[i];
@@ -77,7 +76,6 @@ async function processFiles(folderPath, zipLength, interaction) {
     }
 
     const dxfPath = path.join(folderPath, `${partName}.dxf`);
-    //console.log(dxfPath);
 
     if (!fs.existsSync(dxfPath)) {
       errors.push(`:lady_beetle: Linha ${i + 2}: Arquivo **${partName}.dxf** não foi encontrado.`);
@@ -127,7 +125,9 @@ module.exports = {
 
     const outputFolder = path.resolve(__dirname, 'download');
     const spreadsheetPath = path.resolve(__dirname, 'download', spreadsheetName);
-    const modelPath = path.resolve(__dirname, 'download', modelName);
+    let modelPath = path.resolve(__dirname, 'download', modelName);
+    let dxfTempZipPath = null;
+    let originalDxfPath = null;
 
     await interaction.deferReply(); // pra aparecer q o bot ta pensando e n dar aquele aviso de erro de interacao
 
@@ -194,11 +194,22 @@ module.exports = {
       const valid = await processFiles(outputFolder, zipLength, interaction);
 
       if (!valid) {
-        //console.log('alcool isopropilico');
         deleteFiles(extractedFiles);
         fs.existsSync(spreadsheetPath) && fs.unlinkSync(spreadsheetPath);
         fs.existsSync(modelPath) && fs.unlinkSync(modelPath);
         return;
+      }
+
+      if (modelName.toLowerCase().endsWith('.dxf')) {
+        originalDxfPath = modelPath; // salvando o .dxf original
+
+        dxfTempZipPath = path.resolve(__dirname, 'download', modelName.replace(/\.dxf$/i, '.zip'));
+
+        const zip = new AdmZip();
+        zip.addLocalFile(modelPath); // ainda é o .dxf 
+        zip.writeZip(dxfTempZipPath);
+
+        modelPath = dxfTempZipPath;
       }
 
       try {
@@ -221,10 +232,10 @@ module.exports = {
         );
       }
 
-      //console.log('funciona por favor');
       deleteFiles(extractedFiles);
       fs.existsSync(spreadsheetPath) && fs.unlinkSync(spreadsheetPath);
       fs.existsSync(modelPath) && fs.unlinkSync(modelPath);
+      fs.existsSync(originalDxfPath) && fs.unlinkSync(originalDxfPath);
 
     } catch (error) {
       console.error('Erro ao enviar o arquivo:', error.message);
