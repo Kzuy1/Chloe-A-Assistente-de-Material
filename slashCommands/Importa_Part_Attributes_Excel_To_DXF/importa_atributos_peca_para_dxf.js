@@ -61,6 +61,16 @@ async function processFiles(folderPath, zipLength, interaction) {
   const sheet = workBook.Sheets[workBook.SheetNames[0]];
   const data = xlsx.utils.sheet_to_json(sheet);
 
+  let notErrors = true;
+
+  if (data.length === 0) {
+    await interaction.followUp(
+      `<@${interaction.user.id}>, a planilha enviada está vazia.`
+    );
+    notErrors = false;
+    return notErrors;
+  }
+
   for (let i = 0; i < data.length; i++) {
     const row = data[i];
     const partName = row['PartName'];
@@ -69,10 +79,8 @@ async function processFiles(folderPath, zipLength, interaction) {
     const quantity = row['Quantity'];
 
     if (!partName || !thickness || !material || !quantity) {
-      await interaction.followUp(
-        `<@${interaction.user.id}>, há campos vazios na planilha enviada.`
-      );
-      return false;
+      errors.push(`:lady_beetle: Linha ${i + 2}: possui campos vazios.`);
+      notErrors = false;
     }
 
     const dxfPath = path.join(folderPath, `${partName}.dxf`);
@@ -82,21 +90,35 @@ async function processFiles(folderPath, zipLength, interaction) {
     }
   }
 
+  if (zipLength > data.length) { // pra ver se tem mais arquivos no zip do que no xlsx.
+    if (data.length == 0) {
+      errors.push(`:lady_beetle: O arquivo .zip contém ${zipLength} arquivo(s), mas o .xlsx está vazio.`);
+    }
+    else {
+      errors.push(`:lady_beetle: O arquivo .zip contém ${zipLength} arquivo(s), mas o .xlsx possui apenas ${data.length} registro(s).`);
+    }
+    notErrors = false;
+  }
+
+  if (data.length > zipLength) {
+    if (zipLength == 0) {
+      errors.push(`:lady_beetle: O arquivo .xlsx contém ${data.length} registro(s), mas o .zip está vazio.`);
+    }
+    else {
+      errors.push(`:lady_beetle: O arquivo .xlsx contém ${data.length} registro(s), mas o .zip possui apenas ${zipLength} arquivo(s).`);
+    }
+    notErrors = false;
+  }
+
   if (errors.length > 0) {
     await interaction.followUp(
-      `<@${interaction.user.id}>, foram encontrados os seguintes erros:\n` + errors.join('\n')
+      `<@${interaction.user.id}>, foram encontrados os seguintes problemas:\n\n` +
+      errors.join('\n')
     );
-    return false;
+    notErrors = false;
   }
 
-  if (zipLength > data.length) { // pra ver se tem mais arquivos no zip do que no xlsx.
-    await interaction.followUp(
-      `<@${interaction.user.id}>, o arquivo .zip contém ${zipLength} arquivo(s), mas o .xlsx possui apenas ${data.length} registro(s).`
-    );
-    return false;
-  }
-
-  return true;
+  return notErrors;
 }
 
 module.exports = {
@@ -104,13 +126,13 @@ module.exports = {
   description: 'Recebe a planilha (.xlsx) e modelo (.dxf ou .zip) para gerar DXFs com atributos.',
   options: [
     {
-      name: 'planilha',
+      name: 'spreadsheet',
       description: 'Anexe a planilha (.xlsx)',
       type: ApplicationCommandOptionType.Attachment,
       required: true,
     },
     {
-      name: 'modelo',
+      name: 'part',
       description: 'Anexe o modelo (.dxf ou .zip)',
       type: ApplicationCommandOptionType.Attachment,
       required: true,
@@ -118,8 +140,8 @@ module.exports = {
   ],
 
   run: async (client, interaction) => {
-    const spreadsheet = interaction.options.get('planilha').attachment;
-    const model = interaction.options.get('modelo').attachment;
+    const spreadsheet = interaction.options.get('spreadsheet').attachment;
+    const model = interaction.options.get('part').attachment;
     const spreadsheetName = spreadsheet.name;
     const modelName = model.name;
 
@@ -167,7 +189,7 @@ module.exports = {
 
         if (zipLength == 0) { // pra ver se o zip está vazio
           await interaction.followUp(
-            `<@${interaction.user.id}>, o arquivo .zip está vazio.`);
+            `<@${interaction.user.id}>, o arquivo .zip enviado está vazio.`);
 
           fs.existsSync(spreadsheetPath) && fs.unlinkSync(spreadsheetPath);
           fs.existsSync(modelPath) && fs.unlinkSync(modelPath);
