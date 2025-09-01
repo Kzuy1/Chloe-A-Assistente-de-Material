@@ -27,7 +27,7 @@ async function sendFileToVerify(filePath, issueOrRevisionDate) {
   formData.append('file', fileContent, fileName);
   formData.append('data', issueOrRevisionDate);
 
-  const response = await post('https://chloeape.discloud.app:443/verify', formData, {
+  const response = await post('https://chloeape.discloud.app:443/verify-drawing', formData, {
     headers: formData.getHeaders(),
   });
 
@@ -50,9 +50,9 @@ async function processDxfFiles(folderPath, issueOrRevisionDate, interaction) {
         const drawingErrors = await sendFileToVerify(filePath, issueOrRevisionDate);
 
         if (drawingErrors.length === 0) {
-          await interaction.channel.send({ content: `<@${interaction.user.id}>, o arquivo ${fileNameWithoutExtension} não possui erros!` });
+          await interaction.followUp({ content: `<@${interaction.user.id}>, o arquivo ${fileNameWithoutExtension} não possui erros!` });
         } else {
-          await interaction.channel.send({ content: `<@${interaction.user.id}>, segue abaixo a lista de erros do arquivo ${fileNameWithoutExtension}:` });
+          await interaction.followUp({ content: `<@${interaction.user.id}>, segue abaixo a lista de erros do arquivo ${fileNameWithoutExtension}:` });
           drawingErrors.forEach(errorMessage => {
             interaction.channel.send({ content: errorMessage });
           });
@@ -61,7 +61,7 @@ async function processDxfFiles(folderPath, issueOrRevisionDate, interaction) {
         fs.existsSync(filePath) && fs.unlinkSync(filePath);
       } catch (error) {
         console.error('Erro ao enviar o arquivo:', error.message);
-        await interaction.channel.send(`<@${interaction.user.id}>, ocorreu um erro ao verificar o desenho ${fileNameWithoutExtension}.\nErro: ${error.message}`);
+        await interaction.followUp(`<@${interaction.user.id}>, ocorreu um erro ao verificar o desenho ${fileNameWithoutExtension}.\nErro: ${error.message}`);
       }
     }
   }
@@ -93,10 +93,12 @@ module.exports = {
     const fileName = attachment.name;
     const outputFolder = path.resolve(__dirname, 'download');
     const filePath = path.resolve(__dirname, 'download', fileName);
+
+    await interaction.deferReply();
     
     // Verifica se a extensão do arquivo é .dxf
     if (!attachment || (!fileName.toLowerCase().endsWith('.dxf') && !fileName.toLowerCase().endsWith('.zip'))) {
-      return interaction.channel.send(
+      return interaction.followUp(
         `<@${interaction.user.id}>, envie apenas arquivo .dxf ou .zip.`
       );
     }
@@ -112,7 +114,7 @@ module.exports = {
     
       // Verifica se a data tem o formato correto
       if (!dateRegex.test(issueOrRevisionDate)) {
-        return interaction.channel.send(`<@${interaction.user.id}>, a data especificada não está no formato correto. Por favor, insira uma data válida no formato dd/mm/yy.`);
+        return interaction.followUp(`<@${interaction.user.id}>, a data especificada não está no formato correto. Por favor, insira uma data válida no formato dd/mm/yy.`);
       }
     } else {
       // Se nenhum valor foi fornecido para o parâmetro 'data', obtenha a data atual
@@ -137,7 +139,7 @@ module.exports = {
       fs.existsSync(filePath) && fs.unlinkSync(filePath);
     } catch (error) {
       console.error('Erro ao enviar o arquivo:', error.message);
-      return interaction.channel.send(`<@${interaction.user.id}>, ocorreu um erro ao verificar o desenho.\nErro: ${error.message}`);
+      return interaction.followUp(`<@${interaction.user.id}>, ocorreu um erro ao verificar o desenho.\nErro: ${error.message}`);
     }
   },
 };
