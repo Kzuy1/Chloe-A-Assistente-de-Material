@@ -1,12 +1,12 @@
-const { findTypeMaterial } = require('./adjustMaterial.js');
+const { getMaterial } = require('./getMaterial.js');
 
-const findMaterial = (modeloMaterialValue, material, standard) => {
+async function findMaterial (modeloMaterialValue, material, standard) {
   const listMaterial = standard === 'europe' ? europeListMaterial : brasilListMaterial;
   const info = listMaterial.find(obj => obj.modelo === modeloMaterialValue);
 
   if (info === undefined) return;
   
-  let materialNew = findTypeMaterial(material);
+  let materialNew = await getMaterial(material);
 	
   let infoCopy = Object.assign({}, info);
   
@@ -15,16 +15,17 @@ const findMaterial = (modeloMaterialValue, material, standard) => {
   }
 	
   infoCopy.material = materialNew.nome;
-  return infoCopy;
-};
 
-const findMaterialPos = (findMaterialValue, material, standard) => {
+  return infoCopy;
+}
+
+async function findMaterialPos (findMaterialValue, material, standard) {
   // Verifica o valor de language e define idioma da decrição do material
   const listMaterial = standard === 'europe' ? europeListMaterial : brasilListMaterial;
 
   let pos = listMaterial.findIndex(obj => obj.description == findMaterialValue) * 100;
   let info = listMaterial.filter(obj => obj.description == findMaterialValue);
-  let materialEsp = findTypeMaterial(material);
+  let materialEsp = await getMaterial(material);
 
   if(info.length === 0) {
     return [listMaterial.length * 101, findMaterialValue, 'NULL', 0, material, 0];
@@ -35,7 +36,7 @@ const findMaterialPos = (findMaterialValue, material, standard) => {
   pos += materialEsp.pos;
   infoCopy.quantidade *= materialEsp.densidade;
   return [pos, infoCopy.description, infoCopy.unidade, infoCopy.quantidade, material, infoCopy.peso];
-};
+}
 
 module.exports = { findMaterial, findMaterialPos };
 

@@ -8,3 +8,4 @@ teste.js
 *.dwl
 *.bak
 *.dxf
+.env*
