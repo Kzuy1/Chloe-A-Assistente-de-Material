@@ -154,7 +154,7 @@ async function automatizePecas(filename) {
         }
 
         if (!found) {
-          const findPosMaterial = findMaterialPos(materialTarget[1], materialTarget[2], projectStandardConfig.STANDARD);
+          const findPosMaterial = await findMaterialPos(materialTarget[1], materialTarget[2], projectStandardConfig.STANDARD);
           findPosMaterial[5] += materialTarget[4];
           materialList.push(findPosMaterial);
         }

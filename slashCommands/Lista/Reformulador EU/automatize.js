@@ -1,7 +1,7 @@
 const ExcelJS = require('exceljs');
 const project = require('../../../dataBaseSchema/projectSchema');
 const { findMaterial } = require('./findMaterial');
-const { adjustMaterial } = require('./adjustMaterial');
+const { consolidateMaterialsFinishedProduct } = require('./consolidateMaterialsFinishedProduct');
 const { errors } = require('./error');
 
 async function automatize(filename) {
@@ -108,7 +108,7 @@ async function automatize(filename) {
 
   // Procura o material e substitui
   const estoqueCol2 = targetSheet.getColumn(7);
-  estoqueCol2.eachCell((cell, rowNumber) => {
+  estoqueCol2.eachCell(async (cell, rowNumber) => {
     cell.value = cell.value !== null ? cell.value.toString() : null;
     if (cell.value == null) {
       if (targetSheet.getCell(`H${rowNumber}`).value != 'Generic') {
@@ -142,7 +142,7 @@ async function automatize(filename) {
         errorFile.alertCL01.boleanValue = true;
       }
 
-      material = findMaterial(cell.value, tipoMaterial.value, projectStandardConfig.STANDARD);
+      material = await findMaterial(cell.value, tipoMaterial.value, projectStandardConfig.STANDARD);
 
       if (material == undefined) {
         errorFile.errorCH03.boleanValue = true;
@@ -253,7 +253,7 @@ async function automatize(filename) {
   // Adiciona os matériais as Peças
   for (let i = 0; i < localizePontos.length; i++) {
     if (localizePontos[i].material != false) {
-      const newMaterial = adjustMaterial(localizePontos[i].material);
+      const newMaterial = await consolidateMaterialsFinishedProduct(localizePontos[i].material);
       const materialPieceCell = targetSheet.getCell(`H${localizePontos[i].adress}`);
       materialPieceCell.value = newMaterial.nameMaterial;
 
