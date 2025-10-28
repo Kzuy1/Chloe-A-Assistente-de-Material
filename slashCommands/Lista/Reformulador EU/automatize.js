@@ -1,8 +1,9 @@
 const ExcelJS = require('exceljs');
 const project = require('../../../dataBaseSchema/projectSchema');
-const { findMaterial } = require('./findMaterial');
+const { getInvetoryMaterial } = require('./getInventoryMaterial');
 const { consolidateMaterialsFinishedProduct } = require('./consolidateMaterialsFinishedProduct');
 const { errors } = require('./error');
+const { getMaterial } = require('./getMaterial');
 
 async function automatize(filename) {
   const workbook = new ExcelJS.Workbook();
@@ -107,11 +108,11 @@ async function automatize(filename) {
   });
 
   // Procura o material e substitui
-  const estoqueCol2 = targetSheet.getColumn(7);
-  estoqueCol2.eachCell(async (cell, rowNumber) => {
+  for (let rowNumber = 1; rowNumber <= targetSheet.rowCount; rowNumber++) {
+    const cell = targetSheet.getCell(`G${rowNumber}`);
     cell.value = cell.value !== null ? cell.value.toString() : null;
     if (cell.value == null) {
-      if (targetSheet.getCell(`H${rowNumber}`).value != 'Generic') {
+      if (targetSheet.getCell(`H${rowNumber}`).value != 'Generic' && !rowAdd.includes(rowNumber)) {
         errorFile.errorCH02.boleanValue = true;
         cell.style = {
           fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: '6ddd35' } },
@@ -119,7 +120,6 @@ async function automatize(filename) {
       }
     } else if (!(cell?.value?.includes('NÚMERO DE ESTOQUE') || cell?.value?.includes('Descrição'))) {
       cell.value = cell.value.replace(/^\s+|\s+$/g, '');
-      let material;
       const tipoMaterial = targetSheet.getCell(`H${rowNumber}`);
 
       if (tipoMaterial?.value?.includes('+')) {
@@ -141,26 +141,30 @@ async function automatize(filename) {
       if (tipoMaterial.value != 'S235JR' && tipoMaterial.value != 'ASTM A36') {
         errorFile.alertCL01.boleanValue = true;
       }
+      
+      const inventoryMaterial = await getInvetoryMaterial(cell.value, tipoMaterial.value, projectStandardConfig.STANDARD);
+      const material = await getMaterial(tipoMaterial.value);
 
-      material = await findMaterial(cell.value, tipoMaterial.value, projectStandardConfig.STANDARD);
-
-      if (material == undefined) {
+      if(inventoryMaterial === undefined || !inventoryMaterial.hasFound) {
         errorFile.errorCH03.boleanValue = true;
         cell.style = {
           fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: 'E6D690' } },
         };
-      } else {
-        if (material.peso === null) {
-          errorFile.errorCH11.boleanValue = true;
-          tipoMaterial.style = {
-            fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: 'D48719' } },
-          };
-        }
-        cell.value = material.description;
-        targetSheet.getCell(`H${rowNumber}`).value = material.material;
+      }
+      
+      if(material.densidade === 0) {
+        errorFile.errorCH11.boleanValue = true;
+        tipoMaterial.style = {
+          fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: 'D48719' } },
+        };
+      }
+
+      if(inventoryMaterial){
+        cell.value = inventoryMaterial.description;
+        targetSheet.getCell(`H${rowNumber}`).value = inventoryMaterial.material;
       }
     }
-  });
+  }
 
   // Verifica o Peso
   const massaCol = targetSheet.getColumn(9);
@@ -312,7 +316,6 @@ async function automatize(filename) {
     // Ajuste a largura da coluna
     column.width = maxColumnLength + 2;
   });
-
 
   await targetWorkbook.xlsx.writeFile(`${filename.replace('.xlsx', '')}_CHLOE.xlsx`);
 

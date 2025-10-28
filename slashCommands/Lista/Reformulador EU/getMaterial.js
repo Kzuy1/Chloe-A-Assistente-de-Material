@@ -8,7 +8,7 @@ async function getMaterial (material) {
     return {
       pos: materialDB.position,
       nome: materialDB.modelDescription,
-      densidade: materialDB.density/1000,
+      densidade: materialDB.density,
       modeloMod: material
     };
   }

@@ -16,27 +16,34 @@ const InventoryMaterial = new EntitySchema({
     modelDescription: { 
       type: String, 
       name: 'model_description',
+      unique: true,
       nullable: false, 
     },
     descriptionPTBR: {
       type: String, 
       name: 'description_ptbr',
+      unique: true,
       nullable: false, 
     },
     descriptionENUS: {
       type: String, 
       name: 'description_enus',
+      unique: true,
       nullable: false, 
     },
     unity: {
       type: String,
       nullable: false,
     },
-    sectionArea: {
+    volume: {
       type: 'decimal',
       precision: 10,
       scale: 3,
       nullable: false,
+      transformer: {
+        to: (value) => value,
+        from: (value) => parseFloat(value),
+      },
     }
   }
 });
