@@ -1,6 +1,6 @@
 const ExcelJS = require('exceljs');
 const project = require('../../../dataBaseSchema/projectSchema');
-const { findMaterialPos } = require('./findMaterial.js');
+const { getInvetoryMaterial } = require('./getInventoryMaterial.js');
 const { errors } = require('./error.js');
 
 const workbook = new ExcelJS.Workbook();
@@ -154,9 +154,18 @@ async function automatizePecas(filename) {
         }
 
         if (!found) {
-          const findPosMaterial = await findMaterialPos(materialTarget[1], materialTarget[2], projectStandardConfig.STANDARD);
-          findPosMaterial[5] += materialTarget[4];
-          materialList.push(findPosMaterial);
+          const findPosMaterial = await getInvetoryMaterial(materialTarget[1], materialTarget[2], projectStandardConfig.STANDARD);
+          if(findPosMaterial === undefined) {console.log(materialTarget);}
+          const inventoryMaterialDB = [
+            findPosMaterial.position,
+            findPosMaterial.description,
+            findPosMaterial.unity,
+            findPosMaterial.weight,
+            findPosMaterial.material,
+            materialTarget[4]
+          ];
+
+          materialList.push(inventoryMaterialDB);
         }
       }
 

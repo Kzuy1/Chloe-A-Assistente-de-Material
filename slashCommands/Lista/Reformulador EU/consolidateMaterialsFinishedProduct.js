@@ -21,7 +21,7 @@ async function consolidateMaterialsFinishedProduct (intermediaryProductMaterials
   finishedProductMaterials.push(...knownMaterials);
 
   for (const name of intermediaryProductMaterials) {
-    if (!knownMaterials.includes(name)) {
+    if (!knownMaterials.includes(name) && !finishedProductMaterials.includes(name)) {
       finishedProductMaterials.push(name);
       error = true;
     }
