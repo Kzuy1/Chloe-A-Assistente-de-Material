@@ -145,26 +145,25 @@ async function automatizePecas(filename) {
         const materialTarget = targetSheet.getRow(rowNumber).values;
         let found = false;
 
+        const findPosMaterial = await getInvetoryMaterial(materialTarget[1], materialTarget[2], projectStandardConfig.STANDARD);
+        const inventoryMaterialDB = [
+          findPosMaterial.position,
+          findPosMaterial.description,
+          findPosMaterial.unity,
+          findPosMaterial.weight,
+          findPosMaterial.material,
+          materialTarget[4]
+        ];
+
         for (const material of materialList) {
-          if (materialTarget[1] === material[1] && materialTarget[2] === material[4]) {
-            material[5] += materialTarget[4];
+          if (inventoryMaterialDB[1] === material[1] && inventoryMaterialDB[4] === material[4]) {
+            material[5] += inventoryMaterialDB[5];
             found = true;
             break;
           }
         }
 
         if (!found) {
-          const findPosMaterial = await getInvetoryMaterial(materialTarget[1], materialTarget[2], projectStandardConfig.STANDARD);
-          if(findPosMaterial === undefined) {console.log(materialTarget);}
-          const inventoryMaterialDB = [
-            findPosMaterial.position,
-            findPosMaterial.description,
-            findPosMaterial.unity,
-            findPosMaterial.weight,
-            findPosMaterial.material,
-            materialTarget[4]
-          ];
-
           materialList.push(inventoryMaterialDB);
         }
       }
