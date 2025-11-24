@@ -61,8 +61,8 @@ async function automatizePecas(filename) {
   // Cria as planilhas
   drawCode.sort();
   for (let i = 0; i < drawCode.length; i++) {
-    workbook.addWorksheet(`${drawCode[i]} - PEÇAS`);
-    workbook.addWorksheet(`${drawCode[i]} - MATERIAL`);
+    workbook.addWorksheet(`${drawCode[i]} | PEÇAS`);
+    workbook.addWorksheet(`${drawCode[i]} | MATERIAL`);
   }
 
   // Adiciona primeira Linha com informações
@@ -82,11 +82,11 @@ async function automatizePecas(filename) {
     if (!(cell?.value?.includes('.') || cell?.value?.includes('ITEM'))) {
       const copyPecaRow = sourceWorksheet.getRow(rowNumber);
       if (copyPecaRow.values[1] != undefined) {
-        const targetSheet = workbook.getWorksheet(`${copyPecaRow.values[1]} - PEÇAS`);
+        const targetSheet = workbook.getWorksheet(`${copyPecaRow.values[1]} | PEÇAS`);
         const copyPecaRowProcess = copyPecaRow.values.slice(0, 10);
         targetSheet.insertRow(targetSheet.lastRow.number + 1, copyPecaRowProcess);
         if (copyPecaRow.values[7] != 'Descrição') {
-          const targetSheetMat = workbook.getWorksheet(`${copyPecaRow.values[1]} - MATERIAL`);
+          const targetSheetMat = workbook.getWorksheet(`${copyPecaRow.values[1]} | MATERIAL`);
           const copyPecaRowProcess = [];
           copyPecaRowProcess.push(copyPecaRow.values[7]);
           copyPecaRowProcess.push(copyPecaRow.values[8]);
@@ -98,7 +98,7 @@ async function automatizePecas(filename) {
     } else if (cell?.value?.includes('.')) {
       const copyPecaRow = sourceWorksheet.getRow(rowNumber);
       if (copyPecaRow.values[1] != undefined) {
-        const targetSheet = workbook.getWorksheet(`${copyPecaRow.values[1]} - MATERIAL`);
+        const targetSheet = workbook.getWorksheet(`${copyPecaRow.values[1]} | MATERIAL`);
         const copyPecaRowProcess = [];
         copyPecaRowProcess.push(copyPecaRow.values[7]);
         copyPecaRowProcess.push(copyPecaRow.values[8]);
