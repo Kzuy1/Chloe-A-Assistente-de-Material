@@ -82,6 +82,7 @@ async function automatize(filename) {
   // Verifica Index para Adicionar linhas
   const itemCol = targetSheet.getColumn(3);
   const rowAdd = [];
+  const sectionRows = [];
   itemCol.eachCell((cell, rowNumber) => {
     cell.value = cell.value !== null ? cell.value.toString() : null;
     if (cell.value == null) {
@@ -96,7 +97,10 @@ async function automatize(filename) {
 
   // Adiciona uma linha em cima
   for (let i = 0; i < rowAdd.length; i++) {
-    targetSheet.insertRow(rowAdd[i] + i);
+    const sectionRow = rowAdd[i] + i;
+
+    targetSheet.insertRow(sectionRow);
+    sectionRows.push(sectionRow);
   }
 
   // Move do Estoque Perfil para outra coluna de material
@@ -112,7 +116,7 @@ async function automatize(filename) {
     const cell = targetSheet.getCell(`G${rowNumber}`);
     cell.value = cell.value !== null ? cell.value.toString() : null;
     if (cell.value == null) {
-      if (targetSheet.getCell(`H${rowNumber}`).value != 'Generic' && !rowAdd.includes(rowNumber)) {
+      if (targetSheet.getCell(`H${rowNumber}`).value != 'Generic' && !sectionRows.includes(rowNumber)) {
         errorFile.errorCH02.boleanValue = true;
         cell.style = {
           fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: '6ddd35' } },
