@@ -71,6 +71,25 @@ async function processFiles(folderPath, zipLength, interaction) {
     return notErrors;
   }
 
+  const expectedHeaders = ['PartName', 'Thickness', 'Material', 'Quantity'];
+  const actualHeaders = Object.keys(data[0]);
+
+  const headerIssues = [];
+
+  expectedHeaders.forEach((expected, idx) => {
+    if (actualHeaders[idx] !== expected) {
+      headerIssues.push(`:lady_beetle: A${idx + 1} deve conter "${expected}"`);
+    }
+  });
+
+  if (headerIssues.length > 0) {
+    await interaction.followUp(
+      `<@${interaction.user.id}>, há nomes incorretos nas colunas da planilha:\n\n` +
+      headerIssues.join('\n')
+    );
+    return false;
+  }
+
   for (let i = 0; i < data.length; i++) {
     const row = data[i];
     const partName = row['PartName'];
