@@ -1,5 +1,6 @@
 const { DataSource } = require('typeorm');
 const { InventoryMaterial } = require('../entity/InventoryMaterial.js');
+const { InventoryMaterialReplacement } = require('../entity/InventoryMaterialReplacement.js'); 
 const { Material } = require('../entity/Material.js');
 
 const AppDataSource = new DataSource({
@@ -10,7 +11,11 @@ const AppDataSource = new DataSource({
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
   synchronize: true,
-  entities: [InventoryMaterial, Material],
+  entities: [
+    InventoryMaterial, 
+    InventoryMaterialReplacement,
+    Material
+  ],
 });
 
 AppDataSource.initialize()
