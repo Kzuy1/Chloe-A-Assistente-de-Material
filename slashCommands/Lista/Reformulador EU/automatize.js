@@ -2,8 +2,31 @@ const ExcelJS = require('exceljs');
 const project = require('../../../dataBaseSchema/projectSchema');
 const { getInvetoryMaterial } = require('./getInventoryMaterial');
 const { consolidateMaterialsFinishedProduct } = require('./consolidateMaterialsFinishedProduct');
+const { AppDataSource } = require('../../../database/database');
+const { InventoryMaterialReplacement } = require('../../../entity/InventoryMaterialReplacement');
 const { errors } = require('./error');
 const { getMaterial } = require('./getMaterial');
+
+async function applySpecialInventoryMaterialRule(targetSheet, rowNumber, materialValue) {
+  if (!materialValue) return;
+
+  const inventoryMaterialReplacementDB = await AppDataSource.getRepository(InventoryMaterialReplacement).findOne({ where: { materialName: materialValue } });
+
+  if (!inventoryMaterialReplacementDB) return;
+  
+  const cellF = targetSheet.getCell(`F${rowNumber}`);
+  const cellG = targetSheet.getCell(`G${rowNumber}`);
+
+  cellG.value = cellG.value.replace(
+    inventoryMaterialReplacementDB.inventoryMaterialMatch,
+    inventoryMaterialReplacementDB.inventoryMaterialReplacement
+  );
+
+  cellF.value = cellF.value.replace(
+    inventoryMaterialReplacementDB.inventoryMaterialMatch,
+    inventoryMaterialReplacementDB.inventoryMaterialReplacement
+  );
+}
 
 async function automatize(filename) {
   const workbook = new ExcelJS.Workbook();
@@ -126,21 +149,7 @@ async function automatize(filename) {
       cell.value = cell.value.replace(/^\s+|\s+$/g, '');
       const tipoMaterial = targetSheet.getCell(`H${rowNumber}`);
 
-      if (tipoMaterial?.value?.includes('+')) {
-        const materialEstoque = targetSheet.getCell(`F${rowNumber}`);
-        const materialEstoque1 = targetSheet.getCell(`G${rowNumber}`);
-        materialEstoque.value = materialEstoque.value.replace('SHEET TH.', 'EMBOSSED PLATE Sp.');
-        materialEstoque1.value = materialEstoque1.value.replace('SHEET TH.', 'EMBOSSED PLATE Sp.');
-        tipoMaterial.value = projectStandardConfig.SHEET_STANDARD;
-      }
-
-      if (tipoMaterial?.value?.includes('GRATING')) {
-        const materialEstoque = targetSheet.getCell(`F${rowNumber}`);
-        const materialEstoque1 = targetSheet.getCell(`G${rowNumber}`);
-        materialEstoque.value = materialEstoque.value.replace('SHEET TH.', 'GRATING');
-        materialEstoque1.value = materialEstoque1.value.replace('SHEET TH.', 'GRATING');
-        tipoMaterial.value = projectStandardConfig.SHEET_STANDARD;
-      }
+      await applySpecialInventoryMaterialRule(targetSheet, rowNumber, tipoMaterial.value);
 
       if (tipoMaterial.value != 'S235JR' && tipoMaterial.value != 'ASTM A36') {
         errorFile.alertCL01.boleanValue = true;
