@@ -9,3 +9,5 @@ teste.js
 *.bak
 *.dxf
 .env*
+
+!assets/templateListOfMaterial.xlsx
