@@ -29,5 +29,13 @@
         ],
         "camelcase" : "error",
         "no-console": "off"
+    },
+    "overrides": [
+    {
+      "files": ["**/*.test.js", "**/*.spec.js"],
+      "env": {
+        "jest": true
+      }
     }
+  ]
 }

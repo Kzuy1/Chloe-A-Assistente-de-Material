@@ -2,6 +2,7 @@ const ExcelJS = require('exceljs');
 const project = require('../../../dataBaseSchema/projectSchema');
 const { getInvetoryMaterial } = require('./getInventoryMaterial.js');
 const { errors } = require('./error.js');
+const { normalizeMinimumValue } = require('../../../utils/normalizeMinimumValue.js');
 
 const workbook = new ExcelJS.Workbook();
 
@@ -128,7 +129,7 @@ async function automatizePecas(filename) {
 
       weightTotal = 0;
       for (let c = 2; c <= targetSheet.lastRow.number; c++) {
-        const pieceWeight = +saveRows[c - 2][9].toFixed(1);
+        const pieceWeight = normalizeMinimumValue(saveRows[c - 2][9]);
         const pieceTotalWeight = pieceWeight * saveRows[c - 2][4];
         weightTotal += pieceTotalWeight;
 
@@ -170,7 +171,6 @@ async function automatizePecas(filename) {
 
       materialList.shift();
       materialList = materialList.sort((a, b) => a[0] - b[0]);
-
       for (let i = 0; i < materialList.length; i++) {
         // Preencher "POS."
         targetSheet.getCell(`L${i + 2}`).value = i + 1;
@@ -178,9 +178,9 @@ async function automatizePecas(filename) {
         // Preencher "DESCRIÇÃO"
         targetSheet.getCell(`M${i + 2}`).value = materialList[i][1];
 
-        // Preencher "UNIDADE" e indicar ao usuario caso seja NULL
+        // Preencher "UNIDADE" e indicar ao usuario caso seja ERROR
         targetSheet.getCell(`N${i + 2}`).value = materialList[i][2];
-        if (materialList[i][2] === 'NULL') {
+        if (materialList[i][2] === 'ERROR') {
           errorFile.errorCH14.boleanValue = true;
           targetSheet.getCell(`N${i + 2}`).style = {
             fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: '6D88AD' } },
@@ -191,16 +191,14 @@ async function automatizePecas(filename) {
         targetSheet.getCell(`P${i + 2}`).value = materialList[i][4];
 
         // Preencher "PESO [kg]" e tratar erro
-        let weighMaterial = materialList[i][5];
-        weighMaterial = weighMaterial < 0.1 ? 0.1 : +weighMaterial.toFixed(1);
+        let weighMaterial = normalizeMinimumValue(materialList[i][5]);
         materialWeightTotal += weighMaterial;
         targetSheet.getCell(`Q${i + 2}`).value = weighMaterial;
 
         // Preencher "QUANTIDADE" e tratar erro
-        let qtyMaterial = weighMaterial / materialList[i][3];
-        qtyMaterial = isFinite(qtyMaterial) ? (qtyMaterial < 0.1 ? 0.1 : +qtyMaterial.toFixed(1)) : 'NULL';
-        targetSheet.getCell(`O${i + 2}`).value = qtyMaterial;
-        if (qtyMaterial === 'NULL') {
+        let quantityMaterial = normalizeMinimumValue(weighMaterial / materialList[i][3]);
+        targetSheet.getCell(`O${i + 2}`).value = quantityMaterial;
+        if (quantityMaterial === 'ERROR') {
           errorFile.errorCH14.boleanValue = true;
           targetSheet.getCell(`O${i + 2}`).style = {
             fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: '6D88AD' } },
@@ -237,4 +235,6 @@ async function automatizePecas(filename) {
   return [mergedError, `${filename.replace('.xlsx', '')}.xlsx`];
 }
 
-module.exports.automatizePecas = automatizePecas;
+module.exports = {
+  automatizePecas,
+};
