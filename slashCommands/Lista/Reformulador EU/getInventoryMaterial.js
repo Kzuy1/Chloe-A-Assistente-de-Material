@@ -28,7 +28,7 @@ async function getInvetoryMaterial (modelInvetoryMaterial, material, standard) {
     position: await AppDataSource.getRepository(InventoryMaterial).count() * 101,
     modelDescription: modelInvetoryMaterial,
     description: modelInvetoryMaterial,
-    unity: 'NULL',
+    unity: 'ERROR',
     material: materialDB.nome,
     weight: 0,
     hasFound: false,
