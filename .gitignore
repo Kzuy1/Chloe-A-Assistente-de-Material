@@ -4,10 +4,13 @@ package-lock.json
 config.json
 teste.js
 *.xlsx
+
 *.dwl2
 *.dwl
 *.bak
 *.dxf
+*.dwg
+
 .env*
 
 !assets/templateListOfMaterial.xlsx

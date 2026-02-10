@@ -39,12 +39,12 @@ function extractZip(filePath, outputDir) {
   zip.extractAllTo(outputDir, true);
 }
 
-async function processDxfFiles(folderPath, issueOrRevisionDate, interaction) {
+async function processDrawingFiles(folderPath, issueOrRevisionDate, interaction) {
   const files = fs.readdirSync(folderPath);
   for (const file of files) {
-    if (file.toLowerCase().endsWith('.dxf')) {
+    if (file.toLowerCase().endsWith('.dxf') || file.toLowerCase().endsWith('.dwg')) {
       const filePath = path.join(folderPath, file);
-      const fileNameWithoutExtension = path.basename(file, '.dxf');
+      const fileNameWithoutExtension = path.basename(file, path.extname(file));
 
       try {
         const drawingErrors = await sendFileToVerify(filePath, issueOrRevisionDate);
@@ -96,10 +96,9 @@ module.exports = {
 
     await interaction.deferReply();
     
-    // Verifica se a extensão do arquivo é .dxf
-    if (!attachment || (!fileName.toLowerCase().endsWith('.dxf') && !fileName.toLowerCase().endsWith('.zip'))) {
+    if (!attachment || (!fileName.toLowerCase().endsWith('.dwg') && !fileName.toLowerCase().endsWith('.dxf') &&!fileName.toLowerCase().endsWith('.zip'))) {
       return interaction.followUp(
-        `<@${interaction.user.id}>, envie apenas arquivo .dxf ou .zip.`
+        `<@${interaction.user.id}>, envie apenas arquivo .dwg, .dxf ou .zip.`
       );
     }
 
@@ -133,7 +132,7 @@ module.exports = {
         extractZip(filePath, outputFolder);
       }
 
-      await processDxfFiles(outputFolder, issueOrRevisionDate, interaction);
+      await processDrawingFiles(outputFolder, issueOrRevisionDate, interaction);
 
       // Apaga o arquivo baixado
       fs.existsSync(filePath) && fs.unlinkSync(filePath);
