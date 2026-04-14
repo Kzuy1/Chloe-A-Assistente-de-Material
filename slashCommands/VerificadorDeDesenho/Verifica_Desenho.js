@@ -20,12 +20,13 @@ function downloadFile(url, path) {
   });
 }
 
-async function sendFileToVerify(filePath, issueOrRevisionDate) {
+async function sendFileToVerify(filePath, issueOrRevisionDate, verificationType) {
   const fileContent = fs.readFileSync(filePath);
   const fileName = path.basename(filePath);
   const formData = new FormData();
   formData.append('file', fileContent, fileName);
   formData.append('data', issueOrRevisionDate);
+  formData.append('verification_type', verificationType);
 
   const response = await post('https://chloeape.discloud.app:443/verify-drawing', formData, {
     headers: formData.getHeaders(),
@@ -39,7 +40,7 @@ function extractZip(filePath, outputDir) {
   zip.extractAllTo(outputDir, true);
 }
 
-async function processDrawingFiles(folderPath, issueOrRevisionDate, interaction) {
+async function processDrawingFiles(folderPath, issueOrRevisionDate, verificationType, interaction) {
   const files = fs.readdirSync(folderPath);
   for (const file of files) {
     if (file.toLowerCase().endsWith('.dxf') || file.toLowerCase().endsWith('.dwg')) {
@@ -47,7 +48,7 @@ async function processDrawingFiles(folderPath, issueOrRevisionDate, interaction)
       const fileNameWithoutExtension = path.basename(file, path.extname(file));
 
       try {
-        const drawingErrors = await sendFileToVerify(filePath, issueOrRevisionDate);
+        const drawingErrors = await sendFileToVerify(filePath, issueOrRevisionDate, verificationType);
 
         if (drawingErrors.length === 0) {
           await interaction.followUp({ content: `<@${interaction.user.id}>, o arquivo ${fileNameWithoutExtension} não possui erros!` });
@@ -85,10 +86,21 @@ module.exports = {
       type: ApplicationCommandOptionType.String,
       required: false,
     },
+    {
+      name: 'tipo',
+      description: 'Selecione o tipo de verificação',
+      type: ApplicationCommandOptionType.String,
+      required: false,
+      choices: [
+        { name: 'REDECAM', value: 'redecam' },
+        { name: 'SATUS', value: 'satus' }
+      ]
+    }
   ],
 
   run: async (client, interaction) => {
     const optionDrawing = interaction.options.get('desenho');
+    const verificationTypeOption = interaction.options.get('tipo')?.value;
     const attachment = optionDrawing.attachment;
     const fileName = attachment.name;
     const outputFolder = path.resolve(__dirname, 'download');
@@ -132,7 +144,7 @@ module.exports = {
         extractZip(filePath, outputFolder);
       }
 
-      await processDrawingFiles(outputFolder, issueOrRevisionDate, interaction);
+      await processDrawingFiles(outputFolder, issueOrRevisionDate, verificationTypeOption, interaction);
 
       // Apaga o arquivo baixado
       fs.existsSync(filePath) && fs.unlinkSync(filePath);
