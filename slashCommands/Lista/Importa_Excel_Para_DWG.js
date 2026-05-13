@@ -16,11 +16,22 @@ module.exports = {
       description: 'Anexe a Planilha',
       type: ApplicationCommandOptionType.Attachment,
       required: true
+    },
+    {
+      name: 'tipo',
+      description: 'Selecione o tipo de verificação',
+      type: ApplicationCommandOptionType.String,
+      required: false,
+      choices: [
+        { name: 'REDECAM', value: 'redecam' },
+        { name: 'SATUS', value: 'satus' }
+      ]
     }
   ],
 
   run: async (client, interaction) => {
     const optionSheet = interaction.options.get('planilha');
+    const importTypeOption = interaction.options.get('tipo')?.value;
     const attachment = optionSheet.attachment;
     const filePath = path.resolve(__dirname, 'download', attachment.name);
 
@@ -52,6 +63,7 @@ module.exports = {
         const fileContent = fs.readFileSync(filePath);
         const formData = new FormData();
         formData.append('file', fileContent, attachment.name);
+        formData.append('import_type', importTypeOption);
                 
         // Esperar a resposta do servidor antes de prosseguir
         const response = await axios.post('https://chloeape.discloud.app:443/import-data-to-dxf', formData, {
