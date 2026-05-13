@@ -54,7 +54,7 @@ module.exports = {
         formData.append('file', fileContent, attachment.name);
                 
         // Esperar a resposta do servidor antes de prosseguir
-        const response = await axios.post('https://chloeape.discloud.app:443/upload', formData, {
+        const response = await axios.post('https://chloeape.discloud.app:443/import-data-to-dxf', formData, {
           headers: formData.getHeaders(), 
           responseType: 'arraybuffer',
         });
