@@ -15,11 +15,22 @@ module.exports = {
       description: 'Anexe a Planilha',
       type: ApplicationCommandOptionType.Attachment,
       required: true
+    },
+    {
+      name: 'tipo',
+      description: 'Selecione o tipo de verificação',
+      type: ApplicationCommandOptionType.String,
+      required: false,
+      choices: [
+        { name: 'REDECAM', value: 'redecam' },
+        { name: 'SATUS', value: 'satus' }
+      ]
     }
   ],
 
   run: async (client, interaction) => {
     const optionSheet = interaction.options.get('planilha');
+    const listTypeOption = interaction.options.get('tipo')?.value;
     const attachment = optionSheet.attachment;
     const filePath = path.resolve(__dirname, 'download', attachment.name);
 
@@ -48,7 +59,7 @@ module.exports = {
 
     try{
       // Processa o Arquivo
-      const file = await automatizePecas(filePath);
+      const file = await automatizePecas(filePath, listTypeOption);
 
       // Retorna o Arquivo para Usuário
       await interaction.channel.send({
