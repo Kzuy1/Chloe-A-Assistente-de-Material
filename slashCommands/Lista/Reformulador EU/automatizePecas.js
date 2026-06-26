@@ -6,7 +6,19 @@ const { normalizeMinimumValue } = require('../../../utils/normalizeMinimumValue.
 
 const workbook = new ExcelJS.Workbook();
 
-async function automatizePecas(filename) {
+function calculateExpectedWeight(listTypeOption, quantity, pieceWeight) {
+  let expectedWeight = 0;
+
+  if (listTypeOption === 'redecam') {
+    expectedWeight += pieceWeight;
+  } else {
+    expectedWeight += pieceWeight * quantity;
+  }
+
+  return expectedWeight;
+}
+
+async function automatizePecas(filename, listTypeOption) {
   await workbook.xlsx.readFile(filename);
   const sourceWorksheet = workbook.getWorksheet(1);
   const errorFile = { ...errors };
@@ -130,8 +142,16 @@ async function automatizePecas(filename) {
       weightTotal = 0;
       for (let c = 2; c <= targetSheet.lastRow.number; c++) {
         const pieceWeight = normalizeMinimumValue(saveRows[c - 2][9]);
-        const pieceTotalWeight = pieceWeight * saveRows[c - 2][4];
-        weightTotal += pieceTotalWeight;
+        const quantity = saveRows[c - 2][4];
+        const pieceTotalWeight = pieceWeight * quantity;
+
+        const calculatedWeight = calculateExpectedWeight(
+          listTypeOption,
+          quantity,
+          pieceWeight
+        );
+
+        weightTotal += calculatedWeight;
 
         saveRows[c - 2].push('', pieceWeight, pieceTotalWeight);
         targetSheet.getRow(c).values = saveRows[c - 2];

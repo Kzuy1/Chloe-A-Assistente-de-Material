@@ -28,7 +28,68 @@ async function applySpecialInventoryMaterialRule(targetSheet, rowNumber, materia
   );
 }
 
-async function automatize(filename) {
+function applyFormulasAndCollectMaterials(targetSheet, listTypeOption, itemGroups) {
+  const itemColumn = targetSheet.getColumn(3);
+
+  itemColumn.eachCell((cell, rowNumber) => {
+    const isRoot = cell.value != null && !cell.value.includes('.') && cell.value !== 'ITEM';
+    const isChild = cell.value != null && cell.value.includes('.') && cell.value !== 'ITEM';
+
+    if (isRoot) {
+      if (listTypeOption === 'redecam') {
+      // Redecam: raiz usa apenas I e J diretamente
+        const result = targetSheet.getCell(`I${rowNumber}`).value;
+        targetSheet.getCell(`K${rowNumber}`).value = { formula: `I${rowNumber}`, result };
+
+        const result1 = targetSheet.getCell(`J${rowNumber}`).value;
+        targetSheet.getCell(`L${rowNumber}`).value = { formula: `J${rowNumber}`, result1 };
+      } else {
+      // Satus: raiz multiplica D * I e D * J
+        const result = targetSheet.getCell(`D${rowNumber}`) * targetSheet.getCell(`I${rowNumber}`);
+        targetSheet.getCell(`K${rowNumber}`).value = { formula: `D${rowNumber}*I${rowNumber}`, result };
+
+        const result1 = targetSheet.getCell(`D${rowNumber}`) * targetSheet.getCell(`J${rowNumber}`);
+        targetSheet.getCell(`L${rowNumber}`).value = { formula: `D${rowNumber}*J${rowNumber}`, result1 };
+      }
+
+      itemGroups.push({
+        adress: rowNumber, index: cell.value, pesoMaterial: 0, material: [],
+      });
+
+    } else if (isChild) {
+    // Ambos os modos precisam do pai para o else if
+      const conjuntoFind = itemGroups.find(({ index }) => index === cell.value.split('.')[0]);
+      const conjuntoIndex = itemGroups.findIndex(({ index }) => index === cell.value.split('.')[0]);
+
+      if (!conjuntoFind) return;
+
+      let resultWeight;
+      let resultBaseQuantity;
+
+      if (listTypeOption === 'redecam') {
+      // Redecam: filho multiplica apenas D * I (sem o D do pai)
+        resultWeight = targetSheet.getCell(`D${rowNumber}`) * targetSheet.getCell(`I${rowNumber}`);
+        targetSheet.getCell(`K${rowNumber}`).value = { formula: `D${rowNumber}*I${rowNumber}`, resultWeight };
+
+        resultBaseQuantity = targetSheet.getCell(`D${rowNumber}`) * targetSheet.getCell(`J${rowNumber}`);
+        targetSheet.getCell(`L${rowNumber}`).value = { formula: `D${rowNumber}*J${rowNumber}`, resultBaseQuantity };
+      } else {
+      // Satus: filho multiplica D * I * D_pai
+        resultWeight = targetSheet.getCell(`D${rowNumber}`) * targetSheet.getCell(`I${rowNumber}`) * targetSheet.getCell(`D${conjuntoFind.adress}`);
+        targetSheet.getCell(`K${rowNumber}`).value = { formula: `D${rowNumber}*I${rowNumber}*$D$${conjuntoFind.adress}`, resultWeight };
+
+        resultBaseQuantity = targetSheet.getCell(`D${rowNumber}`) * targetSheet.getCell(`J${rowNumber}`) * targetSheet.getCell(`D${conjuntoFind.adress}`);
+        targetSheet.getCell(`L${rowNumber}`).value = { formula: `D${rowNumber}*J${rowNumber}*$D$${conjuntoFind.adress}`, resultBaseQuantity };
+      }
+
+      const material = targetSheet.getCell(`H${rowNumber}`);
+      itemGroups[conjuntoIndex].material.push(material.value);
+      itemGroups[conjuntoIndex].pesoMaterial += resultWeight;
+    }
+  });
+}
+
+async function automatize(filename, listTypeOption) {
   const workbook = new ExcelJS.Workbook();
   await workbook.xlsx.readFile(filename);
 
@@ -238,40 +299,14 @@ async function automatize(filename) {
   });
 
   // Adiciona as formulas e colhe o material para colocar nas peças
-  const itemColUpdate = targetSheet.getColumn(3);
-  const localizePontos = [];
-  itemColUpdate.eachCell((cell, rowNumber) => {
-    if ((cell.value != null) && (!cell.value.includes('.')) && (cell.value != 'ITEM')) {
-      const result = targetSheet.getCell(`D${rowNumber}`) * targetSheet.getCell(`I${rowNumber}`);
-      targetSheet.getCell(`K${rowNumber}`).value = { formula: `D${rowNumber}*I${rowNumber}`, result };
-
-      const result1 = targetSheet.getCell(`D${rowNumber}`) * targetSheet.getCell(`J${rowNumber}`);
-      targetSheet.getCell(`L${rowNumber}`).value = { formula: `D${rowNumber}*J${rowNumber}`, result: result1 };
-
-      localizePontos.push({
-        adress: rowNumber, index: cell.value, pesoMaterial: 0, material: [],
-      });
-    } else if ((cell.value != null) && (cell.value.includes('.')) && (cell.value != 'ITEM')) {
-      const conjuntoFind = localizePontos.find(({ index }) => index === cell.value.split('.')[0]);
-      const conjuntoIndex = localizePontos.findIndex(({ index }) => index === cell.value.split('.')[0]);
-
-      const result = targetSheet.getCell(`D${rowNumber}`) * targetSheet.getCell(`I${rowNumber}`) * targetSheet.getCell(`D${conjuntoFind.adress}`);
-      targetSheet.getCell(`K${rowNumber}`).value = { formula: `D${rowNumber}*I${rowNumber}*$D$${conjuntoFind.adress}`, result };
-
-      const result1 = targetSheet.getCell(`D${rowNumber}`) * targetSheet.getCell(`J${rowNumber}`) * targetSheet.getCell(`D${conjuntoFind.adress}`);
-      targetSheet.getCell(`L${rowNumber}`).value = { formula: `D${rowNumber}*J${rowNumber}*D$${conjuntoFind.adress}`, result: result1 };
-
-      const material = targetSheet.getCell(`H${rowNumber}`);
-      localizePontos[conjuntoIndex].material.push(material.value);
-      localizePontos[conjuntoIndex].pesoMaterial += result;
-    }
-  });
+  const itemGroups = [];
+  applyFormulasAndCollectMaterials(targetSheet, listTypeOption, itemGroups);
 
   // Adiciona os matériais as Peças
-  for (let i = 0; i < localizePontos.length; i++) {
-    if (localizePontos[i].material != false) {
-      const newMaterial = await consolidateMaterialsFinishedProduct(localizePontos[i].material);
-      const materialPieceCell = targetSheet.getCell(`H${localizePontos[i].adress}`);
+  for (let i = 0; i < itemGroups.length; i++) {
+    if (itemGroups[i].material != false) {
+      const newMaterial = await consolidateMaterialsFinishedProduct(itemGroups[i].material);
+      const materialPieceCell = targetSheet.getCell(`H${itemGroups[i].adress}`);
       materialPieceCell.value = newMaterial.nameMaterial;
 
       if (newMaterial.error) {
@@ -281,7 +316,7 @@ async function automatize(filename) {
         };
       }
 
-      const infoPeca = targetSheet.getCell(`K${localizePontos[i].adress}`);
+      const infoPeca = targetSheet.getCell(`K${itemGroups[i].adress}`);
       const pesoPeca = infoPeca.value.result;
 
       if (pesoPeca == undefined) {
@@ -289,7 +324,7 @@ async function automatize(filename) {
         infoPeca.style = {
           fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: '39FF42' } },
         };
-      } else if (localizePontos[i].pesoMaterial > (pesoPeca + 0.1) || localizePontos[i].pesoMaterial < (pesoPeca - 0.1) || isNaN(localizePontos[i].pesoMaterial)) {
+      } else if (itemGroups[i].pesoMaterial > (pesoPeca + 0.1) || itemGroups[i].pesoMaterial < (pesoPeca - 0.1) || isNaN(itemGroups[i].pesoMaterial)) {
         errorFile.errorCH09.boleanValue = true;
         infoPeca.style = {
           fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: '7F7679' } },
