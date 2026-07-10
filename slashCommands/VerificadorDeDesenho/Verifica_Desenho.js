@@ -87,10 +87,10 @@ module.exports = {
       required: false,
     },
     {
-      name: 'true',
+      name: 'tipo',
       description: 'Selecione o tipo de verificação',
       type: ApplicationCommandOptionType.String,
-      required: false,
+      required: true,
       choices: [
         { name: 'REDECAM', value: 'redecam' },
         { name: 'SATUS', value: 'satus' }
