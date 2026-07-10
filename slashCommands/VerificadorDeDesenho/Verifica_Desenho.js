@@ -87,7 +87,7 @@ module.exports = {
       required: false,
     },
     {
-      name: 'tipo',
+      name: 'true',
       description: 'Selecione o tipo de verificação',
       type: ApplicationCommandOptionType.String,
       required: false,
