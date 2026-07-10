@@ -81,12 +81,6 @@ module.exports = {
       required: true,
     },
     {
-      name: 'data',
-      description: 'Especifique a data de emissão do desenho. Exemplo: 04/06/24',
-      type: ApplicationCommandOptionType.String,
-      required: false,
-    },
-    {
       name: 'tipo',
       description: 'Selecione o tipo de verificação',
       type: ApplicationCommandOptionType.String,
@@ -95,6 +89,12 @@ module.exports = {
         { name: 'REDECAM', value: 'redecam' },
         { name: 'SATUS', value: 'satus' }
       ]
+    },
+    {
+      name: 'data',
+      description: 'Especifique a data de emissão do desenho. Exemplo: 04/06/24',
+      type: ApplicationCommandOptionType.String,
+      required: false,
     }
   ],
 
