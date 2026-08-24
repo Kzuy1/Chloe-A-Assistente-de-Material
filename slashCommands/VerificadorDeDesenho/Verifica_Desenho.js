@@ -48,22 +48,15 @@ async function processDrawingFiles(folderPath, issueOrRevisionDate, verification
       const filePath = path.join(folderPath, file);
       const fileNameWithoutExtension = path.basename(file, path.extname(file));
 
-      try {
-        const drawingErrors = await sendFileToVerify(filePath, issueOrRevisionDate, verificationType);
+      const drawingErrors = await sendFileToVerify(filePath, issueOrRevisionDate, verificationType);
 
-        if (drawingErrors.length === 0) {
-          await interaction.followUp({ content: `<@${interaction.user.id}>, o arquivo ${fileNameWithoutExtension} não possui erros!` });
-        } else {
-          await interaction.followUp({ content: `<@${interaction.user.id}>, segue abaixo a lista de erros do arquivo ${fileNameWithoutExtension}:` });
-          drawingErrors.forEach(errorMessage => {
-            interaction.channel.send({ content: errorMessage });
-          });
-        }
-
-        fs.existsSync(filePath) && fs.unlinkSync(filePath);
-      } catch (error) {
-        console.error('Erro ao enviar o arquivo:', error.message);
-        await interaction.followUp(`<@${interaction.user.id}>, ocorreu um erro ao verificar o desenho ${fileNameWithoutExtension}.\nErro: ${error.message}`);
+      if (drawingErrors.length === 0) {
+        await interaction.followUp({ content: `<@${interaction.user.id}>, o arquivo ${fileNameWithoutExtension} não possui erros!` });
+      } else {
+        await interaction.followUp({ content: `<@${interaction.user.id}>, segue abaixo a lista de erros do arquivo ${fileNameWithoutExtension}:` });
+        drawingErrors.forEach(errorMessage => {
+          interaction.channel.send({ content: errorMessage });
+        });
       }
     }
   }
@@ -146,6 +139,10 @@ module.exports = {
     try {
       await processDrawingFiles(outputFolder, issueOrRevisionDate, verificationTypeOption, interaction);
     } catch (error) {
+      if (error.response && error.response.status === 504) {
+        return interaction.followUp(`<@${interaction.user.id}>, não foi possível processar o arquivo. Ele pode ser muito grande ou complexo. Tente convertê-lo para DXF e envie novamente.`);
+      }
+
       console.error('Erro ao enviar o arquivo:', error.message);
       return interaction.followUp(`<@${interaction.user.id}>, ocorreu um erro ao verificar o desenho.\nErro: ${error.message}`);
     } finally {
