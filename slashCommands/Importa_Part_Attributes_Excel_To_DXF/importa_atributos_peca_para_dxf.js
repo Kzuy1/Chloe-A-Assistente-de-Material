@@ -44,7 +44,7 @@ async function sendFilesToAPI(zipPath, xlsxPath) {
   formData.append('zip', zipContent, zipName);
   formData.append('xlsx', xlsxContent, xlsxName);
 
-  const response = await post('https://chloeape.discloud.app:443/add-attributes', formData, {
+  const response = await post('https://chloeape.discloud.dev:443/add-attributes', formData, {
     headers: formData.getHeaders(),
     responseType: 'arraybuffer',
   });

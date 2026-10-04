@@ -29,7 +29,7 @@ async function sendFileToVerify(filePath, issueOrRevisionDate, verificationType)
   formData.append('data', issueOrRevisionDate);
   formData.append('verification_type', verificationType);
 
-  const response = await post('https://chloeape.discloud.app:443/verify-drawing', formData, {
+  const response = await post('https://chloeape.discloud.dev:443/verify-drawing', formData, {
     headers: formData.getHeaders(),
   });
 
