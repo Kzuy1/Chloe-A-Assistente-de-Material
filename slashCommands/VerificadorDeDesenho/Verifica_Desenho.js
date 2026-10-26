@@ -1,10 +1,14 @@
 const { ApplicationCommandOptionType } = require('discord.js');
-const { post } = require('axios');
+const { post, get } = require('axios');
 const https = require('https');
 const fs = require('fs');
 const FormData = require('form-data');
 const path = require('path');
 const AdmZip = require('adm-zip');
+
+const VERIFY_URL = 'https://chloeape.discloud.dev/verify-drawing';
+const POLL_INTERVAL_MS = 4000;
+const POLL_TIMEOUT_MS = 10 * 60 * 1000;
 
 function downloadFile(url, path) {
   return new Promise((resolve, reject) => {
@@ -28,11 +32,26 @@ async function sendFileToVerify(filePath, issueOrRevisionDate, verificationType)
   formData.append('data', issueOrRevisionDate);
   formData.append('verification_type', verificationType);
 
-  const response = await post('https://chloeape.discloud.app:443/verify-drawing', formData, {
+  const response = await post(VERIFY_URL, formData, {
     headers: formData.getHeaders(),
   });
 
-  return response.data;
+  return waitForJob(response.data.job_id);
+}
+
+async function waitForJob(jobId) {
+  const deadline = Date.now() + POLL_TIMEOUT_MS;
+
+  while (Date.now() < deadline) {
+    await new Promise(resolve => setTimeout(resolve, POLL_INTERVAL_MS));
+
+    const { data: job } = await get(`${VERIFY_URL}/${jobId}`);
+
+    if (job.status === 'done') return job.message;
+    if (job.status === 'error') throw new Error(job.message);
+  }
+
+  throw new Error('Ele pode ser muito grande ou complexo. Tente convertê-lo para DXF e envie novamente.');
 }
 
 function extractZip(filePath, outputDir) {
