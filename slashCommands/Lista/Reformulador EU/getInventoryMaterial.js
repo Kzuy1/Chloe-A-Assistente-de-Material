@@ -25,7 +25,7 @@ async function getInvetoryMaterial (modelInvetoryMaterial, material, standard) {
   }
 
   return {
-    position: await AppDataSource.getRepository(InventoryMaterial).count() * 101,
+    position: await AppDataSource.getRepository(InventoryMaterial).count() * 200,
     modelDescription: modelInvetoryMaterial,
     description: modelInvetoryMaterial,
     unity: 'ERROR',

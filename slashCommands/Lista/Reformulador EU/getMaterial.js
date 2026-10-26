@@ -14,7 +14,7 @@ async function getMaterial (material) {
   }
   
   return {
-    pos: await AppDataSource.getRepository(Material).count(),
+    pos: await AppDataSource.getRepository(Material).count() * 2,
     nome: material, 
     densidade: 0, 
     modeloMod: material

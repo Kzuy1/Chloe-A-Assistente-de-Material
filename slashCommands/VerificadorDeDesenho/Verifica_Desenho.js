@@ -1,4 +1,5 @@
 const { ApplicationCommandOptionType } = require('discord.js');
+const { randomUUID } = require('crypto');
 const { post, get } = require('axios');
 const https = require('https');
 const fs = require('fs');
@@ -66,22 +67,15 @@ async function processDrawingFiles(folderPath, issueOrRevisionDate, verification
       const filePath = path.join(folderPath, file);
       const fileNameWithoutExtension = path.basename(file, path.extname(file));
 
-      try {
-        const drawingErrors = await sendFileToVerify(filePath, issueOrRevisionDate, verificationType);
+      const drawingErrors = await sendFileToVerify(filePath, issueOrRevisionDate, verificationType);
 
-        if (drawingErrors.length === 0) {
-          await interaction.followUp({ content: `<@${interaction.user.id}>, o arquivo ${fileNameWithoutExtension} não possui erros!` });
-        } else {
-          await interaction.followUp({ content: `<@${interaction.user.id}>, segue abaixo a lista de erros do arquivo ${fileNameWithoutExtension}:` });
-          drawingErrors.forEach(errorMessage => {
-            interaction.channel.send({ content: errorMessage });
-          });
-        }
-
-        fs.existsSync(filePath) && fs.unlinkSync(filePath);
-      } catch (error) {
-        console.error('Erro ao enviar o arquivo:', error.message);
-        await interaction.followUp(`<@${interaction.user.id}>, ocorreu um erro ao verificar o desenho ${fileNameWithoutExtension}.\nErro: ${error.message}`);
+      if (drawingErrors.length === 0) {
+        await interaction.followUp({ content: `<@${interaction.user.id}>, o arquivo ${fileNameWithoutExtension} não possui erros!` });
+      } else {
+        await interaction.followUp({ content: `<@${interaction.user.id}>, segue abaixo a lista de erros do arquivo ${fileNameWithoutExtension}:` });
+        drawingErrors.forEach(errorMessage => {
+          interaction.channel.send({ content: errorMessage });
+        });
       }
     }
   }
@@ -122,8 +116,8 @@ module.exports = {
     const verificationTypeOption = interaction.options.get('tipo')?.value;
     const attachment = optionDrawing.attachment;
     const fileName = attachment.name;
-    const outputFolder = path.resolve(__dirname, 'download');
-    const filePath = path.resolve(__dirname, 'download', fileName);
+    const outputFolder = path.resolve(__dirname, 'download', randomUUID());
+    const filePath = path.resolve(__dirname, outputFolder, fileName);
 
     await interaction.deferReply();
     
@@ -154,22 +148,24 @@ module.exports = {
       issueOrRevisionDate = currentDate.toLocaleDateString('pt-BR', { timeZone: 'UTC', day: '2-digit', month: '2-digit', year: '2-digit' });
     }
 
+    fs.mkdirSync(outputFolder, { recursive: true });
     await downloadFile(attachment.url, filePath);
 
+    if (fileName.toLowerCase().endsWith('.zip')) {
+      extractZip(filePath, outputFolder);
+    }
+
     try {
-      if (fileName.toLowerCase().endsWith('.zip')) {
-        fs.mkdirSync(outputFolder, { recursive: true });
-  
-        extractZip(filePath, outputFolder);
+      await processDrawingFiles(outputFolder, issueOrRevisionDate, verificationTypeOption, interaction);
+    } catch (error) {
+      if (error.response && error.response.status === 504) {
+        return interaction.followUp(`<@${interaction.user.id}>, não foi possível processar o arquivo. Ele pode ser muito grande ou complexo. Tente convertê-lo para DXF e envie novamente.`);
       }
 
-      await processDrawingFiles(outputFolder, issueOrRevisionDate, verificationTypeOption, interaction);
-
-      // Apaga o arquivo baixado
-      fs.existsSync(filePath) && fs.unlinkSync(filePath);
-    } catch (error) {
       console.error('Erro ao enviar o arquivo:', error.message);
       return interaction.followUp(`<@${interaction.user.id}>, ocorreu um erro ao verificar o desenho.\nErro: ${error.message}`);
+    } finally {
+      fs.rmSync(outputFolder, { recursive: true, force: true });
     }
   },
 };
