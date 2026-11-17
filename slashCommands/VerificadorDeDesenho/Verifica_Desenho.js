@@ -6,6 +6,7 @@ const fs = require('fs');
 const FormData = require('form-data');
 const path = require('path');
 const AdmZip = require('adm-zip');
+const { getDrawingMessages } = require('../../utils/formatDrawingErrors');
 
 const VERIFY_URL = 'https://chloeape.discloud.dev/verify-drawing';
 const POLL_INTERVAL_MS = 4000;
@@ -48,7 +49,7 @@ async function waitForJob(jobId) {
 
     const { data: job } = await get(`${VERIFY_URL}/${jobId}`);
 
-    if (job.status === 'done') return job.message;
+    if (job.status === 'done') return job;
     if (job.status === 'error') throw new Error(job.message);
   }
 
@@ -67,15 +68,16 @@ async function processDrawingFiles(folderPath, issueOrRevisionDate, verification
       const filePath = path.join(folderPath, file);
       const fileNameWithoutExtension = path.basename(file, path.extname(file));
 
-      const drawingErrors = await sendFileToVerify(filePath, issueOrRevisionDate, verificationType);
+      const job = await sendFileToVerify(filePath, issueOrRevisionDate, verificationType);
+      const drawingMessages = getDrawingMessages(job);
 
-      if (drawingErrors.length === 0) {
+      if (drawingMessages.length === 0) {
         await interaction.followUp({ content: `<@${interaction.user.id}>, o arquivo ${fileNameWithoutExtension} não possui erros!` });
       } else {
         await interaction.followUp({ content: `<@${interaction.user.id}>, segue abaixo a lista de erros do arquivo ${fileNameWithoutExtension}:` });
-        drawingErrors.forEach(errorMessage => {
-          interaction.channel.send({ content: errorMessage });
-        });
+        for (const content of drawingMessages) {
+          await interaction.channel.send({ content });
+        }
       }
     }
   }
