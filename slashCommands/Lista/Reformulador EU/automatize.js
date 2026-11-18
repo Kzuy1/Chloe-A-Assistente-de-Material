@@ -94,7 +94,7 @@ async function automatize(filename, listTypeOption) {
   await workbook.xlsx.readFile(filename);
 
   const errorFile = { ...errors };
-  const sourceWorksheet = workbook.getWorksheet(1);
+  const sourceWorksheet = workbook.worksheets[0];
   const targetWorkbook = new ExcelJS.Workbook();
   const targetSheet = targetWorkbook.addWorksheet(sourceWorksheet.name);
 

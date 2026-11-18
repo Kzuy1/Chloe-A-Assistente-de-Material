@@ -20,7 +20,7 @@ function calculateExpectedWeight(listTypeOption, quantity, pieceWeight) {
 
 async function automatizePecas(filename, listTypeOption) {
   await workbook.xlsx.readFile(filename);
-  const sourceWorksheet = workbook.getWorksheet(1);
+  const sourceWorksheet = workbook.worksheets[0];
   const errorFile = { ...errors };
 
   // Remove as planilhas subsquententes que podem ser um processo anterior
